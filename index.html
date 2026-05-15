@@ -25,7 +25,9 @@
             --input-color: #333;
             --sos-red: #e74c3c;
             --sos-dark: #c0392b;
+            --contacts-bg: #1e2d3d;
         }
+
         .wallpaper-active .sidebar,
         .wallpaper-active .main-chat,
         .wallpaper-active .right-bar,
@@ -35,10 +37,10 @@
             backdrop-filter: blur(15px);
             border-color: rgba(255,255,255,0.1) !important;
         }
+
         * { box-sizing: border-box; border-radius: 0 !important; }
         button, .icon-btn,
         button:not(:disabled):active { transform: scale(0.95) translateY(1px); }
-
 
         @keyframes callPulse {
             0%   { box-shadow: 0 0 0 0 rgba(46,204,113,0.5); }
@@ -60,7 +62,7 @@
         .lang-btn { transition: color 0.2s ease, border-color 0.2s ease, transform 0.15s ease !important; }
         .lang-btn:hover { transform: translateY(-2px); color: #ccc; }
         .lang-btn:active { transform: translateY(0); }
-        .theme-toggle:active { transform: translateX(0); }
+
         @keyframes sosShake {
             0%,100% { transform: translateX(0); }
             20%     { transform: translateX(-3px) rotate(-1deg); }
@@ -69,9 +71,9 @@
             80%     { transform: translateX(2px); }
         }
 
-        #call-overlay button:hover { transform: scale(1.05); filter: brightness(1.15); }
-        #call-overlay button:active { transform: scale(0.96); }
         body, html { height: 100%; margin: 0; font-family: 'Ubuntu', sans-serif; font-weight: 300; overflow: hidden; background-color: var(--sidebar-bg); }
+
+        /* SPLASH */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--sidebar-bg); display: flex; flex-direction: column;
@@ -82,8 +84,11 @@
         .splash-loader { width: 50px; height: 2px; background: rgba(255,255,255,0.1); margin-top: 20px; position: relative; overflow: hidden; }
         .splash-loader::after { content: ''; position: absolute; left: -100%; width: 100%; height: 100%; background: var(--skype-blue); animation: loading 1.5s infinite; }
         @keyframes loading { 100% { left: 100%; } }
+
         .app-container { display: flex; height: 100vh; width: 100vw; opacity: 0; }
         .loaded .app-container { opacity: 1; }
+
+        /* SIDEBAR */
         .sidebar { width: 280px; background: var(--sidebar-bg); color: white; display: flex; flex-direction: column; padding: 25px; border-right: 1px solid #1a252f; z-index: 10; }
         .brand-section { margin-bottom: 30px; }
         .brand-name { color: var(--skype-blue); font-size: 32px; font-weight: 700; margin: 0; }
@@ -93,19 +98,24 @@
         .lang-switcher { display: flex; flex-direction: row; flex-wrap: wrap; gap: 5px; margin-bottom: 20px; }
         .lang-btn { background: #1a252f; border: none; color: #7f8c8d; font-size: 11px; padding: 8px 10px; cursor: pointer; font-weight: bold; letter-spacing: 1px; flex: 1; text-align: center; transition: none; }
         .lang-btn.active { color: white; border-bottom: 2px solid var(--skype-blue); }
-        .main-chat { flex: 1; display: flex; flex-direction: column; background: var(--chat-bg); position: relative; }
+
+        /* MAIN CHAT */
+        .main-chat { flex: 1; display: flex; flex-direction: column; background: var(--chat-bg); position: relative; min-width: 0; }
         #chat-box { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth; }
+
         .msg { max-width: 70%; padding: 12px 18px; line-height: 1.6; position: relative; font-size: 14px; animation: msgIn 0.3s ease-out; }
         @keyframes msgIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .local { background: var(--msg-local); align-self: flex-end; border: 1px solid var(--msg-local-border); border-right: 4px solid var(--skype-blue); color: var(--chat-text); }
         .remote { background: var(--msg-remote); align-self: flex-start; border: 1px solid var(--msg-remote-border); border-left: 4px solid #bdc3c7; color: var(--chat-text); }
         .msg-meta { font-size: 9px; margin-top: 5px; color: #999; display: flex; justify-content: flex-end; align-items: center; gap: 3px; }
         .seen-icon { color: var(--skype-blue); font-weight: bold; }
+
+        /* SOS */
         .msg-sos {
             max-width: 90%; align-self: center; background: #2d0000;
             border: 2px solid var(--sos-red); border-left: 6px solid var(--sos-red);
             color: #ff6b6b; padding: 14px 20px; font-size: 14px;
-            animation: sosPulse 0.5s ease-out, msgIn 0.3s ease-out; position: relative;
+            animation: sosPulse 0.5s ease-out, msgIn 0.3s ease-out;
         }
         @keyframes sosPulse {
             0% { box-shadow: 0 0 0 0 rgba(231,76,60,0.7); }
@@ -115,38 +125,120 @@
         .sos-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--sos-red); margin-bottom: 5px; }
         .sos-from { font-size: 11px; color: #ff9999; margin-top: 6px; }
         .sos-hop { font-size: 9px; color: #884444; margin-top: 3px; }
-        .sos-btn {
-            background: var(--sos-red); color: white; border: none; padding: 6px 10px;
-            font-weight: bold; cursor: pointer; font-family: 'Ubuntu', sans-serif;
-            letter-spacing: 1px; font-size: 11px; position: relative; overflow: hidden;
-            transition: background 0.2s ease !important; width: auto; align-self: flex-start;
-        }
-        .sos-btn:hover { background: var(--sos-dark); }
-        .sos-btn:disabled { background: #555; cursor: not-allowed; color: #999; letter-spacing: 0px; }
-        .sos-btn::after {
-            content: ''; position: absolute; top: 0; left: -100%;
-            width: 100%; height: 100%; background: rgba(255,255,255,0.15); transition: left 0.3s ease;
-        }
-        .sos-btn:not(:disabled):hover::after { left: 100%; }
+
+        /* INPUT AREA */
         .input-area { padding: 20px 30px; display: flex; gap: 15px; border-top: 1px solid var(--input-border); background: var(--input-area-bg); align-items: center; }
-        #message-input { flex: 1; padding: 14px; border: 1px solid var(--input-border); outline: none; font-size: 14px; background: var(--input-bg); color: var(--input-color); border-radius: 4px !important; }
+        #message-input { flex: 1; padding: 14px; border: 1px solid var(--input-border); outline: none; font-size: 14px; background: var(--input-bg); color: var(--input-color); }
         .icon-btn { cursor: pointer; display: flex; align-items: center; transition: 0.2s; user-select: none; color: var(--skype-blue); }
         .icon-btn:hover { transform: none !important; }
-        .mountain-icon { width: 24px; height: 24px; position: relative; overflow: hidden; border: 2px solid currentColor; border-radius: 4px !important; }
+        .mountain-icon { width: 24px; height: 24px; position: relative; overflow: hidden; border: 2px solid currentColor; }
         .mountain-icon::before { content: ''; position: absolute; bottom: -2px; left: 1px; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 12px solid currentColor; }
         .mountain-icon::after { content: ''; position: absolute; bottom: -2px; left: 8px; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 9px solid currentColor; }
         .sun { position: absolute; top: 3px; right: 3px; width: 5px; height: 5px; background: currentColor; border-radius: 50% !important; }
-        .right-bar { width: 240px; background: #fcfcfc; border-left: 1px solid #eee; padding: 25px 20px; }
-        .online-title { font-size: 12px; font-weight: 700; color: #95a5a6; letter-spacing: 1px; margin-bottom: 20px; display: flex; justify-content: space-between; }
-        .online-count { background: var(--skype-blue); color: white; padding: 2px 8px; font-size: 10px; }
-        .user-card { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
-        .user-avatar { width: 35px; height: 35px; background: #ddd; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 12px; }
+
+        /* RIGHT BAR — CONTACTS */
+        .right-bar {
+            width: 240px; background: var(--contacts-bg);
+            border-left: 1px solid #111d28; padding: 0;
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .contacts-header {
+            padding: 18px 16px 12px;
+            border-bottom: 1px solid #111d28;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .contacts-title { font-size: 11px; font-weight: 700; color: #7f8c8d; letter-spacing: 1.5px; text-transform: uppercase; }
+        .contacts-count { background: var(--skype-blue); color: white; padding: 2px 7px; font-size: 10px; font-weight: bold; }
+
+        /* Online section */
+        .contacts-section-label {
+            font-size: 9px; font-weight: 700; letter-spacing: 2px;
+            color: #4a6278; padding: 10px 16px 4px; text-transform: uppercase;
+        }
+        #online-list { padding: 0 8px; }
+
+        /* Divider */
+        .contacts-divider { height: 1px; background: #111d28; margin: 8px 16px; }
+
+        /* Saved contacts list */
+        #contacts-list { flex: 1; overflow-y: auto; padding: 0 8px 8px; }
+        #contacts-list::-webkit-scrollbar { width: 3px; }
+        #contacts-list::-webkit-scrollbar-track { background: transparent; }
+        #contacts-list::-webkit-scrollbar-thumb { background: #34495e; }
+
+        /* Contact card */
+        .contact-card {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 8px; cursor: pointer;
+            border-left: 3px solid transparent;
+            transition: background 0.15s ease, border-color 0.15s ease, padding-left 0.15s ease;
+        }
+        .contact-card:hover { background: rgba(0,175,240,0.07); border-left-color: var(--skype-blue); padding-left: 12px; }
+        .contact-card.active { background: rgba(0,175,240,0.13); border-left-color: var(--skype-blue); }
+        .contact-card.online-now { border-left-color: var(--call-green); }
+        .contact-card.online-now:hover { border-left-color: var(--call-green); }
+
+        .contact-avatar {
+            width: 34px; height: 34px; min-width: 34px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; color: white; font-size: 13px;
+            position: relative;
+        }
+        .contact-online-dot {
+            position: absolute; bottom: 0; right: 0;
+            width: 9px; height: 9px; background: var(--call-green);
+            border: 2px solid var(--contacts-bg);
+            border-radius: 50% !important;
+        }
+        .contact-info { flex: 1; min-width: 0; }
+        .contact-name { font-size: 12px; font-weight: 700; color: #cdd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .contact-last { font-size: 10px; color: #4a6278; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+        .contact-unread { background: var(--skype-blue); color: white; font-size: 9px; font-weight: bold; padding: 1px 5px; min-width: 16px; text-align: center; }
+
+        /* No contacts placeholder */
+        .no-contacts { padding: 20px 16px; font-size: 11px; color: #4a6278; text-align: center; line-height: 1.6; }
+
+        /* Chat header showing active contact */
+        #chat-header {
+            display: none; padding: 12px 30px;
+            background: #f7f7f7; border-bottom: 1px solid #eee;
+            align-items: center; gap: 12px;
+        }
+        #chat-header-avatar { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 13px; }
+        #chat-header-name { font-size: 14px; font-weight: 700; color: #333; }
+        #chat-header-status { font-size: 10px; color: #999; margin-top: 2px; }
+
+        /* Call overlay */
         #call-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(44, 62, 80, 0.95); z-index: 10000;
+            background: rgba(44, 62, 80, 0.97); z-index: 10000;
             display: none; flex-direction: column; align-items: center; justify-content: center; color: white;
         }
+        #call-overlay button:hover { filter: brightness(1.15); }
+        #call-overlay button:active { transform: scale(0.96); }
+
+        /* Incoming call panel (replaces confirm()) */
+        #incoming-call-panel {
+            position: fixed; bottom: 30px; right: 260px;
+            background: #1e2d3d; border: 1px solid var(--call-green);
+            border-left: 4px solid var(--call-green);
+            padding: 16px 20px; z-index: 10001;
+            display: none; flex-direction: column; gap: 10px;
+            animation: slideInPanel 0.3s ease-out;
+            min-width: 240px;
+        }
+        @keyframes slideInPanel { from { opacity:0; transform: translateX(20px); } to { opacity:1; transform: translateX(0); } }
+        #incoming-call-name { color: white; font-weight: bold; font-size: 14px; }
+        #incoming-call-sub { color: #7f8c8d; font-size: 11px; }
+        .call-panel-btns { display: flex; gap: 8px; }
+        .call-panel-btns button { flex: 1; padding: 9px; border: none; font-weight: bold; cursor: pointer; font-family: 'Ubuntu', sans-serif; font-size: 12px; letter-spacing: 1px; }
+        .btn-answer { background: var(--call-green); color: white; }
+        .btn-reject { background: var(--call-red); color: white; }
+
+        /* SOS timer */
         #sos-timer { font-size: 9px; color: #e74c3c; text-align: center; margin-top: 4px; min-height: 14px; letter-spacing: 1px; }
+
+        /* Wallpaper buttons */
         .wp-btn {
             background: #1a252f; border: none; border-left: 3px solid transparent;
             color: #7f8c8d; font-size: 12px; padding: 13px 15px; cursor: pointer;
@@ -154,13 +246,10 @@
             font-family: 'Ubuntu', sans-serif;
             transition: color 0.2s ease, border-color 0.2s ease, padding-left 0.2s ease, background 0.2s ease;
         }
-        .wp-btn:hover {
-            color: white; border-left-color: var(--skype-blue);
-            padding-left: 20px; background: rgba(0,175,240,0.07);
-        }
+        .wp-btn:hover { color: white; border-left-color: var(--skype-blue); padding-left: 20px; background: rgba(0,175,240,0.07); }
         .wp-btn:active { padding-left: 13px; }
 
-        /* Sidebar ana butonlar - slide animasyonu */
+        /* Sidebar action buttons */
         .sidebar-action-btn {
             border: none; color: white; padding: 13px 15px; font-weight: bold;
             cursor: pointer; font-family: 'Ubuntu', sans-serif; font-size: 13px;
@@ -175,6 +264,111 @@
         .btn-call    { background: var(--call-green); }
         .btn-sos     { background: var(--sos-red); font-size: 12px; }
         .btn-sos:disabled { background: #555; color: #999; }
+
+        .typing-pulse { color: #00aff0; font-weight: bold; font-size: 11px; padding: 4px 30px; }
+
+        /* PHONE SETUP SCREEN */
+        #phone-setup {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--sidebar-bg); display: flex; flex-direction: column;
+            align-items: center; justify-content: center; z-index: 99999;
+        }
+        #phone-setup h2 { color: var(--skype-blue); font-size: 28px; margin: 0 0 6px; font-weight: 700; }
+        #phone-setup p { color: #7f8c8d; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 30px; }
+        .phone-input-wrap { display: flex; border: 1px solid #34495e; overflow: hidden; width: 300px; }
+        .phone-prefix { background: #1a252f; color: #7f8c8d; padding: 14px 12px; font-size: 14px; font-weight: bold; border-right: 1px solid #34495e; white-space: nowrap; }
+        #phone-number-input {
+            flex: 1; background: #1a252f; border: none; color: white;
+            padding: 14px 12px; font-size: 16px; font-family: 'Ubuntu', sans-serif;
+            outline: none; letter-spacing: 2px;
+        }
+        #phone-number-input::placeholder { color: #4a6278; letter-spacing: 1px; font-size: 13px; }
+        #phone-setup-btn {
+            margin-top: 12px; width: 300px; padding: 14px;
+            background: var(--skype-blue); color: white; border: none;
+            font-weight: bold; font-family: 'Ubuntu', sans-serif;
+            font-size: 14px; letter-spacing: 2px; cursor: pointer;
+            transition: filter 0.2s ease;
+        }
+        #phone-setup-btn:hover { filter: brightness(1.15); }
+        #phone-setup-error { color: var(--sos-red); font-size: 11px; margin-top: 8px; min-height: 16px; letter-spacing: 1px; }
+        .phone-setup-note { color: #4a6278; font-size: 10px; margin-top: 16px; text-align: center; max-width: 300px; line-height: 1.6; }
+
+        /* NAME STEP (second step of phone setup) */
+        #name-step {
+            display: none; flex-direction: column; align-items: center;
+            animation: stepSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes stepSlideIn {
+            from { opacity: 0; transform: translateX(40px) scale(0.97); }
+            to   { opacity: 1; transform: translateX(0) scale(1); }
+        }
+        #phone-step {
+            display: flex; flex-direction: column; align-items: center;
+            animation: stepSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .setup-step-label {
+            font-size: 9px; letter-spacing: 3px; color: #4a6278;
+            text-transform: uppercase; margin-bottom: 20px;
+        }
+        .step-dots { display: flex; gap: 6px; margin-bottom: 28px; }
+        .step-dot { width: 24px; height: 3px; background: #1a252f; transition: background 0.3s ease; }
+        .step-dot.active { background: var(--skype-blue); }
+        .name-input-wrap { display: flex; border: 1px solid #34495e; overflow: hidden; width: 300px; }
+        .name-prefix { background: #1a252f; color: #7f8c8d; padding: 14px 12px; font-size: 16px; border-right: 1px solid #34495e; }
+        #display-name-input {
+            flex: 1; background: #1a252f; border: none; color: white;
+            padding: 14px 12px; font-size: 15px; font-family: 'Ubuntu', sans-serif;
+            outline: none;
+        }
+        #display-name-input::placeholder { color: #4a6278; font-size: 13px; }
+        .setup-phone-preview {
+            font-size: 11px; color: #00ffcc; letter-spacing: 2px;
+            margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
+        }
+        .setup-phone-preview::before { content: '📱'; font-size: 14px; }
+
+        /* DELETE CONFIRM MODAL */
+        #delete-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 20000;
+            display: none; align-items: center; justify-content: center;
+            animation: fadeInBg 0.2s ease;
+        }
+        @keyframes fadeInBg { from { opacity: 0; } to { opacity: 1; } }
+        #delete-modal-box {
+            background: #1e2d3d; border: 1px solid #34495e;
+            border-top: 3px solid var(--sos-red);
+            padding: 28px 30px; min-width: 280px; max-width: 340px;
+            animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes modalPop { from { opacity: 0; transform: scale(0.85) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        #delete-modal-title { color: white; font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+        #delete-modal-sub { color: #7f8c8d; font-size: 12px; line-height: 1.6; margin-bottom: 22px; }
+        #delete-modal-name { color: #00ffcc; font-weight: bold; }
+        .modal-btns { display: flex; gap: 8px; }
+        .modal-btns button { flex: 1; padding: 11px; border: none; font-weight: bold; cursor: pointer; font-family: 'Ubuntu', sans-serif; font-size: 12px; letter-spacing: 1px; transition: filter 0.15s ease; }
+        .modal-btns button:hover { filter: brightness(1.15); }
+        .btn-modal-delete { background: var(--sos-red); color: white; }
+        .btn-modal-cancel { background: #2c3e50; color: #aaa; border: 1px solid #34495e; }
+
+        /* Contact card delete button */
+        .contact-card { position: relative; }
+        .contact-del-btn {
+            display: none; position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; color: #4a6278; font-size: 15px;
+            cursor: pointer; padding: 4px 6px; line-height: 1;
+            transition: color 0.15s ease;
+        }
+        .contact-del-btn:hover { color: var(--sos-red) !important; transform: translateY(-50%) scale(1.2); }
+        .contact-card:hover .contact-del-btn { display: block; }
+
+        #reset-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 20000;
+            display: none; align-items: center; justify-content: center;
+            animation: fadeInBg 0.2s ease;
+        }
     </style>
 </head>
 <body>
@@ -183,6 +377,7 @@
 <audio id="snd-call" src="https://assets.mixkit.co/active_storage/sfx/1359/1359-preview.mp3" loop></audio>
 <audio id="snd-sos" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
 
+<!-- CALL OVERLAY (active call) -->
 <div id="call-overlay">
     <div style="font-size: 60px; margin-bottom: 20px;">📞</div>
     <h2 id="call-name">AceTalk Voice</h2>
@@ -190,6 +385,83 @@
     <button onclick="endCall()" data-i18n="closeCall" style="background: var(--call-red); color: white; border: none; padding: 15px 40px; font-weight: bold; cursor: pointer; margin-top: 30px;">KAPAT</button>
 </div>
 
+<!-- INCOMING CALL PANEL -->
+<div id="incoming-call-panel">
+    <div>
+        <div id="incoming-call-name">Birileri arıyor...</div>
+        <div id="incoming-call-sub" data-i18n="incomingCallSub">Sesli arama geliyor</div>
+    </div>
+    <div class="call-panel-btns">
+        <button class="btn-answer" onclick="answerCall()" data-i18n="answerBtn">CEVAPLA</button>
+        <button class="btn-reject" onclick="rejectCall()" data-i18n="rejectBtn">REDDET</button>
+    </div>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div id="delete-modal">
+
+<!-- RESET ACCOUNT MODAL -->
+<div id="reset-modal">
+    <div id="delete-modal-box" style="border-top-color: #e67e22;">
+        <div id="delete-modal-title">Hesabı sıfırla</div>
+        <div id="delete-modal-sub" style="color:#7f8c8d;">
+            Telefon numaran, görünen ismin ve tüm konuşma geçmişin silinecek. Bu işlem geri alınamaz.
+        </div>
+        <div class="modal-btns">
+            <button class="btn-modal-delete" onclick="confirmResetAccount()">SIFIRLA</button>
+            <button class="btn-modal-cancel" onclick="closeResetModal()">İPTAL</button>
+        </div>
+    </div>
+</div>
+    <div id="delete-modal-box">
+        <div id="delete-modal-title">Kişiyi sil</div>
+        <div id="delete-modal-sub">
+            <span id="delete-modal-name"></span> kişisini ve tüm mesaj geçmişini silmek istediğine emin misin?
+        </div>
+        <div class="modal-btns">
+            <button class="btn-modal-delete" onclick="confirmDelete()">SİL</button>
+            <button class="btn-modal-cancel" onclick="closeDeleteModal()">İPTAL</button>
+        </div>
+    </div>
+</div>
+
+<!-- PHONE SETUP (first time only) -->
+<div id="phone-setup" style="display:none;">
+    <h2>AceTalk</h2>
+    <p>Hesabını oluştur</p>
+    <div class="step-dots">
+        <div class="step-dot active" id="dot-1"></div>
+        <div class="step-dot" id="dot-2"></div>
+    </div>
+
+    <!-- Step 1: Phone -->
+    <div id="phone-step">
+        <div class="setup-step-label">1 / 2 — Telefon numarası</div>
+        <div class="phone-input-wrap">
+            <span class="phone-prefix">📱</span>
+            <input type="tel" id="phone-number-input" placeholder="5XX XXX XX XX" maxlength="15"
+                   onkeypress="if(event.key==='Enter') confirmPhone()">
+        </div>
+        <button id="phone-setup-btn" onclick="confirmPhone()">DEVAM ET →</button>
+        <div id="phone-setup-error"></div>
+        <div class="phone-setup-note">Bu numara senin AceTalk ID'n olacak. Başkaları bu numarayla sana ulaşabilir.</div>
+    </div>
+
+    <!-- Step 2: Name -->
+    <div id="name-step">
+        <div class="setup-step-label">2 / 2 — Görünen isim</div>
+        <div class="setup-phone-preview" id="setup-phone-preview"></div>
+        <div class="name-input-wrap">
+            <span class="name-prefix">✏️</span>
+            <input type="text" id="display-name-input" placeholder="İsminiz..." maxlength="30"
+                   onkeypress="if(event.key==='Enter') confirmName()">
+        </div>
+        <button id="phone-setup-btn" onclick="confirmName()" style="margin-top:12px; width:300px; padding:14px; background:var(--call-green); color:white; border:none; font-weight:bold; font-family:'Ubuntu',sans-serif; font-size:14px; letter-spacing:2px; cursor:pointer;">BAŞLA ✓</button>
+        <div class="phone-setup-note" style="margin-top:12px;">İstediğin zaman daha sonra değiştirebilirsin.</div>
+    </div>
+</div>
+
+<!-- SPLASH -->
 <div id="splash-screen">
     <h1 style="color: var(--skype-blue); font-weight: 700; font-size: 48px; margin: 0;">AceTalk</h1>
     <div class="sidebar-slogan" style="color: white; margin-top: 5px;">Simple Messenger</div>
@@ -197,6 +469,7 @@
 </div>
 
 <div class="app-container">
+    <!-- LEFT SIDEBAR -->
     <div class="sidebar">
         <div class="brand-section" style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 30px;">
             <div>
@@ -211,20 +484,22 @@
             <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
             <button class="lang-btn" onclick="setLanguage('de')">DE</button>
         </div>
+
         <div style="display:flex; flex-direction:column; gap:4px; margin-bottom:15px;">
             <button onclick="document.getElementById('wallpaper-input').click()" class="wp-btn">🖼️ Duvar Kağıdı</button>
             <button onclick="resetWallpaper()" class="wp-btn">↺ Varsayılan WP</button>
             <input type="file" id="wallpaper-input" accept="image/*" style="display:none" onchange="setWallpaper(this)">
+            <button onclick="openResetModal()" class="wp-btn" style="color:#e74c3c; border-left-color: transparent;">⚠ Hesabı Sıfırla</button>
         </div>
 
         <div class="my-status-box">
             <b style="font-size: 10px; color: var(--skype-blue);" data-i18n="myName">ADIM</b>
             <input type="text" id="my-name-input" class="status-input" value="AceUser" onchange="updateMyProfile()">
-            <small style="display:block; margin-top:15px; font-size: 9px; color: #7f8c8d;">ID: <span id="my-id" style="color: #00ffcc; cursor:pointer;" onclick="navigator.clipboard.writeText(this.innerText).then(()=>{this.style.color='#fff';setTimeout(()=>this.style.color='#00ffcc',1000)})" title="Kopyalamak için tıkla">...</span></small>
+            <small style="display:block; margin-top:15px; font-size: 9px; color: #7f8c8d;">📱 <span id="my-id" style="color: #00ffcc; cursor:pointer;" onclick="navigator.clipboard.writeText(this.innerText).then(()=>{this.style.color='#fff';setTimeout(()=>this.style.color='#00ffcc',1000)})" title="Kopyalamak için tıkla">...</span></small>
         </div>
 
         <div style="margin-top: auto; display: flex; flex-direction: column; gap: 10px;">
-            <input type="text" id="peer-id-input" data-i18n-placeholder="idPlaceholder" placeholder="Bağlanılacak ID..." style="background: #1a252f; border: 1px solid #34495e; padding: 10px; color: white; outline: none;">
+            <input type="tel" id="peer-id-input" data-i18n-placeholder="idPlaceholder" placeholder="Karşı tarafın numarası..." style="background: #1a252f; border: 1px solid #34495e; padding: 10px; color: white; outline: none; letter-spacing: 1px;">
             <button onclick="connectToPeer()" data-i18n="connectBtn" class="sidebar-action-btn btn-connect">BAĞLAN</button>
             <button onclick="startCall()" data-i18n="voiceCall" class="sidebar-action-btn btn-call">SESLİ ARA</button>
             <div>
@@ -234,15 +509,25 @@
         </div>
     </div>
 
+    <!-- MAIN CHAT -->
     <div class="main-chat" id="drop-zone">
+        <!-- Chat header (shows active contact) -->
+        <div id="chat-header">
+            <div id="chat-header-avatar"></div>
+            <div>
+                <div id="chat-header-name"></div>
+                <div id="chat-header-status"></div>
+            </div>
+        </div>
+
         <div id="chat-box">
             <div id="welcome-msg" style="margin: auto; text-align: center; color: #ccc;">
                 <p data-i18n="secureChat">Güvenli ve şifreli uçtan uca sohbet.</p>
                 <small data-i18n="enterId">Bağlanmak için bir ID girin.</small>
             </div>
         </div>
-        
-        <div class="typing-pulse" id="typing-ui" style="display:none; color: #00aff0; font-weight: bold; font-size: 11px; padding: 4px 30px;">birileri yazıyor...</div>
+
+        <div class="typing-pulse" id="typing-ui" style="display:none;">birileri yazıyor...</div>
 
         <div class="input-area">
             <label for="img-input" class="icon-btn" title="Resim Gönder">
@@ -251,362 +536,789 @@
                 </div>
             </label>
             <input type="file" id="img-input" accept="image/*" style="display:none" onchange="handleImage(this)">
-            
-            <input type="text" id="message-input" data-i18n-placeholder="msgPlaceholder" placeholder="Mesajınızı yazın..." 
+            <input type="text" id="message-input" data-i18n-placeholder="msgPlaceholder" placeholder="Mesajınızı yazın..."
                    onkeypress="if(event.key==='Enter') sendMessage()"
                    oninput="notifyTyping()">
-            
             <div class="icon-btn" onclick="sendMessage()" title="Gönder" style="font-size: 26px; color: var(--skype-blue);">➤</div>
         </div>
     </div>
 
+    <!-- RIGHT BAR — CONTACTS -->
     <div class="right-bar">
-        <div class="online-title"><span data-i18n="online">ÇEVRİMİÇİ</span> <span class="online-count" id="conn-count">0</span></div>
+        <div class="contacts-header">
+            <span class="contacts-title" data-i18n="contactsTitle">CONTACTS</span>
+            <span class="contacts-count" id="contacts-total">0</span>
+        </div>
+
+        <!-- Online now -->
+        <div class="contacts-section-label" data-i18n="onlineNow">ŞU AN ÇEVRİMİÇİ</div>
         <div id="online-list"></div>
+
+        <div class="contacts-divider"></div>
+
+        <!-- Saved contacts -->
+        <div class="contacts-section-label" data-i18n="savedContacts">KAYDEDİLEN</div>
+        <div id="contacts-list">
+            <div class="no-contacts" id="no-contacts-msg" data-i18n="noContacts">
+                Henüz kişi yok.<br>Biri ile konuştuktan sonra burada görünür.
+            </div>
+        </div>
     </div>
 </div>
 
 <audio id="remote-audio" autoplay></audio>
 
 <script>
-    const DEFAULT_WALLPAPER = "https://raw.githubusercontent.com/benmalakko-netizen/AceTalk/main/Acetalkwallpaper.jpg";
+// ─── WALLPAPER ───────────────────────────────────────────────────────────────
+const DEFAULT_WALLPAPER = "https://raw.githubusercontent.com/benmalakko-netizen/AceTalk/main/Acetalkwallpaper.jpg";
 
-    function applyWallpaper(url) {
-        document.body.style.backgroundImage = "url('" + url + "')";
-        document.body.style.backgroundSize = "cover";
-        document.body.style.backgroundPosition = "center";
-        document.body.style.backgroundAttachment = "fixed";
-        document.body.classList.add('wallpaper-active');
+function applyWallpaper(url) {
+    document.body.style.backgroundImage = "url('" + url + "')";
+    document.body.style.backgroundSize = "cover";
+    document.body.style.backgroundPosition = "center";
+    document.body.style.backgroundAttachment = "fixed";
+    document.body.classList.add('wallpaper-active');
+}
+function setWallpaper(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => { localStorage.setItem('acetalk_wallpaper', e.target.result); applyWallpaper(e.target.result); }
+        reader.readAsDataURL(input.files[0]);
     }
+}
+function resetWallpaper() { localStorage.removeItem('acetalk_wallpaper'); applyWallpaper(DEFAULT_WALLPAPER); }
 
-    function setWallpaper(input) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = e => {
-                localStorage.setItem('acetalk_wallpaper', e.target.result);
-                applyWallpaper(e.target.result);
-            }
-            reader.readAsDataURL(input.files[0]);
+// ─── I18N ────────────────────────────────────────────────────────────────────
+const i18n = {
+    tr: {
+        myName: "ADIM", idPlaceholder: "Karşı tarafın numarası...", connectBtn: "BAĞLAN", voiceCall: "SESLİ ARA",
+        secureChat: "Güvenli ve şifreli uçtan uca sohbet.", enterId: "Bağlanmak için bir ID girin.",
+        msgPlaceholder: "Mesajınızı yazın...", calling: "ARANIYOR...",
+        closeCall: "KAPAT", typing: "yazıyor...",
+        sosBtn: "🚨 ACİL", sosCooldown: "saniye bekle", sosReceived: "ACİL YARDIM ÇAĞRISI",
+        sosFrom: "Gönderen", sosHops: "ağ üzerinden ulaştı", sosNoConn: "Bağlı kimse yok! Önce birine bağlan.",
+        wallpaperBtn: "🖼️ Duvar Kağıdı", resetWpBtn: "↺ Varsayılan WP",
+        micDenied: "Mikrofon erişimi reddedildi!", noConn: "Önce birine bağlan!",
+        connected: "🟢 BAĞLANDI",
+        contactsTitle: "KİŞİLER",
+        onlineNow: "ŞU AN ÇEVRİMİÇİ",
+        savedContacts: "KAYDEDİLEN",
+        noContacts: "Henüz kişi yok.\nBiri ile konuştuktan sonra burada görünür.",
+        onlineStatus: "Çevrimiçi",
+        offlineStatus: "Son görülme",
+        incomingCallSub: "Sesli arama geliyor",
+        answerBtn: "CEVAPLA",
+        rejectBtn: "REDDET",
+        loadHistory: "Geçmiş yükleniyor...",
+        chatWith: "ile sohbet"
+    },
+    en: {
+        myName: "MY NAME", idPlaceholder: "Their phone number...", connectBtn: "CONNECT", voiceCall: "VOICE CALL",
+        secureChat: "Secure and end-to-end encrypted chat.", enterId: "Enter an ID to connect.",
+        msgPlaceholder: "Type your message...", calling: "CALLING...",
+        closeCall: "HANG UP", typing: "is typing...",
+        sosBtn: "🚨 SOS", sosCooldown: "seconds wait", sosReceived: "EMERGENCY SOS RECEIVED",
+        sosFrom: "From", sosHops: "hops away", sosNoConn: "Nobody connected! Connect to someone first.",
+        wallpaperBtn: "🖼️ Wallpaper", resetWpBtn: "↺ Default WP",
+        micDenied: "Microphone access denied!", noConn: "Connect to someone first!",
+        connected: "🟢 CONNECTED",
+        contactsTitle: "CONTACTS",
+        onlineNow: "ONLINE NOW",
+        savedContacts: "SAVED",
+        noContacts: "No contacts yet.\nAppears after chatting with someone.",
+        onlineStatus: "Online",
+        offlineStatus: "Last seen",
+        incomingCallSub: "Incoming voice call",
+        answerBtn: "ANSWER",
+        rejectBtn: "REJECT",
+        loadHistory: "Loading history...",
+        chatWith: "Chat with"
+    },
+    ru: {
+        myName: "МОЕ ИМЯ", idPlaceholder: "Номер телефона...", connectBtn: "ПОДКЛЮЧИТЬ", voiceCall: "ГОЛОСОВОЙ ВЫЗОВ",
+        secureChat: "Безопасный чат с шифрованием.", enterId: "Введите ID для подключения.",
+        msgPlaceholder: "Введите сообщение...", calling: "ЗВОНОК...",
+        closeCall: "СБРОСИТЬ", typing: "пишет...",
+        sosBtn: "🚨 SOS", sosCooldown: "сек ожидание", sosReceived: "ПОЛУЧЕН СИГНАЛ SOS",
+        sosFrom: "От", sosHops: "прыжков", sosNoConn: "Нет подключений! Сначала подключитесь.",
+        wallpaperBtn: "🖼️ Обои", resetWpBtn: "↺ По умолчанию",
+        micDenied: "Доступ к микрофону запрещён!", noConn: "Сначала подключитесь!",
+        connected: "🟢 ПОДКЛЮЧЕНО",
+        contactsTitle: "КОНТАКТЫ",
+        onlineNow: "СЕЙЧАС В СЕТИ",
+        savedContacts: "СОХРАНЁННЫЕ",
+        noContacts: "Нет контактов.\nПоявится после общения.",
+        onlineStatus: "В сети",
+        offlineStatus: "Был(а)",
+        incomingCallSub: "Входящий голосовой вызов",
+        answerBtn: "ОТВЕТИТЬ",
+        rejectBtn: "ОТКЛОНИТЬ",
+        loadHistory: "Загрузка истории...",
+        chatWith: "Чат с"
+    },
+    de: {
+        myName: "MEIN NAME", idPlaceholder: "Telefonnummer...", connectBtn: "VERBINDEN", voiceCall: "ANRUFEN",
+        secureChat: "Sicherer und verschlüsselter Chat.", enterId: "Geben Sie eine ID ein.",
+        msgPlaceholder: "Nachricht schreiben...", calling: "ANRUF...",
+        closeCall: "AUFLEGEN", typing: "schreibt...",
+        sosBtn: "🚨 SOS", sosCooldown: "Sek warten", sosReceived: "NOTFALL SOS EMPFANGEN",
+        sosFrom: "Von", sosHops: "Hops entfernt", sosNoConn: "Niemand verbunden! Zuerst verbinden.",
+        wallpaperBtn: "🖼️ Hintergrundbild", resetWpBtn: "↺ Standard WP",
+        micDenied: "Mikrofonzugriff verweigert!", noConn: "Zuerst verbinden!",
+        connected: "🟢 VERBUNDEN",
+        contactsTitle: "KONTAKTE",
+        onlineNow: "JETZT ONLINE",
+        savedContacts: "GESPEICHERT",
+        noContacts: "Keine Kontakte.\nErscheint nach dem Chatten.",
+        onlineStatus: "Online",
+        offlineStatus: "Zuletzt gesehen",
+        incomingCallSub: "Eingehender Sprachanruf",
+        answerBtn: "ANNEHMEN",
+        rejectBtn: "ABLEHNEN",
+        loadHistory: "Verlauf laden...",
+        chatWith: "Chat mit"
+    }
+};
+
+let currentLang = 'tr';
+
+function setLanguage(lang) {
+    currentLang = lang;
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        const m = (btn.getAttribute('onclick') || '').match(/'(\w+)'/);
+        if(m) btn.classList.toggle('active', m[1] === lang);
+    });
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if(i18n[lang]?.[key]) el.innerText = i18n[lang][key];
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if(i18n[lang]?.[key]) el.placeholder = i18n[lang][key];
+    });
+    const sosBtn = document.getElementById('sos-btn');
+    if(sosBtn && !sosBtn.disabled) sosBtn.innerText = i18n[lang].sosBtn;
+    const typingUi = document.getElementById('typing-ui');
+    if(typingUi && typingUi.style.display !== 'none') {
+        const name = typingUi.innerText.split(' ')[0];
+        typingUi.innerText = name + ' ' + i18n[lang].typing;
+    }
+    renderContacts();
+}
+
+// ─── CONTACTS STORAGE ────────────────────────────────────────────────────────
+// Structure: { peerId: { name, lastSeen, messages: [{type, user, body, time}] } }
+
+function loadContacts() {
+    try { return JSON.parse(localStorage.getItem('acetalk_contacts') || '{}'); }
+    catch { return {}; }
+}
+function saveContacts(contacts) {
+    localStorage.setItem('acetalk_contacts', JSON.stringify(contacts));
+}
+function upsertContact(peerId, name, message) {
+    const contacts = loadContacts();
+    if (!contacts[peerId]) contacts[peerId] = { name: name || peerId, lastSeen: null, messages: [] };
+    if (name) contacts[peerId].name = name;
+    if (message) {
+        contacts[peerId].messages.push(message);
+        // Keep last 200 messages per contact
+        if (contacts[peerId].messages.length > 200) contacts[peerId].messages = contacts[peerId].messages.slice(-200);
+    }
+    contacts[peerId].lastSeen = Date.now();
+    saveContacts(contacts);
+    renderContacts();
+}
+
+// ─── ACTIVE CHAT STATE ───────────────────────────────────────────────────────
+let activePeerId = null; // which contact's history is shown
+
+function openContact(peerId) {
+    activePeerId = peerId;
+    const contacts = loadContacts();
+    const contact = contacts[peerId];
+    if (!contact) return;
+
+    // Update header
+    const header = document.getElementById('chat-header');
+    const avatar = document.getElementById('chat-header-avatar');
+    const headerName = document.getElementById('chat-header-name');
+    const headerStatus = document.getElementById('chat-header-status');
+
+    header.style.display = 'flex';
+    avatar.style.background = stringToColor(peerId);
+    avatar.innerText = (contact.name || '?').charAt(0).toUpperCase();
+    headerName.innerText = contact.name || peerId;
+    const isOnline = connections.find(c => c.peer === peerId);
+    headerStatus.innerText = isOnline ? i18n[currentLang].onlineStatus : (i18n[currentLang].offlineStatus + ': ' + formatLastSeen(contact.lastSeen));
+
+    // Load messages
+    const box = document.getElementById('chat-box');
+    const welcome = document.getElementById('welcome-msg');
+    if (welcome) welcome.style.display = 'none';
+    box.innerHTML = '';
+
+    contact.messages.forEach(m => {
+        if (m.type === 'local') {
+            addMessage('', m.body, 'local', m.time, false);
+        } else {
+            addMessage(m.user || contact.name, m.body, 'remote', m.time, false);
         }
-    }
-
-    function resetWallpaper() {
-        localStorage.removeItem('acetalk_wallpaper');
-        applyWallpaper(DEFAULT_WALLPAPER);
-    }
-
-    const i18n = {
-        tr: {
-            myName: "ADIM", idPlaceholder: "Bağlanılacak ID...", connectBtn: "BAĞLAN", voiceCall: "SESLİ ARA",
-            secureChat: "Güvenli ve şifreli uçtan uca sohbet.", enterId: "Bağlanmak için bir ID girin.",
-            msgPlaceholder: "Mesajınızı yazın...", online: "ÇEVRİMİÇİ", calling: "ARANIYOR...",
-            closeCall: "KAPAT", typing: "yazıyor...", callAlert: "Arama geliyor!",
-            sosBtn: "🚨 ACİL", sosCooldown: "saniye bekle", sosReceived: "ACİL YARDIM ÇAĞRISI",
-            sosFrom: "Gönderen", sosHops: "ağ üzerinden ulaştı", sosNoConn: "Bağlı kimse yok! Önce birine bağlan.",
-            wallpaperBtn: "🖼️ Duvar Kağıdı", resetWpBtn: "↺ Varsayılan WP",
-            incomingCall: "arıyor. Cevapla?", micDenied: "Mikrofon erişimi reddedildi!", noConn: "Önce birine bağlan!",
-            connected: "🟢 BAĞLANDI"
-        },
-        en: {
-            myName: "MY NAME", idPlaceholder: "ID to connect...", connectBtn: "CONNECT", voiceCall: "VOICE CALL",
-            secureChat: "Secure and end-to-end encrypted chat.", enterId: "Enter an ID to connect.",
-            msgPlaceholder: "Type your message...", online: "ONLINE", calling: "CALLING...",
-            closeCall: "HANG UP", typing: "is typing...", callAlert: "Incoming call!",
-            sosBtn: "🚨 SOS", sosCooldown: "seconds wait", sosReceived: "EMERGENCY SOS RECEIVED",
-            sosFrom: "From", sosHops: "hops away", sosNoConn: "Nobody connected! Connect to someone first.",
-            wallpaperBtn: "🖼️ Wallpaper", resetWpBtn: "↺ Default WP",
-            incomingCall: "is calling. Answer?", micDenied: "Microphone access denied!", noConn: "Connect to someone first!",
-            connected: "🟢 CONNECTED"
-        },
-        ru: {
-            myName: "МОЕ ИМЯ", idPlaceholder: "ID для связи...", connectBtn: "ПОДКЛЮЧИТЬ", voiceCall: "ГОЛОСОВОЙ ВЫЗОВ",
-            secureChat: "Безопасный чат с шифрованием.", enterId: "Введите ID для подключения.",
-            msgPlaceholder: "Введите сообщение...", online: "В СЕТИ", calling: "ЗВОНОК...",
-            closeCall: "СБРОСИТЬ", typing: "пишет...", callAlert: "Входящий звонок!",
-            sosBtn: "🚨 SOS", sosCooldown: "сек ожидание", sosReceived: "ПОЛУЧЕН СИГНАЛ SOS",
-            sosFrom: "От", sosHops: "прыжков", sosNoConn: "Нет подключений! Сначала подключитесь.",
-            wallpaperBtn: "🖼️ Обои", resetWpBtn: "↺ По умолчанию",
-            incomingCall: "звонит. Ответить?", micDenied: "Доступ к микрофону запрещён!", noConn: "Сначала подключитесь!",
-            connected: "🟢 ПОДКЛЮЧЕНО"
-        },
-        de: {
-            myName: "MEIN NAME", idPlaceholder: "ID zum Verbinden...", connectBtn: "VERBINDEN", voiceCall: "ANRUFEN",
-            secureChat: "Sicherer und verschlüsselter Chat.", enterId: "Geben Sie eine ID ein.",
-            msgPlaceholder: "Nachricht schreiben...", online: "ONLINE", calling: "ANRUF...",
-            closeCall: "AUFLEGEN", typing: "schreibt...", callAlert: "Eingehender Anruf!",
-            sosBtn: "🚨 SOS", sosCooldown: "Sek warten", sosReceived: "NOTFALL SOS EMPFANGEN",
-            sosFrom: "Von", sosHops: "Hops entfernt", sosNoConn: "Niemand verbunden! Zuerst verbinden.",
-            wallpaperBtn: "🖼️ Hintergrundbild", resetWpBtn: "↺ Standard WP",
-            incomingCall: "ruft an. Annehmen?", micDenied: "Mikrofonzugriff verweigert!", noConn: "Zuerst verbinden!",
-            connected: "🟢 VERBUNDEN"
-        }
-    };
-
-    let currentLang = 'tr';
-
-    function setLanguage(lang) {
-        currentLang = lang;
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            const onclickAttr = btn.getAttribute('onclick');
-            if(onclickAttr) {
-                const match = onclickAttr.match(/'(\w+)'/);
-                if(match) btn.classList.toggle('active', match[1] === lang);
-            }
-        });
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            if(i18n[lang] && i18n[lang][key]) el.innerText = i18n[lang][key];
-        });
-        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-            const key = el.getAttribute('data-i18n-placeholder');
-            if(i18n[lang] && i18n[lang][key]) el.placeholder = i18n[lang][key];
-        });
-        // Dinamik elementleri güncelle
-        const sosBtn = document.getElementById('sos-btn');
-        if(sosBtn && !sosBtn.disabled) sosBtn.innerText = i18n[lang].sosBtn;
-        const wpBtn = document.querySelector('button[onclick*="wallpaper-input"]');
-        if(wpBtn) wpBtn.innerText = i18n[lang].wallpaperBtn;
-        const resetWpBtn = document.querySelector('button[onclick="resetWallpaper()"]');
-        if(resetWpBtn) resetWpBtn.innerText = i18n[lang].resetWpBtn;
-        // typing-ui güncelle
-        const typingUi = document.getElementById('typing-ui');
-        if(typingUi && typingUi.style.display !== 'none') {
-            const name = typingUi.innerText.split(' ')[0];
-            typingUi.innerText = name + ' ' + i18n[lang].typing;
-        }
-    }
-
-    window.addEventListener('load', () => {
-        setTimeout(() => document.body.classList.add('loaded'), 2500);
-        const saved = localStorage.getItem('acetalk_wallpaper');
-        applyWallpaper(saved || DEFAULT_WALLPAPER);
     });
 
-    const peer = new Peer();
-    let connections = [];
-    let peerNames = {}; 
-    let currentCall = null;
-    let typingTimeout = null;
+    box.scrollTop = box.scrollHeight;
+    renderContacts(); // refresh active state
+}
 
-    peer.on('open', id => document.getElementById('my-id').innerText = id);
+function formatLastSeen(ts) {
+    if (!ts) return '?';
+    const d = new Date(ts);
+    return d.toLocaleDateString([], {day:'2-digit', month:'2-digit'}) + ' ' + d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+}
+
+// ─── RENDER CONTACTS ─────────────────────────────────────────────────────────
+function renderContacts() {
+    const contacts = loadContacts();
+    const list = document.getElementById('contacts-list');
+    const noMsg = document.getElementById('no-contacts-msg');
+    const totalEl = document.getElementById('contacts-total');
+    const keys = Object.keys(contacts);
+
+    // Sort: online first, then by lastSeen desc
+    const onlineIds = new Set(connections.map(c => c.peer));
+    keys.sort((a, b) => {
+        const ao = onlineIds.has(a), bo = onlineIds.has(b);
+        if (ao !== bo) return ao ? -1 : 1;
+        return (contacts[b].lastSeen || 0) - (contacts[a].lastSeen || 0);
+    });
+
+    totalEl.innerText = keys.length;
+
+    if (keys.length === 0) {
+        list.innerHTML = '<div class="no-contacts" id="no-contacts-msg">' + i18n[currentLang].noContacts + '</div>';
+        return;
+    }
+    list.innerHTML = '';
+
+    keys.forEach(peerId => {
+        const c = contacts[peerId];
+        const isOnline = onlineIds.has(peerId);
+        const isActive = peerId === activePeerId;
+        const lastMsg = c.messages.length ? c.messages[c.messages.length - 1] : null;
+        const lastText = lastMsg ? (lastMsg.body.startsWith('<') ? '📷 Resim' : lastMsg.body.substring(0, 28) + (lastMsg.body.length > 28 ? '…' : '')) : '';
+
+        const card = document.createElement('div');
+        card.className = 'contact-card' + (isOnline ? ' online-now' : '') + (isActive ? ' active' : '');
+        card.onclick = () => openContact(peerId);
+        card.innerHTML = `
+            <div class="contact-avatar" style="background:${stringToColor(peerId)}">
+                ${(c.name || '?').charAt(0).toUpperCase()}
+                ${isOnline ? '<div class="contact-online-dot"></div>' : ''}
+            </div>
+            <div class="contact-info">
+                <div class="contact-name">${c.name || peerIdToPhone(peerId)}</div>
+                <div class="contact-last">${lastText || (isOnline ? i18n[currentLang].onlineStatus : '')}</div>
+            </div>
+            <button class="contact-del-btn" onclick="openDeleteModal('${peerId}', event)" title="Sil">✕</button>
+        `;
+        list.appendChild(card);
+    });
+
+    // Online section
+    updateOnlineList();
+}
+
+function updateOnlineList() {
+    const list = document.getElementById('online-list');
+    list.innerHTML = '';
+    if (connections.length === 0) {
+        list.innerHTML = '<div style="padding: 6px 16px; font-size:10px; color:#4a6278;">—</div>';
+        return;
+    }
+    connections.forEach(c => {
+        const displayName = peerNames[c.peer] || peerIdToPhone(c.peer);
+        const card = document.createElement('div');
+        card.className = 'contact-card online-now';
+        card.onclick = () => openContact(c.peer);
+        card.innerHTML = `
+            <div class="contact-avatar" style="background:${stringToColor(c.peer)}">
+                ${displayName.charAt(0).toUpperCase()}
+                <div class="contact-online-dot"></div>
+            </div>
+            <div class="contact-info">
+                <div class="contact-name">${displayName}</div>
+                <div class="contact-last" style="color: #2ecc71;">${i18n[currentLang].onlineStatus}</div>
+            </div>
+        `;
+        list.appendChild(card);
+    });
+}
+
+// ─── PEER SETUP ───────────────────────────────────────────────────────────────
+window.addEventListener('load', () => {
+    const saved = localStorage.getItem('acetalk_wallpaper');
+    applyWallpaper(saved || DEFAULT_WALLPAPER);
+    renderContacts();
+
+    const savedPhone = localStorage.getItem('acetalk_phone');
+    if (savedPhone) {
+        initPeer(savedPhone);
+    } else {
+        document.getElementById('phone-setup').style.display = 'flex';
+    }
+});
+
+function confirmPhone() {
+    const raw = document.getElementById('phone-number-input').value.trim().replace(/\s+/g, '');
+    const errEl = document.getElementById('phone-setup-error');
+    if (!raw || raw.length < 7) { errEl.innerText = 'Geçerli bir numara gir!'; return; }
+    const clean = raw.replace(/[^\d+]/g, '');
+    if (clean.length < 7) { errEl.innerText = 'Numara çok kısa!'; return; }
+    errEl.innerText = '';
+    // Transition to name step
+    const phoneStep = document.getElementById('phone-step');
+    const nameStep  = document.getElementById('name-step');
+    document.getElementById('dot-1').classList.remove('active');
+    document.getElementById('dot-2').classList.add('active');
+    document.getElementById('setup-phone-preview').innerText = clean;
+    phoneStep.style.animation = 'none';
+    phoneStep.style.opacity = '0';
+    phoneStep.style.transform = 'translateX(-40px)';
+    phoneStep.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+    setTimeout(() => {
+        phoneStep.style.display = 'none';
+        nameStep.style.display = 'flex';
+        document.getElementById('display-name-input').focus();
+        // Store temporarily
+        window._pendingPhone = clean;
+    }, 250);
+}
+
+function confirmName() {
+    const nameVal = document.getElementById('display-name-input').value.trim();
+    const phone = window._pendingPhone;
+    if (!phone) return;
+    localStorage.setItem('acetalk_phone', phone);
+    if (nameVal) {
+        localStorage.setItem('acetalk_displayname', nameVal);
+        document.getElementById('my-name-input').value = nameVal;
+    }
+    document.getElementById('phone-setup').style.display = 'none';
+    initPeer(phone);
+}
+
+// ─── DELETE MODAL ─────────────────────────────────────────────────────────────
+let _deleteTargetId = null;
+
+function openDeleteModal(peerId, e) {
+    e.stopPropagation();
+    _deleteTargetId = peerId;
+    const contacts = loadContacts();
+    const c = contacts[peerId];
+    const displayName = (c && c.name) ? c.name : peerIdToPhone(peerId);
+    document.getElementById('delete-modal-name').innerText = '"' + displayName + '"';
+    document.getElementById('delete-modal').style.display = 'flex';
+}
+
+function closeDeleteModal() {
+    document.getElementById('delete-modal').style.display = 'none';
+    _deleteTargetId = null;
+}
+
+function confirmDelete() {
+    if (!_deleteTargetId) return;
+    const contacts = loadContacts();
+    delete contacts[_deleteTargetId];
+    saveContacts(contacts);
+    // If deleted contact was active, clear chat
+    if (activePeerId === _deleteTargetId) {
+        activePeerId = null;
+        document.getElementById('chat-header').style.display = 'none';
+        document.getElementById('chat-box').innerHTML = '<div id="welcome-msg" style="margin: auto; text-align: center; color: #ccc;"><p>Güvenli ve şifreli uçtan uca sohbet.</p><small>Bağlanmak için bir ID girin.</small></div>';
+    }
+    closeDeleteModal();
+    renderContacts();
+}
+
+// ─── RESET ACCOUNT ────────────────────────────────────────────────────────────
+function openResetModal() {
+    document.getElementById('reset-modal').style.display = 'flex';
+}
+function closeResetModal() {
+    document.getElementById('reset-modal').style.display = 'none';
+}
+function confirmResetAccount() {
+    // Disconnect all peers
+    connections.forEach(c => { try { c.close(); } catch(e){} });
+    if (peer) { try { peer.destroy(); } catch(e){} }
+    // Wipe all acetalk storage (keep wallpaper)
+    const wp = localStorage.getItem('acetalk_wallpaper');
+    localStorage.removeItem('acetalk_phone');
+    localStorage.removeItem('acetalk_displayname');
+    localStorage.removeItem('acetalk_contacts');
+    if (wp) localStorage.setItem('acetalk_wallpaper', wp);
+    // Reload page to show setup screen fresh
+    location.reload();
+}
+
+let peer = null;
+let connections = [];
+let peerNames = {};
+let currentCall = null;
+let pendingCall = null;
+let typingTimeout = null;
+
+function initPeer(phoneId) {
+    const peerId = 'ace_' + phoneId.replace(/\+/g, '00').replace(/[^\w]/g, '');
+
+    // Apply saved display name
+    const savedName = localStorage.getItem('acetalk_displayname');
+    if (savedName) document.getElementById('my-name-input').value = savedName;
+
+    setTimeout(() => document.body.classList.add('loaded'), 2500);
+
+    peer = new Peer(peerId);
+
+    peer.on('open', id => {
+        // Display as the original phone number
+        document.getElementById('my-id').innerText = localStorage.getItem('acetalk_phone');
+    });
+
+    peer.on('error', err => {
+        if (err.type === 'unavailable-id') {
+            // ID taken — someone else is using this number right now
+            document.getElementById('phone-setup').style.display = 'flex';
+            document.getElementById('phone-setup-error').innerText = 'Bu numara şu an başka bir cihazda açık!';
+            localStorage.removeItem('acetalk_phone');
+            if (peer) { peer.destroy(); peer = null; }
+            document.body.classList.remove('loaded');
+        }
+    });
+
     peer.on('connection', conn => setupConn(conn));
+    peer.on('call', handleIncomingCall);
+}
 
-    function connectToPeer() {
-        const pid = document.getElementById('peer-id-input').value;
-        if(!pid || connections.find(c => c.peer === pid)) return;
-        setupConn(peer.connect(pid));
-    }
+function phoneToId(phone) {
+    return 'ace_' + phone.trim().replace(/\s/g,'').replace(/\+/g, '00').replace(/[^\w]/g, '');
+}
 
-    function setupConn(conn) {
-        conn.on('open', () => {
-            if(!connections.find(c => c.peer === conn.peer)) {
-                connections.push(conn);
-                const myName = document.getElementById('my-name-input').value;
-                conn.send({type: 'profile', name: myName});
-                updateUI();
-            }
-        });
-        conn.on('data', data => {
-            if(data.type === 'profile') { peerNames[conn.peer] = data.name; updateUI(); }
-            else if(data.type === 'msg') { 
-                playAudio('snd-msg'); 
-                addMessage(data.name, parseMarkdown(data.body), 'remote', data.time);
-                conn.send({type: 'seen', msgId: data.time}); 
-            }
-            else if(data.type === 'seen') { markAsSeen(data.msgId); }
-            else if(data.type === 'typing') { showTyping(data.name, data.state); }
-            else if(data.type === 'sos') { handleSOS(data); }
-        });
-        conn.on('close', () => {
-            connections = connections.filter(c => c.peer !== conn.peer);
-            delete peerNames[conn.peer];
-            updateUI();
-        });
-    }
+function connectToPeer() {
+    const raw = document.getElementById('peer-id-input').value.trim().replace(/\s+/g, '');
+    if (!raw) return;
+    const pid = phoneToId(raw);
+    if (connections.find(c => c.peer === pid)) return;
+    setupConn(peer.connect(pid));
+    // Store original phone for display
+    peerNames[pid] = peerNames[pid] || raw;
+}
 
-    const seenSOS = new Set();
-    let sosCooldownTimer = null;
-    const SOS_COOLDOWN = 60;
-
-    function sendSOS() {
-        if(connections.length === 0) { alert(i18n[currentLang].sosNoConn); return; }
-        const myName = document.getElementById('my-name-input').value;
-        const myId  = document.getElementById('my-id').innerText;
-        const sosId  = myId + '_' + Date.now();
-        const sosPacket = { type: 'sos', id: sosId, fromId: myId, fromName: myName, ttl: 5, hopCount: 0, timestamp: Date.now() };
-        seenSOS.add(sosId);
-        addSOSMessage(myName, 0, true);
-        connections.forEach(c => c.send(sosPacket));
-        startSOSCooldown();
-    }
-
-    function handleSOS(data) {
-        if(seenSOS.has(data.id)) return;
-        if(data.ttl <= 0) return;
-        seenSOS.add(data.id);
-        playAudio('snd-sos');
-        addSOSMessage(data.fromName, data.hopCount + 1, false);
-        const forwardPacket = { ...data, ttl: data.ttl - 1, hopCount: data.hopCount + 1 };
-        connections.forEach(c => c.send(forwardPacket));
-    }
-
-    function addSOSMessage(fromName, hops, isSelf) {
-        const box  = document.getElementById('chat-box');
-        const lang = i18n[currentLang];
-        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const hopText = hops > 0 ? '<div class="sos-hop">↳ ' + hops + ' ' + lang.sosHops + '</div>' : '';
-        box.innerHTML += '<div class="msg msg-sos"><div class="sos-label">⚠ ' + lang.sosReceived + '</div><b style="font-size:15px;">' + (isSelf ? '🆘 ' : '🚨 ') + fromName + '</b><div class="sos-from">' + lang.sosFrom + ': ' + fromName + '</div>' + hopText + '<div class="msg-meta" style="color:#884444;">' + time + '</div></div>';
-        box.scrollTop = box.scrollHeight;
-        document.title = '🚨 SOS – ' + fromName + ' | AceTalk';
-        setTimeout(() => document.title = 'AceTalk | Simple Messenger', 8000);
-    }
-
-    function startSOSCooldown() {
-        const btn = document.getElementById('sos-btn');
-        const timerEl = document.getElementById('sos-timer');
-        btn.disabled = true;
-        let remaining = SOS_COOLDOWN;
-        timerEl.innerText = remaining + ' ' + i18n[currentLang].sosCooldown;
-        sosCooldownTimer = setInterval(() => {
-            remaining--;
-            if(remaining <= 0) {
-                clearInterval(sosCooldownTimer);
-                btn.disabled = false;
-                timerEl.innerText = '';
-                btn.innerText = i18n[currentLang].sosBtn;
-            } else {
-                timerEl.innerText = remaining + ' ' + i18n[currentLang].sosCooldown;
-            }
-        }, 1000);
-    }
-
-    function parseMarkdown(text) {
-        return text
-            .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
-            .replace(/\*(.*?)\*/g, '<i>$1</i>')
-            .replace(/~~(.*?)~~/g, '<s>$1</s>')
-            .replace(/`(.*?)`/g, '<code>$1</code>');
-    }
-
-    function updateMyProfile() {
-        const myName = document.getElementById('my-name-input').value;
-        connections.forEach(c => c.send({type: 'profile', name: myName}));
-    }
-
-    function sendMessage() {
-        const input = document.getElementById('message-input');
-        const myName = document.getElementById('my-name-input').value;
-        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        if(input.value.trim() === "") return;
-        connections.forEach(c => c.send({type: 'msg', name: myName, body: input.value, time: time}));
-        addMessage("", parseMarkdown(input.value), 'local', time);
-        input.value = "";
-        notifyTyping(false);
-    }
-
-    function addMessage(user, text, type, time) {
-        const box = document.getElementById('chat-box');
-        const displayTime = time.substring(0, 5);
-        const id = time.replace(/:/g, '');
-        box.innerHTML += '<div class="msg ' + type + '">' + (user ? '<strong>' + user + '</strong><br>' : '') + text + '<div class="msg-meta">' + displayTime + (type === 'local' ? ' <span id="seen-' + id + '" style="margin-left:4px;">✔</span>' : '') + '</div></div>';
-        box.scrollTop = box.scrollHeight;
-    }
-
-    function markAsSeen(time) {
-        const id = time.replace(/:/g, '');
-        const el = document.getElementById('seen-' + id);
-        if(el) { el.innerHTML = '✔✔'; el.classList.add('seen-icon'); }
-    }
-
-    function handleImage(input) {
-        if(input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = e => {
-                const imgHtml = '<img src="' + e.target.result + '" style="max-width:100%; border-radius:2px; margin-top:5px; display:block;">';
-                sendSpecialMessage(imgHtml);
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    function sendSpecialMessage(content) {
-        const myName = document.getElementById('my-name-input').value;
-        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        connections.forEach(c => c.send({type: 'msg', name: myName, body: content, time: time}));
-        addMessage("", content, 'local', time);
-    }
-
-    function notifyTyping(state = true) {
-        const myName = document.getElementById('my-name-input').value;
-        connections.forEach(c => c.send({type: 'typing', name: myName, state: state}));
-        if(state) {
-            clearTimeout(typingTimeout);
-            typingTimeout = setTimeout(() => notifyTyping(false), 3000);
-        }
-    }
-
-    function showTyping(name, state) {
-        const ui = document.getElementById('typing-ui');
-        if(state) { ui.innerText = name + ' ' + i18n[currentLang].typing; ui.style.display = 'block'; }
-        else { ui.style.display = 'none'; }
-    }
-
-    function stringToColor(str) {
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
-        let color = '#';
-        for (let i = 0; i < 3; i++) { let value = (hash >> (i * 8)) & 0xFF; color += ('00' + value.toString(16)).substr(-2); }
-        return color;
-    }
-
-    function updateUI() {
-        document.getElementById('conn-count').innerText = connections.length;
-        const list = document.getElementById('online-list');
-        list.innerHTML = "";
-        connections.forEach(c => {
-            const displayName = peerNames[c.peer] || "Bağlanıyor...";
-            list.innerHTML += '<div class="user-card" style="flex-direction:column; align-items:flex-start; gap:2px;"><div style="display:flex; align-items:center; gap:10px;"><div class="user-avatar" style="background:' + stringToColor(c.peer) + '">' + displayName.charAt(0).toUpperCase() + '</div><div class="user-name">' + displayName + '</div></div><div class="user-status" style="font-size:9px; color:#999;">ID: ' + c.peer.substring(0,8) + '...</div></div>';
-        });
-    }
-    
-    function playAudio(id) { document.getElementById(id).play().catch(()=>{}); }
-    function endCall() { if(currentCall) { currentCall.close(); currentCall = null; document.getElementById('call-overlay').style.display = 'none'; } }
-    function startCall() {
-        if(connections.length === 0) { alert(i18n[currentLang].noConn); return; }
-        const targetId = connections[0].peer;
-        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-            const call = peer.call(targetId, stream);
-            currentCall = call;
-            document.getElementById('call-name').innerText = peerNames[targetId] || targetId;
-            document.getElementById('call-status').innerText = i18n[currentLang].calling;
-            document.getElementById('call-overlay').style.display = 'flex';
-            playAudio('snd-call');
-            call.on('stream', remoteStream => {
-                document.getElementById('snd-call').pause();
-                document.getElementById('remote-audio').srcObject = remoteStream;
-                document.getElementById('call-status').innerText = i18n[currentLang].connected;
-            });
-            call.on('close', () => {
-                endCall();
-            });
-        }).catch(() => alert(i18n[currentLang].micDenied));
-    }
-
-    peer.on('call', call => {
-        if(confirm((peerNames[call.peer] || call.peer) + " " + i18n[currentLang].incomingCall)) {
-            navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-                call.answer(stream);
-                currentCall = call;
-                document.getElementById('call-name').innerText = peerNames[call.peer] || call.peer;
-                document.getElementById('call-status').innerText = i18n[currentLang].connected;
-                document.getElementById('call-overlay').style.display = 'flex';
-                call.on('stream', remoteStream => {
-                    document.getElementById('remote-audio').srcObject = remoteStream;
-                });
-                call.on('close', () => endCall());
-            }).catch(() => alert(i18n[currentLang].micDenied));
+function setupConn(conn) {
+    conn.on('open', () => {
+        if (!connections.find(c => c.peer === conn.peer)) {
+            connections.push(conn);
+            const myName = document.getElementById('my-name-input').value;
+            conn.send({type: 'profile', name: myName});
+            // Upsert contact (no message yet)
+            upsertContact(conn.peer, peerNames[conn.peer] || null);
+            updateOnlineList();
+            renderContacts();
         }
     });
+    conn.on('data', data => {
+        if (data.type === 'profile') {
+            peerNames[conn.peer] = data.name;
+            upsertContact(conn.peer, data.name);
+            renderContacts();
+        }
+        else if (data.type === 'msg') {
+            playAudio('snd-msg');
+            const parsed = parseMarkdown(data.body);
+            // Save to contact history
+            upsertContact(conn.peer, peerNames[conn.peer] || null, {
+                type: 'remote', user: data.name, body: parsed, time: data.time
+            });
+            // If this contact is active, show message in chat
+            if (activePeerId === conn.peer) {
+                addMessage(data.name, parsed, 'remote', data.time, true);
+            }
+            conn.send({type: 'seen', msgId: data.time});
+        }
+        else if (data.type === 'seen') { markAsSeen(data.msgId); }
+        else if (data.type === 'typing') { showTyping(data.name, data.state); }
+        else if (data.type === 'sos') { handleSOS(data); }
+    });
+    conn.on('close', () => {
+        connections = connections.filter(c => c.peer !== conn.peer);
+        // Update lastSeen for contact
+        const contacts = loadContacts();
+        if (contacts[conn.peer]) {
+            contacts[conn.peer].lastSeen = Date.now();
+            saveContacts(contacts);
+        }
+        renderContacts();
+    });
+    conn.on('error', err => console.warn('conn error', err));
+}
+
+// ─── SOS (FIXED) ─────────────────────────────────────────────────────────────
+const seenSOS = new Set();
+let sosCooldownTimer = null;
+const SOS_COOLDOWN = 60;
+
+function sendSOS() {
+    if (connections.length === 0) { alert(i18n[currentLang].sosNoConn); return; }
+    const myName = document.getElementById('my-name-input').value;
+    const myId = document.getElementById('my-id').innerText;
+    const sosId = myId + '_' + Date.now();
+    const sosPacket = { type: 'sos', id: sosId, fromId: myId, fromName: myName, ttl: 5, hopCount: 0, timestamp: Date.now() };
+    seenSOS.add(sosId);
+    addSOSMessage(myName, 0, true);
+    connections.forEach(c => { try { c.send(sosPacket); } catch(e){} });
+    startSOSCooldown();
+}
+
+function handleSOS(data) {
+    if (seenSOS.has(data.id)) return;
+    if (data.ttl <= 0) return;
+    seenSOS.add(data.id);
+    playAudio('snd-sos');
+    addSOSMessage(data.fromName, data.hopCount + 1, false);
+    const forwardPacket = { ...data, ttl: data.ttl - 1, hopCount: data.hopCount + 1 };
+    connections.forEach(c => { try { c.send(forwardPacket); } catch(e){} });
+}
+
+function addSOSMessage(fromName, hops, isSelf) {
+    const box = document.getElementById('chat-box');
+    const lang = i18n[currentLang];
+    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const hopText = hops > 0 ? '<div class="sos-hop">↳ ' + hops + ' ' + lang.sosHops + '</div>' : '';
+    const div = document.createElement('div');
+    div.className = 'msg msg-sos';
+    div.innerHTML = '<div class="sos-label">⚠ ' + lang.sosReceived + '</div><b style="font-size:15px;">' + (isSelf ? '🆘 ' : '🚨 ') + fromName + '</b><div class="sos-from">' + lang.sosFrom + ': ' + fromName + '</div>' + hopText + '<div class="msg-meta" style="color:#884444;">' + time + '</div>';
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+    document.title = '🚨 SOS – ' + fromName + ' | AceTalk';
+    setTimeout(() => document.title = 'AceTalk | Simple Messenger', 8000);
+}
+
+function startSOSCooldown() {
+    const btn = document.getElementById('sos-btn');
+    const timerEl = document.getElementById('sos-timer');
+    btn.disabled = true;
+    let remaining = SOS_COOLDOWN;
+    timerEl.innerText = remaining + ' ' + i18n[currentLang].sosCooldown;
+    sosCooldownTimer = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+            clearInterval(sosCooldownTimer);
+            btn.disabled = false;
+            timerEl.innerText = '';
+            btn.innerText = i18n[currentLang].sosBtn;
+        } else {
+            timerEl.innerText = remaining + ' ' + i18n[currentLang].sosCooldown;
+        }
+    }, 1000);
+}
+
+// ─── CALLS (FIXED) ───────────────────────────────────────────────────────────
+function startCall() {
+    if (connections.length === 0) { alert(i18n[currentLang].noConn); return; }
+    // Prefer active contact, fallback to first connection
+    const targetId = activePeerId && connections.find(c => c.peer === activePeerId)
+        ? activePeerId : connections[0].peer;
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        const call = peer.call(targetId, stream);
+        currentCall = call;
+        document.getElementById('call-name').innerText = peerNames[targetId] || targetId;
+        document.getElementById('call-status').innerText = i18n[currentLang].calling;
+        document.getElementById('call-overlay').style.display = 'flex';
+        playAudio('snd-call');
+        call.on('stream', remoteStream => {
+            document.getElementById('snd-call').pause();
+            document.getElementById('remote-audio').srcObject = remoteStream;
+            document.getElementById('call-status').innerText = i18n[currentLang].connected;
+        });
+        call.on('close', () => endCall());
+        call.on('error', () => endCall());
+    }).catch(() => alert(i18n[currentLang].micDenied));
+}
+
+// Incoming call — no confirm(), custom panel
+function handleIncomingCall(call) {
+    pendingCall = call;
+    const callerName = peerNames[call.peer] || call.peer.replace('ace_','').replace(/^00/,'+');
+    document.getElementById('incoming-call-name').innerText = '📞 ' + callerName;
+    document.getElementById('incoming-call-panel').style.display = 'flex';
+    playAudio('snd-call');
+}
+
+function answerCall() {
+    document.getElementById('incoming-call-panel').style.display = 'none';
+    document.getElementById('snd-call').pause();
+    if (!pendingCall) return;
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        pendingCall.answer(stream);
+        currentCall = pendingCall;
+        pendingCall = null;
+        document.getElementById('call-name').innerText = peerNames[currentCall.peer] || currentCall.peer;
+        document.getElementById('call-status').innerText = i18n[currentLang].connected;
+        document.getElementById('call-overlay').style.display = 'flex';
+        currentCall.on('stream', remoteStream => {
+            document.getElementById('remote-audio').srcObject = remoteStream;
+        });
+        currentCall.on('close', () => endCall());
+        currentCall.on('error', () => endCall());
+    }).catch(() => alert(i18n[currentLang].micDenied));
+}
+
+function rejectCall() {
+    document.getElementById('incoming-call-panel').style.display = 'none';
+    document.getElementById('snd-call').pause();
+    if (pendingCall) { pendingCall.close(); pendingCall = null; }
+}
+
+function endCall() {
+    if (currentCall) { currentCall.close(); currentCall = null; }
+    document.getElementById('snd-call').pause();
+    document.getElementById('call-overlay').style.display = 'none';
+}
+
+// ─── MESSAGES ────────────────────────────────────────────────────────────────
+function parseMarkdown(text) {
+    return text
+        .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+        .replace(/\*(.*?)\*/g, '<i>$1</i>')
+        .replace(/~~(.*?)~~/g, '<s>$1</s>')
+        .replace(/`(.*?)`/g, '<code>$1</code>');
+}
+
+function updateMyProfile() {
+    const myName = document.getElementById('my-name-input').value;
+    connections.forEach(c => { try { c.send({type: 'profile', name: myName}); } catch(e){} });
+}
+
+function sendMessage() {
+    const input = document.getElementById('message-input');
+    const myName = document.getElementById('my-name-input').value;
+    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    if (input.value.trim() === '') return;
+    if (connections.length === 0) { alert(i18n[currentLang].noConn); return; }
+
+    const body = input.value;
+    const parsed = parseMarkdown(body);
+
+    // Send to active peer or broadcast
+    const targets = activePeerId && connections.find(c => c.peer === activePeerId)
+        ? connections.filter(c => c.peer === activePeerId)
+        : connections;
+
+    targets.forEach(c => { try { c.send({type: 'msg', name: myName, body: body, time: time}); } catch(e){} });
+
+    // Save to active contact history
+    if (activePeerId) {
+        upsertContact(activePeerId, peerNames[activePeerId] || null, { type: 'local', body: parsed, time: time });
+    }
+
+    addMessage('', parsed, 'local', time, true);
+    input.value = '';
+    notifyTyping(false);
+}
+
+function addMessage(user, text, type, time, scroll) {
+    const box = document.getElementById('chat-box');
+    const welcome = document.getElementById('welcome-msg');
+    if (welcome) welcome.style.display = 'none';
+    const displayTime = time.substring(0, 5);
+    const id = 'msg-' + time.replace(/[:\s]/g, '');
+    const div = document.createElement('div');
+    div.className = 'msg ' + type;
+    div.innerHTML = (user ? '<strong>' + user + '</strong><br>' : '') + text +
+        '<div class="msg-meta">' + displayTime +
+        (type === 'local' ? ' <span id="seen-' + id + '" style="margin-left:4px;">✔</span>' : '') +
+        '</div>';
+    box.appendChild(div);
+    if (scroll) box.scrollTop = box.scrollHeight;
+}
+
+function markAsSeen(time) {
+    const id = 'seen-msg-' + time.replace(/[:\s]/g, '');
+    const el = document.getElementById(id);
+    if (el) { el.innerHTML = '✔✔'; el.classList.add('seen-icon'); }
+}
+
+function handleImage(input) {
+    if (input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => {
+            const imgHtml = '<img src="' + e.target.result + '" style="max-width:100%; margin-top:5px; display:block;">';
+            sendSpecialMessage(imgHtml);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function sendSpecialMessage(content) {
+    const myName = document.getElementById('my-name-input').value;
+    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const targets = activePeerId && connections.find(c => c.peer === activePeerId)
+        ? connections.filter(c => c.peer === activePeerId)
+        : connections;
+    targets.forEach(c => { try { c.send({type: 'msg', name: myName, body: content, time: time}); } catch(e){} });
+    if (activePeerId) {
+        upsertContact(activePeerId, null, { type: 'local', body: content, time: time });
+    }
+    addMessage('', content, 'local', time, true);
+}
+
+function notifyTyping(state = true) {
+    const myName = document.getElementById('my-name-input').value;
+    const targets = activePeerId && connections.find(c => c.peer === activePeerId)
+        ? connections.filter(c => c.peer === activePeerId)
+        : connections;
+    targets.forEach(c => { try { c.send({type: 'typing', name: myName, state: state}); } catch(e){} });
+    if (state) { clearTimeout(typingTimeout); typingTimeout = setTimeout(() => notifyTyping(false), 3000); }
+}
+
+function showTyping(name, state) {
+    const ui = document.getElementById('typing-ui');
+    if (state) { ui.innerText = name + ' ' + i18n[currentLang].typing; ui.style.display = 'block'; }
+    else { ui.style.display = 'none'; }
+}
+
+// ─── UTILS ───────────────────────────────────────────────────────────────────
+function peerIdToPhone(peerId) {
+    // ace_00905... → +905... | ace_05... → 05...
+    return peerId.replace(/^ace_/, '').replace(/^00/, '+');
+}
+
+function stringToColor(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    let color = '#';
+    for (let i = 0; i < 3; i++) {
+        let v = (hash >> (i * 8)) & 0xFF;
+        // darken a bit so white text is readable
+        v = Math.max(40, Math.min(180, v));
+        color += ('00' + v.toString(16)).substr(-2);
+    }
+    return color;
+}
+
+function playAudio(id) { document.getElementById(id).play().catch(() => {}); }
+
+// Drag & drop image
+const dropZone = document.getElementById('drop-zone');
+dropZone.addEventListener('dragover', e => e.preventDefault());
+dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = ev => sendSpecialMessage('<img src="' + ev.target.result + '" style="max-width:100%; margin-top:5px; display:block;">');
+        reader.readAsDataURL(file);
+    }
+});
 </script>
 </body>
 </html>
