@@ -217,7 +217,7 @@
         #call-overlay button:hover { filter: brightness(1.15); }
         #call-overlay button:active { transform: scale(0.96); }
 
-        /* Incoming call panel (replaces confirm()) */
+        /* Incoming call panel */
         #incoming-call-panel {
             position: fixed; bottom: 30px; right: 260px;
             background: #1e2d3d; border: 1px solid var(--call-green);
@@ -294,7 +294,7 @@
         #phone-setup-error { color: var(--sos-red); font-size: 11px; margin-top: 8px; min-height: 16px; letter-spacing: 1px; }
         .phone-setup-note { color: #4a6278; font-size: 10px; margin-top: 16px; text-align: center; max-width: 300px; line-height: 1.6; }
 
-        /* NAME STEP (second step of phone setup) */
+        /* NAME STEP */
         #name-step {
             display: none; flex-direction: column; align-items: center;
             animation: stepSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -369,6 +369,16 @@
             display: none; align-items: center; justify-content: center;
             animation: fadeInBg 0.2s ease;
         }
+
+        /* Phone input shake animation */
+        @keyframes inputShake {
+            0%,100% { transform: translateX(0); }
+            20%     { transform: translateX(-4px); }
+            40%     { transform: translateX(4px); }
+            60%     { transform: translateX(-3px); }
+            80%     { transform: translateX(3px); }
+        }
+        .input-shake { animation: inputShake 0.4s ease; }
     </style>
 </head>
 <body>
@@ -439,12 +449,12 @@
         <div class="setup-step-label">1 / 2 — Telefon numarası</div>
         <div class="phone-input-wrap">
             <span class="phone-prefix">📱</span>
-            <input type="tel" id="phone-number-input" placeholder="5XX XXX XX XX" maxlength="15"
+            <input type="tel" id="phone-number-input" placeholder="+994XXXXXXXXX" maxlength="16"
                    onkeypress="if(event.key==='Enter') confirmPhone()">
         </div>
         <button id="phone-setup-btn" onclick="confirmPhone()">DEVAM ET →</button>
         <div id="phone-setup-error"></div>
-        <div class="phone-setup-note">Bu numara senin AceTalk ID'n olacak. Başkaları bu numarayla sana ulaşabilir.</div>
+        <div class="phone-setup-note">Uluslararası format kullan: +994501234567<br>Bu numara senin AceTalk ID'n olacak.</div>
     </div>
 
     <!-- Step 2: Name -->
@@ -511,7 +521,6 @@
 
     <!-- MAIN CHAT -->
     <div class="main-chat" id="drop-zone">
-        <!-- Chat header (shows active contact) -->
         <div id="chat-header">
             <div id="chat-header-avatar"></div>
             <div>
@@ -549,14 +558,9 @@
             <span class="contacts-title" data-i18n="contactsTitle">CONTACTS</span>
             <span class="contacts-count" id="contacts-total">0</span>
         </div>
-
-        <!-- Online now -->
         <div class="contacts-section-label" data-i18n="onlineNow">ŞU AN ÇEVRİMİÇİ</div>
         <div id="online-list"></div>
-
         <div class="contacts-divider"></div>
-
-        <!-- Saved contacts -->
         <div class="contacts-section-label" data-i18n="savedContacts">KAYDEDİLEN</div>
         <div id="contacts-list">
             <div class="no-contacts" id="no-contacts-msg" data-i18n="noContacts">
@@ -569,6 +573,31 @@
 <audio id="remote-audio" autoplay></audio>
 
 <script>
+// ─── PHONE VALIDATION ─────────────────────────────────────────────────────────
+function isValidInternationalPhone(value) {
+    const cleaned = value.replace(/[\s\-\(\)]/g, '');
+    return /^\+[1-9]\d{6,14}$/.test(cleaned);
+}
+
+function showInputError(inputEl, msg) {
+    const origPlaceholder = inputEl.placeholder;
+    const origBorder = inputEl.style.borderColor;
+    const origColor = inputEl.style.color;
+    inputEl.style.borderColor = '#e74c3c';
+    inputEl.style.color = '#e74c3c';
+    if (msg) inputEl.placeholder = msg;
+    inputEl.classList.remove('input-shake');
+    void inputEl.offsetWidth; // reflow to restart animation
+    inputEl.classList.add('input-shake');
+    inputEl.value = '';
+    setTimeout(() => {
+        inputEl.style.borderColor = origBorder;
+        inputEl.style.color = origColor;
+        if (msg) inputEl.placeholder = origPlaceholder;
+        inputEl.classList.remove('input-shake');
+    }, 2000);
+}
+
 // ─── WALLPAPER ───────────────────────────────────────────────────────────────
 const DEFAULT_WALLPAPER = "https://raw.githubusercontent.com/benmalakko-netizen/AceTalk/main/Acetalkwallpaper.jpg";
 
@@ -610,7 +639,8 @@ const i18n = {
         answerBtn: "CEVAPLA",
         rejectBtn: "REDDET",
         loadHistory: "Geçmiş yükleniyor...",
-        chatWith: "ile sohbet"
+        chatWith: "ile sohbet",
+        invalidPhone: "Geçersiz numara! Örnek: +994501234567"
     },
     en: {
         myName: "MY NAME", idPlaceholder: "Their phone number...", connectBtn: "CONNECT", voiceCall: "VOICE CALL",
@@ -632,7 +662,8 @@ const i18n = {
         answerBtn: "ANSWER",
         rejectBtn: "REJECT",
         loadHistory: "Loading history...",
-        chatWith: "Chat with"
+        chatWith: "Chat with",
+        invalidPhone: "Invalid number! Example: +994501234567"
     },
     ru: {
         myName: "МОЕ ИМЯ", idPlaceholder: "Номер телефона...", connectBtn: "ПОДКЛЮЧИТЬ", voiceCall: "ГОЛОСОВОЙ ВЫЗОВ",
@@ -654,7 +685,8 @@ const i18n = {
         answerBtn: "ОТВЕТИТЬ",
         rejectBtn: "ОТКЛОНИТЬ",
         loadHistory: "Загрузка истории...",
-        chatWith: "Чат с"
+        chatWith: "Чат с",
+        invalidPhone: "Неверный номер! Пример: +994501234567"
     },
     de: {
         myName: "MEIN NAME", idPlaceholder: "Telefonnummer...", connectBtn: "VERBINDEN", voiceCall: "ANRUFEN",
@@ -676,7 +708,8 @@ const i18n = {
         answerBtn: "ANNEHMEN",
         rejectBtn: "ABLEHNEN",
         loadHistory: "Verlauf laden...",
-        chatWith: "Chat mit"
+        chatWith: "Chat mit",
+        invalidPhone: "Ungültige Nummer! Beispiel: +994501234567"
     }
 };
 
@@ -707,8 +740,6 @@ function setLanguage(lang) {
 }
 
 // ─── CONTACTS STORAGE ────────────────────────────────────────────────────────
-// Structure: { peerId: { name, lastSeen, messages: [{type, user, body, time}] } }
-
 function loadContacts() {
     try { return JSON.parse(localStorage.getItem('acetalk_contacts') || '{}'); }
     catch { return {}; }
@@ -722,7 +753,6 @@ function upsertContact(peerId, name, message) {
     if (name) contacts[peerId].name = name;
     if (message) {
         contacts[peerId].messages.push(message);
-        // Keep last 200 messages per contact
         if (contacts[peerId].messages.length > 200) contacts[peerId].messages = contacts[peerId].messages.slice(-200);
     }
     contacts[peerId].lastSeen = Date.now();
@@ -731,7 +761,7 @@ function upsertContact(peerId, name, message) {
 }
 
 // ─── ACTIVE CHAT STATE ───────────────────────────────────────────────────────
-let activePeerId = null; // which contact's history is shown
+let activePeerId = null;
 
 function openContact(peerId) {
     activePeerId = peerId;
@@ -739,7 +769,6 @@ function openContact(peerId) {
     const contact = contacts[peerId];
     if (!contact) return;
 
-    // Update header
     const header = document.getElementById('chat-header');
     const avatar = document.getElementById('chat-header-avatar');
     const headerName = document.getElementById('chat-header-name');
@@ -752,7 +781,6 @@ function openContact(peerId) {
     const isOnline = connections.find(c => c.peer === peerId);
     headerStatus.innerText = isOnline ? i18n[currentLang].onlineStatus : (i18n[currentLang].offlineStatus + ': ' + formatLastSeen(contact.lastSeen));
 
-    // Load messages
     const box = document.getElementById('chat-box');
     const welcome = document.getElementById('welcome-msg');
     if (welcome) welcome.style.display = 'none';
@@ -767,7 +795,7 @@ function openContact(peerId) {
     });
 
     box.scrollTop = box.scrollHeight;
-    renderContacts(); // refresh active state
+    renderContacts();
 }
 
 function formatLastSeen(ts) {
@@ -780,11 +808,9 @@ function formatLastSeen(ts) {
 function renderContacts() {
     const contacts = loadContacts();
     const list = document.getElementById('contacts-list');
-    const noMsg = document.getElementById('no-contacts-msg');
     const totalEl = document.getElementById('contacts-total');
     const keys = Object.keys(contacts);
 
-    // Sort: online first, then by lastSeen desc
     const onlineIds = new Set(connections.map(c => c.peer));
     keys.sort((a, b) => {
         const ao = onlineIds.has(a), bo = onlineIds.has(b);
@@ -824,7 +850,6 @@ function renderContacts() {
         list.appendChild(card);
     });
 
-    // Online section
     updateOnlineList();
 }
 
@@ -871,11 +896,21 @@ window.addEventListener('load', () => {
 function confirmPhone() {
     const raw = document.getElementById('phone-number-input').value.trim().replace(/\s+/g, '');
     const errEl = document.getElementById('phone-setup-error');
-    if (!raw || raw.length < 7) { errEl.innerText = 'Geçerli bir numara gir!'; return; }
-    const clean = raw.replace(/[^\d+]/g, '');
-    if (clean.length < 7) { errEl.innerText = 'Numara çok kısa!'; return; }
+
+    if (!raw) { errEl.innerText = 'Numara gir!'; return; }
+    if (!isValidInternationalPhone(raw)) {
+        errEl.innerText = 'Uluslararası format kullan: +994501234567';
+        const inputEl = document.getElementById('phone-number-input');
+        inputEl.classList.remove('input-shake');
+        void inputEl.offsetWidth;
+        inputEl.classList.add('input-shake');
+        setTimeout(() => inputEl.classList.remove('input-shake'), 400);
+        return;
+    }
+
     errEl.innerText = '';
-    // Transition to name step
+    const clean = raw.replace(/[\s\-\(\)]/g, '');
+
     const phoneStep = document.getElementById('phone-step');
     const nameStep  = document.getElementById('name-step');
     document.getElementById('dot-1').classList.remove('active');
@@ -889,7 +924,6 @@ function confirmPhone() {
         phoneStep.style.display = 'none';
         nameStep.style.display = 'flex';
         document.getElementById('display-name-input').focus();
-        // Store temporarily
         window._pendingPhone = clean;
     }, 250);
 }
@@ -930,7 +964,6 @@ function confirmDelete() {
     const contacts = loadContacts();
     delete contacts[_deleteTargetId];
     saveContacts(contacts);
-    // If deleted contact was active, clear chat
     if (activePeerId === _deleteTargetId) {
         activePeerId = null;
         document.getElementById('chat-header').style.display = 'none';
@@ -948,16 +981,13 @@ function closeResetModal() {
     document.getElementById('reset-modal').style.display = 'none';
 }
 function confirmResetAccount() {
-    // Disconnect all peers
     connections.forEach(c => { try { c.close(); } catch(e){} });
     if (peer) { try { peer.destroy(); } catch(e){} }
-    // Wipe all acetalk storage (keep wallpaper)
     const wp = localStorage.getItem('acetalk_wallpaper');
     localStorage.removeItem('acetalk_phone');
     localStorage.removeItem('acetalk_displayname');
     localStorage.removeItem('acetalk_contacts');
     if (wp) localStorage.setItem('acetalk_wallpaper', wp);
-    // Reload page to show setup screen fresh
     location.reload();
 }
 
@@ -971,7 +1001,6 @@ let typingTimeout = null;
 function initPeer(phoneId) {
     const peerId = 'ace_' + phoneId.replace(/\+/g, '00').replace(/[^\w]/g, '');
 
-    // Apply saved display name
     const savedName = localStorage.getItem('acetalk_displayname');
     if (savedName) document.getElementById('my-name-input').value = savedName;
 
@@ -980,13 +1009,11 @@ function initPeer(phoneId) {
     peer = new Peer(peerId);
 
     peer.on('open', id => {
-        // Display as the original phone number
         document.getElementById('my-id').innerText = localStorage.getItem('acetalk_phone');
     });
 
     peer.on('error', err => {
         if (err.type === 'unavailable-id') {
-            // ID taken — someone else is using this number right now
             document.getElementById('phone-setup').style.display = 'flex';
             document.getElementById('phone-setup-error').innerText = 'Bu numara şu an başka bir cihazda açık!';
             localStorage.removeItem('acetalk_phone');
@@ -1003,13 +1030,20 @@ function phoneToId(phone) {
     return 'ace_' + phone.trim().replace(/\s/g,'').replace(/\+/g, '00').replace(/[^\w]/g, '');
 }
 
+// ─── CONNECT TO PEER (with validation) ───────────────────────────────────────
 function connectToPeer() {
-    const raw = document.getElementById('peer-id-input').value.trim().replace(/\s+/g, '');
+    const inputEl = document.getElementById('peer-id-input');
+    const raw = inputEl.value.trim().replace(/\s+/g, '');
     if (!raw) return;
+
+    if (!isValidInternationalPhone(raw)) {
+        showInputError(inputEl, i18n[currentLang].invalidPhone);
+        return;
+    }
+
     const pid = phoneToId(raw);
     if (connections.find(c => c.peer === pid)) return;
     setupConn(peer.connect(pid));
-    // Store original phone for display
     peerNames[pid] = peerNames[pid] || raw;
 }
 
@@ -1019,7 +1053,6 @@ function setupConn(conn) {
             connections.push(conn);
             const myName = document.getElementById('my-name-input').value;
             conn.send({type: 'profile', name: myName});
-            // Upsert contact (no message yet)
             upsertContact(conn.peer, peerNames[conn.peer] || null);
             updateOnlineList();
             renderContacts();
@@ -1034,11 +1067,9 @@ function setupConn(conn) {
         else if (data.type === 'msg') {
             playAudio('snd-msg');
             const parsed = parseMarkdown(data.body);
-            // Save to contact history
             upsertContact(conn.peer, peerNames[conn.peer] || null, {
                 type: 'remote', user: data.name, body: parsed, time: data.time
             });
-            // If this contact is active, show message in chat
             if (activePeerId === conn.peer) {
                 addMessage(data.name, parsed, 'remote', data.time, true);
             }
@@ -1050,7 +1081,6 @@ function setupConn(conn) {
     });
     conn.on('close', () => {
         connections = connections.filter(c => c.peer !== conn.peer);
-        // Update lastSeen for contact
         const contacts = loadContacts();
         if (contacts[conn.peer]) {
             contacts[conn.peer].lastSeen = Date.now();
@@ -1061,7 +1091,7 @@ function setupConn(conn) {
     conn.on('error', err => console.warn('conn error', err));
 }
 
-// ─── SOS (FIXED) ─────────────────────────────────────────────────────────────
+// ─── SOS ─────────────────────────────────────────────────────────────────────
 const seenSOS = new Set();
 let sosCooldownTimer = null;
 const SOS_COOLDOWN = 60;
@@ -1121,10 +1151,9 @@ function startSOSCooldown() {
     }, 1000);
 }
 
-// ─── CALLS (FIXED) ───────────────────────────────────────────────────────────
+// ─── CALLS ───────────────────────────────────────────────────────────────────
 function startCall() {
     if (connections.length === 0) { alert(i18n[currentLang].noConn); return; }
-    // Prefer active contact, fallback to first connection
     const targetId = activePeerId && connections.find(c => c.peer === activePeerId)
         ? activePeerId : connections[0].peer;
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
@@ -1144,7 +1173,6 @@ function startCall() {
     }).catch(() => alert(i18n[currentLang].micDenied));
 }
 
-// Incoming call — no confirm(), custom panel
 function handleIncomingCall(call) {
     pendingCall = call;
     const callerName = peerNames[call.peer] || call.peer.replace('ace_','').replace(/^00/,'+');
@@ -1208,14 +1236,12 @@ function sendMessage() {
     const body = input.value;
     const parsed = parseMarkdown(body);
 
-    // Send to active peer or broadcast
     const targets = activePeerId && connections.find(c => c.peer === activePeerId)
         ? connections.filter(c => c.peer === activePeerId)
         : connections;
 
     targets.forEach(c => { try { c.send({type: 'msg', name: myName, body: body, time: time}); } catch(e){} });
 
-    // Save to active contact history
     if (activePeerId) {
         upsertContact(activePeerId, peerNames[activePeerId] || null, { type: 'local', body: parsed, time: time });
     }
@@ -1286,39 +1312,4 @@ function showTyping(name, state) {
     else { ui.style.display = 'none'; }
 }
 
-// ─── UTILS ───────────────────────────────────────────────────────────────────
-function peerIdToPhone(peerId) {
-    // ace_00905... → +905... | ace_05... → 05...
-    return peerId.replace(/^ace_/, '').replace(/^00/, '+');
-}
-
-function stringToColor(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    let color = '#';
-    for (let i = 0; i < 3; i++) {
-        let v = (hash >> (i * 8)) & 0xFF;
-        // darken a bit so white text is readable
-        v = Math.max(40, Math.min(180, v));
-        color += ('00' + v.toString(16)).substr(-2);
-    }
-    return color;
-}
-
-function playAudio(id) { document.getElementById(id).play().catch(() => {}); }
-
-// Drag & drop image
-const dropZone = document.getElementById('drop-zone');
-dropZone.addEventListener('dragover', e => e.preventDefault());
-dropZone.addEventListener('drop', e => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = ev => sendSpecialMessage('<img src="' + ev.target.result + '" style="max-width:100%; margin-top:5px; display:block;">');
-        reader.readAsDataURL(file);
-    }
-});
-</script>
-</body>
-</html>
+// ─── UTILS ────────────────────────────────────────────────────────────────�
