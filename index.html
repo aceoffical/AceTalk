@@ -14,6 +14,7 @@
             --chat-bg: #ffffff;
             --call-green: #2ecc71;
             --call-red: #e74c3c;
+            --call-purple: #8e44ad;
             --msg-local: #f0faff;
             --msg-remote: #f9f9f9;
             --msg-local-border: #d1ecf1;
@@ -47,21 +48,13 @@
             70%  { box-shadow: 0 0 0 8px rgba(46,204,113,0); }
             100% { box-shadow: 0 0 0 0 rgba(46,204,113,0); }
         }
-        @keyframes connectPulse {
-            0%   { box-shadow: 0 0 0 0 rgba(0,175,240,0.5); }
-            70%  { box-shadow: 0 0 0 8px rgba(0,175,240,0); }
-            100% { box-shadow: 0 0 0 0 rgba(0,175,240,0); }
-        }
 
         .icon-btn[onclick="sendMessage()"] { transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), color 0.2s ease !important; }
         .icon-btn[onclick="sendMessage()"]:hover { transform: translateX(4px) scale(1.15); }
         .icon-btn[onclick="sendMessage()"]:active { transform: translateX(8px) scale(0.95); }
-        label.icon-btn { transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), color 0.2s ease !important; }
+        label.icon-btn { transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), color 0.2s ease !important; cursor: pointer; }
         label.icon-btn:hover { transform: scale(1.2) rotate(-5deg); }
         label.icon-btn:active { transform: scale(0.9); }
-        .lang-btn { transition: color 0.2s ease, border-color 0.2s ease, transform 0.15s ease !important; }
-        .lang-btn:hover { transform: translateY(-2px); color: #ccc; }
-        .lang-btn:active { transform: translateY(0); }
 
         @keyframes sosShake {
             0%,100% { transform: translateX(0); }
@@ -90,14 +83,40 @@
 
         /* SIDEBAR */
         .sidebar { width: 280px; background: var(--sidebar-bg); color: white; display: flex; flex-direction: column; padding: 25px; border-right: 1px solid #1a252f; z-index: 10; }
-        .brand-section { margin-bottom: 30px; }
+        .brand-section { margin-bottom: 25px; }
         .brand-name { color: var(--skype-blue); font-size: 32px; font-weight: 700; margin: 0; }
         .sidebar-slogan { font-size: 10px; color: #7f8c8d; text-transform: uppercase; letter-spacing: 2px; }
-        .my-status-box { background: rgba(0,0,0,0.2); padding: 15px; margin-bottom: 10px; border-left: 3px solid var(--skype-blue); }
-        .status-input { width: 100%; background: transparent; border: none; color: white; font-weight: bold; font-size: 14px; outline: none; border-bottom: 1px solid #34495e; padding-bottom: 5px; }
-        .lang-switcher { display: flex; flex-direction: row; flex-wrap: wrap; gap: 5px; margin-bottom: 20px; }
-        .lang-btn { background: #1a252f; border: none; color: #7f8c8d; font-size: 11px; padding: 8px 10px; cursor: pointer; font-weight: bold; letter-spacing: 1px; flex: 1; text-align: center; transition: none; }
-        .lang-btn.active { color: white; border-bottom: 2px solid var(--skype-blue); }
+        
+        .my-status-box { background: rgba(0,0,0,0.2); padding: 15px; margin-bottom: 10px; border-left: 3px solid var(--skype-blue); display: flex; flex-direction: column; }
+        .status-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .my-avatar-upload { width: 34px; height: 34px; min-width: 34px; background: #1a252f; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; cursor: pointer; border: 1px solid #34495e; overflow: hidden; }
+        .my-avatar-upload img { width: 100%; height: 100%; object-fit: cover; }
+        .status-input { flex: 1; width: 100%; background: transparent; border: none; color: white; font-weight: bold; font-size: 14px; outline: none; border-bottom: 1px solid #34495e; padding-bottom: 5px; }
+        
+        /* MODERN LANG SELECTOR */
+        .lang-switcher { margin-bottom: 20px; }
+        .lang-select {
+            width: 100%;
+            background: #1a252f;
+            border: 1px solid #34495e;
+            color: #ccc;
+            padding: 10px 12px;
+            font-family: 'Ubuntu', sans-serif;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%2300aff0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position-x: 95%;
+            background-position-y: 50%;
+            transition: border-color 0.2s ease, color 0.2s ease;
+        }
+        .lang-select:hover { border-color: var(--skype-blue); color: white; }
+        .lang-select option { background: #1e2d3d; color: white; padding: 10px; font-weight: normal; }
 
         /* MAIN CHAT */
         .main-chat { flex: 1; display: flex; flex-direction: column; background: var(--chat-bg); position: relative; min-width: 0; }
@@ -111,17 +130,8 @@
         .seen-icon { color: var(--skype-blue); font-weight: bold; }
 
         /* SOS */
-        .msg-sos {
-            max-width: 90%; align-self: center; background: #2d0000;
-            border: 2px solid var(--sos-red); border-left: 6px solid var(--sos-red);
-            color: #ff6b6b; padding: 14px 20px; font-size: 14px;
-            animation: sosPulse 0.5s ease-out, msgIn 0.3s ease-out;
-        }
-        @keyframes sosPulse {
-            0% { box-shadow: 0 0 0 0 rgba(231,76,60,0.7); }
-            70% { box-shadow: 0 0 0 12px rgba(231,76,60,0); }
-            100% { box-shadow: 0 0 0 0 rgba(231,76,60,0); }
-        }
+        .msg-sos { max-width: 90%; align-self: center; background: #2d0000; border: 2px solid var(--sos-red); border-left: 6px solid var(--sos-red); color: #ff6b6b; padding: 14px 20px; font-size: 14px; animation: sosPulse 0.5s ease-out, msgIn 0.3s ease-out; }
+        @keyframes sosPulse { 0% { box-shadow: 0 0 0 0 rgba(231,76,60,0.7); } 70% { box-shadow: 0 0 0 12px rgba(231,76,60,0); } 100% { box-shadow: 0 0 0 0 rgba(231,76,60,0); } }
         .sos-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--sos-red); margin-bottom: 5px; }
         .sos-from { font-size: 11px; color: #ff9999; margin-top: 6px; }
         .sos-hop { font-size: 9px; color: #884444; margin-top: 3px; }
@@ -136,97 +146,52 @@
         .mountain-icon::after { content: ''; position: absolute; bottom: -2px; left: 8px; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 9px solid currentColor; }
         .sun { position: absolute; top: 3px; right: 3px; width: 5px; height: 5px; background: currentColor; border-radius: 50% !important; }
 
-        /* RIGHT BAR — CONTACTS */
-        .right-bar {
-            width: 240px; background: var(--contacts-bg);
-            border-left: 1px solid #111d28; padding: 0;
-            display: flex; flex-direction: column; overflow: hidden;
-        }
-        .contacts-header {
-            padding: 18px 16px 12px;
-            border-bottom: 1px solid #111d28;
-            display: flex; justify-content: space-between; align-items: center;
-        }
+        /* RIGHT BAR */
+        .right-bar { width: 240px; background: var(--contacts-bg); border-left: 1px solid #111d28; padding: 0; display: flex; flex-direction: column; overflow: hidden; }
+        .contacts-header { padding: 18px 16px 12px; border-bottom: 1px solid #111d28; display: flex; justify-content: space-between; align-items: center; }
         .contacts-title { font-size: 11px; font-weight: 700; color: #7f8c8d; letter-spacing: 1.5px; text-transform: uppercase; }
         .contacts-count { background: var(--skype-blue); color: white; padding: 2px 7px; font-size: 10px; font-weight: bold; }
-
-        /* Online section */
-        .contacts-section-label {
-            font-size: 9px; font-weight: 700; letter-spacing: 2px;
-            color: #4a6278; padding: 10px 16px 4px; text-transform: uppercase;
-        }
+        .contacts-section-label { font-size: 9px; font-weight: 700; letter-spacing: 2px; color: #4a6278; padding: 10px 16px 4px; text-transform: uppercase; }
         #online-list { padding: 0 8px; }
-
-        /* Divider */
         .contacts-divider { height: 1px; background: #111d28; margin: 8px 16px; }
-
-        /* Saved contacts list */
         #contacts-list { flex: 1; overflow-y: auto; padding: 0 8px 8px; }
         #contacts-list::-webkit-scrollbar { width: 3px; }
         #contacts-list::-webkit-scrollbar-track { background: transparent; }
         #contacts-list::-webkit-scrollbar-thumb { background: #34495e; }
 
         /* Contact card */
-        .contact-card {
-            display: flex; align-items: center; gap: 10px;
-            padding: 9px 8px; cursor: pointer;
-            border-left: 3px solid transparent;
-            transition: background 0.15s ease, border-color 0.15s ease, padding-left 0.15s ease;
-        }
+        .contact-card { display: flex; align-items: center; gap: 10px; padding: 9px 8px; cursor: pointer; border-left: 3px solid transparent; transition: background 0.15s ease, border-color 0.15s ease, padding-left 0.15s ease; position: relative; }
         .contact-card:hover { background: rgba(0,175,240,0.07); border-left-color: var(--skype-blue); padding-left: 12px; }
         .contact-card.active { background: rgba(0,175,240,0.13); border-left-color: var(--skype-blue); }
         .contact-card.online-now { border-left-color: var(--call-green); }
         .contact-card.online-now:hover { border-left-color: var(--call-green); }
 
-        .contact-avatar {
-            width: 34px; height: 34px; min-width: 34px;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; color: white; font-size: 13px;
-            position: relative;
-        }
-        .contact-online-dot {
-            position: absolute; bottom: 0; right: 0;
-            width: 9px; height: 9px; background: var(--call-green);
-            border: 2px solid var(--contacts-bg);
-            border-radius: 50% !important;
-        }
+        .contact-avatar { width: 34px; height: 34px; min-width: 34px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 13px; position: relative; overflow: hidden; border: 1px solid #34495e; }
+        .contact-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .contact-online-dot { position: absolute; bottom: 0; right: 0; width: 9px; height: 9px; background: var(--call-green); border: 2px solid var(--contacts-bg); border-radius: 50% !important; z-index: 2; }
         .contact-info { flex: 1; min-width: 0; }
         .contact-name { font-size: 12px; font-weight: 700; color: #cdd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .contact-last { font-size: 10px; color: #4a6278; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
-        .contact-unread { background: var(--skype-blue); color: white; font-size: 9px; font-weight: bold; padding: 1px 5px; min-width: 16px; text-align: center; }
-
-        /* No contacts placeholder */
         .no-contacts { padding: 20px 16px; font-size: 11px; color: #4a6278; text-align: center; line-height: 1.6; }
 
-        /* Chat header showing active contact */
-        #chat-header {
-            display: none; padding: 12px 30px;
-            background: #f7f7f7; border-bottom: 1px solid #eee;
-            align-items: center; gap: 12px;
-        }
-        #chat-header-avatar { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 13px; }
+        /* Chat header */
+        #chat-header { display: none; padding: 12px 30px; background: #f7f7f7; border-bottom: 1px solid #eee; align-items: center; gap: 12px; }
+        #chat-header-avatar { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 13px; overflow: hidden; border: 1px solid #ccc; }
+        #chat-header-avatar img { width: 100%; height: 100%; object-fit: cover; }
         #chat-header-name { font-size: 14px; font-weight: 700; color: #333; }
         #chat-header-status { font-size: 10px; color: #999; margin-top: 2px; }
 
-        /* Call overlay */
-        #call-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(44, 62, 80, 0.97); z-index: 10000;
-            display: none; flex-direction: column; align-items: center; justify-content: center; color: white;
-        }
+        /* Call overlay & Videos */
+        #call-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44, 62, 80, 0.97); z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; color: white; }
         #call-overlay button:hover { filter: brightness(1.15); }
         #call-overlay button:active { transform: scale(0.96); }
+        
+        #call-videos { display: none; width: 100%; max-width: 800px; position: relative; margin-top: 20px; align-items: center; justify-content: center; }
+        #remote-video { width: 100%; max-height: 65vh; border: 2px solid var(--call-green); background: #000; }
+        #local-video { position: absolute; bottom: 15px; right: 15px; width: 140px; border: 2px solid var(--skype-blue); background: #000; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
 
-        /* Incoming call panel (replaces confirm()) */
-        #incoming-call-panel {
-            position: fixed; bottom: 30px; right: 260px;
-            background: #1e2d3d; border: 1px solid var(--call-green);
-            border-left: 4px solid var(--call-green);
-            padding: 16px 20px; z-index: 10001;
-            display: none; flex-direction: column; gap: 10px;
-            animation: slideInPanel 0.3s ease-out;
-            min-width: 240px;
-        }
+        /* Incoming call panel */
+        #incoming-call-panel { position: fixed; bottom: 30px; right: 260px; background: #1e2d3d; border: 1px solid var(--call-green); border-left: 4px solid var(--call-green); padding: 16px 20px; z-index: 10001; display: none; flex-direction: column; gap: 10px; animation: slideInPanel 0.3s ease-out; min-width: 240px; }
         @keyframes slideInPanel { from { opacity:0; transform: translateX(20px); } to { opacity:1; transform: translateX(0); } }
         #incoming-call-name { color: white; font-weight: bold; font-size: 14px; }
         #incoming-call-sub { color: #7f8c8d; font-size: 11px; }
@@ -235,140 +200,48 @@
         .btn-answer { background: var(--call-green); color: white; }
         .btn-reject { background: var(--call-red); color: white; }
 
-        /* SOS timer */
         #sos-timer { font-size: 9px; color: #e74c3c; text-align: center; margin-top: 4px; min-height: 14px; letter-spacing: 1px; }
 
-        /* Wallpaper buttons */
-        .wp-btn {
-            background: #1a252f; border: none; border-left: 3px solid transparent;
-            color: #7f8c8d; font-size: 12px; padding: 13px 15px; cursor: pointer;
-            font-weight: bold; text-align: left; letter-spacing: 1px; width: 100%;
-            font-family: 'Ubuntu', sans-serif;
-            transition: color 0.2s ease, border-color 0.2s ease, padding-left 0.2s ease, background 0.2s ease;
-        }
+        /* Buttons */
+        .wp-btn { background: #1a252f; border: none; border-left: 3px solid transparent; color: #7f8c8d; font-size: 12px; padding: 13px 15px; cursor: pointer; font-weight: bold; text-align: left; letter-spacing: 1px; width: 100%; font-family: 'Ubuntu', sans-serif; transition: color 0.2s ease, border-color 0.2s ease, padding-left 0.2s ease, background 0.2s ease; }
         .wp-btn:hover { color: white; border-left-color: var(--skype-blue); padding-left: 20px; background: rgba(0,175,240,0.07); }
-        .wp-btn:active { padding-left: 13px; }
-
-        /* Sidebar action buttons */
-        .sidebar-action-btn {
-            border: none; color: white; padding: 13px 15px; font-weight: bold;
-            cursor: pointer; font-family: 'Ubuntu', sans-serif; font-size: 13px;
-            letter-spacing: 1px; width: 100%; text-align: left;
-            border-left: 3px solid transparent;
-            transition: padding-left 0.2s ease, border-color 0.2s ease, filter 0.2s ease;
-        }
+        .sidebar-action-btn { border: none; color: white; padding: 13px 15px; font-weight: bold; cursor: pointer; font-family: 'Ubuntu', sans-serif; font-size: 13px; letter-spacing: 1px; width: 100%; text-align: left; border-left: 3px solid transparent; transition: padding-left 0.2s ease, border-color 0.2s ease, filter 0.2s ease; }
         .sidebar-action-btn:hover { padding-left: 22px; border-left-color: rgba(255,255,255,0.6); filter: brightness(1.15); }
-        .sidebar-action-btn:active { padding-left: 12px; filter: brightness(0.9); }
-        .sidebar-action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
         .btn-connect { background: var(--skype-blue); }
         .btn-call    { background: var(--call-green); }
+        .btn-video   { background: var(--call-purple); }
         .btn-sos     { background: var(--sos-red); font-size: 12px; }
-        .btn-sos:disabled { background: #555; color: #999; }
-
         .typing-pulse { color: #00aff0; font-weight: bold; font-size: 11px; padding: 4px 30px; }
 
-        /* PHONE SETUP SCREEN */
-        #phone-setup {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--sidebar-bg); display: flex; flex-direction: column;
-            align-items: center; justify-content: center; z-index: 99999;
-        }
-        #phone-setup h2 { color: var(--skype-blue); font-size: 28px; margin: 0 0 6px; font-weight: 700; }
+        /* NEW SETUP SCREEN */
+        #phone-setup { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--sidebar-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; }
+        #phone-setup h2 { color: var(--skype-blue); font-size: 32px; margin: 0 0 6px; font-weight: 700; }
         #phone-setup p { color: #7f8c8d; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 30px; }
-        .phone-input-wrap { display: flex; border: 1px solid #34495e; overflow: hidden; width: 300px; }
-        .phone-prefix { background: #1a252f; color: #7f8c8d; padding: 14px 12px; font-size: 14px; font-weight: bold; border-right: 1px solid #34495e; white-space: nowrap; }
-        #phone-number-input {
-            flex: 1; background: #1a252f; border: none; color: white;
-            padding: 14px 12px; font-size: 16px; font-family: 'Ubuntu', sans-serif;
-            outline: none; letter-spacing: 2px;
-        }
-        #phone-number-input::placeholder { color: #4a6278; letter-spacing: 1px; font-size: 13px; }
-        #phone-setup-btn {
-            margin-top: 12px; width: 300px; padding: 14px;
-            background: var(--skype-blue); color: white; border: none;
-            font-weight: bold; font-family: 'Ubuntu', sans-serif;
-            font-size: 14px; letter-spacing: 2px; cursor: pointer;
-            transition: filter 0.2s ease;
-        }
-        #phone-setup-btn:hover { filter: brightness(1.15); }
-        #phone-setup-error { color: var(--sos-red); font-size: 11px; margin-top: 8px; min-height: 16px; letter-spacing: 1px; }
-        .phone-setup-note { color: #4a6278; font-size: 10px; margin-top: 16px; text-align: center; max-width: 300px; line-height: 1.6; }
-
-        /* NAME STEP (second step of phone setup) */
-        #name-step {
-            display: none; flex-direction: column; align-items: center;
-            animation: stepSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        @keyframes stepSlideIn {
-            from { opacity: 0; transform: translateX(40px) scale(0.97); }
-            to   { opacity: 1; transform: translateX(0) scale(1); }
-        }
-        #phone-step {
-            display: flex; flex-direction: column; align-items: center;
-            animation: stepSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        .setup-step-label {
-            font-size: 9px; letter-spacing: 3px; color: #4a6278;
-            text-transform: uppercase; margin-bottom: 20px;
-        }
-        .step-dots { display: flex; gap: 6px; margin-bottom: 28px; }
-        .step-dot { width: 24px; height: 3px; background: #1a252f; transition: background 0.3s ease; }
-        .step-dot.active { background: var(--skype-blue); }
         .name-input-wrap { display: flex; border: 1px solid #34495e; overflow: hidden; width: 300px; }
-        .name-prefix { background: #1a252f; color: #7f8c8d; padding: 14px 12px; font-size: 16px; border-right: 1px solid #34495e; }
-        #display-name-input {
-            flex: 1; background: #1a252f; border: none; color: white;
-            padding: 14px 12px; font-size: 15px; font-family: 'Ubuntu', sans-serif;
-            outline: none;
-        }
-        #display-name-input::placeholder { color: #4a6278; font-size: 13px; }
-        .setup-phone-preview {
-            font-size: 11px; color: #00ffcc; letter-spacing: 2px;
-            margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
-        }
-        .setup-phone-preview::before { content: '📱'; font-size: 14px; }
-
-        /* DELETE CONFIRM MODAL */
-        #delete-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 20000;
-            display: none; align-items: center; justify-content: center;
-            animation: fadeInBg 0.2s ease;
-        }
+        .name-prefix { background: #1a252f; color: #7f8c8d; padding: 14px 12px; font-size: 16px; font-weight: bold; border-right: 1px solid #34495e; }
+        #username-input { flex: 1; background: #1a252f; border: none; color: white; padding: 14px 12px; font-size: 15px; font-family: 'Ubuntu', sans-serif; outline: none; }
+        #setup-btn { margin-top: 12px; width: 300px; padding: 14px; background: var(--call-green); color: white; border: none; font-weight: bold; font-family: 'Ubuntu', sans-serif; font-size: 14px; letter-spacing: 2px; cursor: pointer; transition: filter 0.2s ease; }
+        #setup-btn:hover { filter: brightness(1.15); }
+        #setup-btn:disabled { background: #555; cursor: not-allowed; }
+        
+        /* DELETE & RESET MODAL */
+        #delete-modal, #reset-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 20000; display: none; align-items: center; justify-content: center; animation: fadeInBg 0.2s ease; }
         @keyframes fadeInBg { from { opacity: 0; } to { opacity: 1; } }
-        #delete-modal-box {
-            background: #1e2d3d; border: 1px solid #34495e;
-            border-top: 3px solid var(--sos-red);
-            padding: 28px 30px; min-width: 280px; max-width: 340px;
-            animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
+        .modal-box { background: #1e2d3d; border: 1px solid #34495e; padding: 28px 30px; min-width: 280px; max-width: 340px; border-top: 3px solid var(--sos-red); animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
         @keyframes modalPop { from { opacity: 0; transform: scale(0.85) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-        #delete-modal-title { color: white; font-size: 15px; font-weight: 700; margin-bottom: 6px; }
-        #delete-modal-sub { color: #7f8c8d; font-size: 12px; line-height: 1.6; margin-bottom: 22px; }
-        #delete-modal-name { color: #00ffcc; font-weight: bold; }
+        .modal-title { color: white; font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+        .modal-sub { color: #7f8c8d; font-size: 12px; line-height: 1.6; margin-bottom: 22px; }
         .modal-btns { display: flex; gap: 8px; }
         .modal-btns button { flex: 1; padding: 11px; border: none; font-weight: bold; cursor: pointer; font-family: 'Ubuntu', sans-serif; font-size: 12px; letter-spacing: 1px; transition: filter 0.15s ease; }
         .modal-btns button:hover { filter: brightness(1.15); }
         .btn-modal-delete { background: var(--sos-red); color: white; }
         .btn-modal-cancel { background: #2c3e50; color: #aaa; border: 1px solid #34495e; }
 
-        /* Contact card delete button */
         .contact-card { position: relative; }
-        .contact-del-btn {
-            display: none; position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
-            background: none; border: none; color: #4a6278; font-size: 15px;
-            cursor: pointer; padding: 4px 6px; line-height: 1;
-            transition: color 0.15s ease;
-        }
+        .contact-del-btn { display: none; position: absolute; right: 6px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #4a6278; font-size: 15px; cursor: pointer; padding: 4px 6px; line-height: 1; transition: color 0.15s ease; }
         .contact-del-btn:hover { color: var(--sos-red) !important; transform: translateY(-50%) scale(1.2); }
         .contact-card:hover .contact-del-btn { display: block; }
-
-        #reset-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 20000;
-            display: none; align-items: center; justify-content: center;
-            animation: fadeInBg 0.2s ease;
-        }
     </style>
 </head>
 <body>
@@ -379,17 +252,22 @@
 
 <!-- CALL OVERLAY (active call) -->
 <div id="call-overlay">
-    <div style="font-size: 60px; margin-bottom: 20px;">📞</div>
+    <div id="call-icon" style="font-size: 60px; margin-bottom: 20px;">📞</div>
     <h2 id="call-name">AceTalk Voice</h2>
     <p id="call-status" data-i18n="calling">ARANIYOR...</p>
+    <div id="call-videos">
+        <video id="remote-video" autoplay playsinline></video>
+        <video id="local-video" autoplay muted playsinline></video>
+        <audio id="remote-audio" autoplay></audio>
+    </div>
     <button onclick="endCall()" data-i18n="closeCall" style="background: var(--call-red); color: white; border: none; padding: 15px 40px; font-weight: bold; cursor: pointer; margin-top: 30px;">KAPAT</button>
 </div>
 
 <!-- INCOMING CALL PANEL -->
 <div id="incoming-call-panel">
     <div>
-        <div id="incoming-call-name">Birileri arıyor...</div>
-        <div id="incoming-call-sub" data-i18n="incomingCallSub">Sesli arama geliyor</div>
+        <div id="incoming-call-name" data-i18n="callName">Birileri arıyor...</div>
+        <div id="incoming-call-sub">Sesli arama geliyor</div>
     </div>
     <div class="call-panel-btns">
         <button class="btn-answer" onclick="answerCall()" data-i18n="answerBtn">CEVAPLA</button>
@@ -399,109 +277,102 @@
 
 <!-- DELETE CONFIRM MODAL -->
 <div id="delete-modal">
+    <div class="modal-box">
+        <div class="modal-title" data-i18n="delTitle">Kişiyi sil</div>
+        <div class="modal-sub" id="delete-modal-sub">
+            <!-- JS dynamically injects translated text here -->
+        </div>
+        <div class="modal-btns">
+            <button class="btn-modal-delete" onclick="confirmDelete()" data-i18n="delBtn">SİL</button>
+            <button class="btn-modal-cancel" onclick="closeDeleteModal()" data-i18n="cancelBtn">İPTAL</button>
+        </div>
+    </div>
+</div>
 
 <!-- RESET ACCOUNT MODAL -->
 <div id="reset-modal">
-    <div id="delete-modal-box" style="border-top-color: #e67e22;">
-        <div id="delete-modal-title">Hesabı sıfırla</div>
-        <div id="delete-modal-sub" style="color:#7f8c8d;">
-            Telefon numaran, görünen ismin ve tüm konuşma geçmişin silinecek. Bu işlem geri alınamaz.
-        </div>
+    <div class="modal-box" style="border-top-color: #e67e22;">
+        <div class="modal-title" data-i18n="resetTitle">Hesabı sıfırla</div>
+        <div class="modal-sub" data-i18n="resetDesc">Kullanıcı adın, görünen ismin ve tüm konuşma geçmişin silinecek. Bu işlem geri alınamaz.</div>
         <div class="modal-btns">
-            <button class="btn-modal-delete" onclick="confirmResetAccount()">SIFIRLA</button>
-            <button class="btn-modal-cancel" onclick="closeResetModal()">İPTAL</button>
-        </div>
-    </div>
-</div>
-    <div id="delete-modal-box">
-        <div id="delete-modal-title">Kişiyi sil</div>
-        <div id="delete-modal-sub">
-            <span id="delete-modal-name"></span> kişisini ve tüm mesaj geçmişini silmek istediğine emin misin?
-        </div>
-        <div class="modal-btns">
-            <button class="btn-modal-delete" onclick="confirmDelete()">SİL</button>
-            <button class="btn-modal-cancel" onclick="closeDeleteModal()">İPTAL</button>
+            <button class="btn-modal-delete" onclick="confirmResetAccount()" data-i18n="resetBtn">SIFIRLA</button>
+            <button class="btn-modal-cancel" onclick="closeResetModal()" data-i18n="cancelBtn">İPTAL</button>
         </div>
     </div>
 </div>
 
-<!-- PHONE SETUP (first time only) -->
+<!-- SETUP SCREEN (USERNAME BASED) -->
 <div id="phone-setup" style="display:none;">
     <h2>AceTalk</h2>
-    <p>Hesabını oluştur</p>
-    <div class="step-dots">
-        <div class="step-dot active" id="dot-1"></div>
-        <div class="step-dot" id="dot-2"></div>
-    </div>
-
-    <!-- Step 1: Phone -->
-    <div id="phone-step">
-        <div class="setup-step-label">1 / 2 — Telefon numarası</div>
-        <div class="phone-input-wrap">
-            <span class="phone-prefix">📱</span>
-            <input type="tel" id="phone-number-input" placeholder="5XX XXX XX XX" maxlength="15"
-                   onkeypress="if(event.key==='Enter') confirmPhone()">
-        </div>
-        <button id="phone-setup-btn" onclick="confirmPhone()">DEVAM ET →</button>
-        <div id="phone-setup-error"></div>
-        <div class="phone-setup-note">Bu numara senin AceTalk ID'n olacak. Başkaları bu numarayla sana ulaşabilir.</div>
-    </div>
-
-    <!-- Step 2: Name -->
-    <div id="name-step">
-        <div class="setup-step-label">2 / 2 — Görünen isim</div>
-        <div class="setup-phone-preview" id="setup-phone-preview"></div>
+    <p data-i18n="setupTitle">Hesabını oluştur</p>
+    <div id="name-step" style="display: flex; flex-direction: column; align-items: center;">
         <div class="name-input-wrap">
-            <span class="name-prefix">✏️</span>
-            <input type="text" id="display-name-input" placeholder="İsminiz..." maxlength="30"
-                   onkeypress="if(event.key==='Enter') confirmName()">
+            <span class="name-prefix">@</span>
+            <input type="text" id="username-input" data-i18n-placeholder="usernamePlace" placeholder="Kullanıcı Adı" maxlength="20" onkeypress="if(event.key==='Enter') tryCreateAccount()">
         </div>
-        <button id="phone-setup-btn" onclick="confirmName()" style="margin-top:12px; width:300px; padding:14px; background:var(--call-green); color:white; border:none; font-weight:bold; font-family:'Ubuntu',sans-serif; font-size:14px; letter-spacing:2px; cursor:pointer;">BAŞLA ✓</button>
-        <div class="phone-setup-note" style="margin-top:12px;">İstediğin zaman daha sonra değiştirebilirsin.</div>
+        <button id="setup-btn" onclick="tryCreateAccount()" data-i18n="startBtn">BAŞLA ✓</button>
+        <div id="setup-error" style="color: var(--sos-red); font-size: 11px; margin-top: 8px; min-height: 16px; letter-spacing: 1px;"></div>
+        <div id="setup-suggestions" style="margin-top: 10px; display:flex; gap:5px; flex-wrap:wrap; justify-content:center; max-width: 300px;"></div>
+        <div style="color: #4a6278; font-size: 10px; margin-top: 16px; text-align: center; max-width: 300px; line-height: 1.6;" data-i18n="setupDesc">Bu senin eşsiz ID'n olacak. Başkaları sana bu isimle bağlanacak.</div>
     </div>
 </div>
 
 <!-- SPLASH -->
 <div id="splash-screen">
     <h1 style="color: var(--skype-blue); font-weight: 700; font-size: 48px; margin: 0;">AceTalk</h1>
-    <div class="sidebar-slogan" style="color: white; margin-top: 5px;">Simple Messenger</div>
+    <div class="sidebar-slogan" data-i18n="slogan" style="color: white; margin-top: 5px;">Simple Messenger</div>
     <div class="splash-loader"></div>
 </div>
 
 <div class="app-container">
     <!-- LEFT SIDEBAR -->
     <div class="sidebar">
-        <div class="brand-section" style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 30px;">
+        <div class="brand-section" style="display:flex; justify-content:space-between; align-items:flex-start;">
             <div>
                 <h1 class="brand-name">AceTalk</h1>
-                <div class="sidebar-slogan">Simple Messenger</div>
+                <div class="sidebar-slogan" data-i18n="slogan">Simple Messenger</div>
             </div>
         </div>
 
         <div class="lang-switcher">
-            <button class="lang-btn active" onclick="setLanguage('tr')">TR</button>
-            <button class="lang-btn" onclick="setLanguage('en')">EN</button>
-            <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
-            <button class="lang-btn" onclick="setLanguage('de')">DE</button>
+            <select id="lang-select" class="lang-select" onchange="setLanguage(this.value)">
+                <option value="tr">🇹🇷 Türkçe</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="ru">🇷🇺 Русский</option>
+                <option value="zh">🇨🇳 中文</option>
+                <option value="ar">🇸🇦 العربية</option>
+                <option value="pt">🇵🇹 Português</option>
+                <option value="ja">🇯🇵 日本語</option>
+                <option value="hi">🇮🇳 हिन्दी</option>
+            </select>
         </div>
 
         <div style="display:flex; flex-direction:column; gap:4px; margin-bottom:15px;">
-            <button onclick="document.getElementById('wallpaper-input').click()" class="wp-btn">🖼️ Duvar Kağıdı</button>
-            <button onclick="resetWallpaper()" class="wp-btn">↺ Varsayılan WP</button>
+            <button onclick="document.getElementById('wallpaper-input').click()" class="wp-btn" data-i18n="wallpaperBtn">🖼️ Duvar Kağıdı</button>
+            <button onclick="resetWallpaper()" class="wp-btn" data-i18n="resetWpBtn">↺ Varsayılan WP</button>
             <input type="file" id="wallpaper-input" accept="image/*" style="display:none" onchange="setWallpaper(this)">
-            <button onclick="openResetModal()" class="wp-btn" style="color:#e74c3c; border-left-color: transparent;">⚠ Hesabı Sıfırla</button>
+            <button onclick="openResetModal()" class="wp-btn" style="color:#e74c3c; border-left-color: transparent;" data-i18n="resetAccBtn">⚠ Hesabı Sıfırla</button>
         </div>
 
+        <!-- MY STATUS BOX -->
         <div class="my-status-box">
+            <div class="status-header">
+                <label for="my-avatar-input" class="my-avatar-upload" id="my-avatar-display" title="Profil Fotoğrafını Değiştir">?</label>
+                <input type="file" id="my-avatar-input" accept="image/*" style="display:none" onchange="handleAvatarUpload(this)">
+                <input type="text" id="my-name-input" class="status-input" value="AceUser" onchange="updateMyProfile()" title="Sohbette görünecek adın">
+            </div>
             <b style="font-size: 10px; color: var(--skype-blue);" data-i18n="myName">ADIM</b>
-            <input type="text" id="my-name-input" class="status-input" value="AceUser" onchange="updateMyProfile()">
-            <small style="display:block; margin-top:15px; font-size: 9px; color: #7f8c8d;">📱 <span id="my-id" style="color: #00ffcc; cursor:pointer;" onclick="navigator.clipboard.writeText(this.innerText).then(()=>{this.style.color='#fff';setTimeout(()=>this.style.color='#00ffcc',1000)})" title="Kopyalamak için tıkla">...</span></small>
+            <small style="display:block; margin-top:5px; font-size: 9px; color: #7f8c8d;">👤 <span id="my-id" style="color: #00ffcc; cursor:pointer;" onclick="navigator.clipboard.writeText(this.innerText).then(()=>{this.style.color='#fff';setTimeout(()=>this.style.color='#00ffcc',1000)})" title="Kopyalamak için tıkla">...</span></small>
         </div>
 
         <div style="margin-top: auto; display: flex; flex-direction: column; gap: 10px;">
-            <input type="tel" id="peer-id-input" data-i18n-placeholder="idPlaceholder" placeholder="Karşı tarafın numarası..." style="background: #1a252f; border: 1px solid #34495e; padding: 10px; color: white; outline: none; letter-spacing: 1px;">
+            <input type="text" id="peer-id-input" data-i18n-placeholder="idPlaceholder" placeholder="Karşı tarafın ismi..." style="background: #1a252f; border: 1px solid #34495e; padding: 10px; color: white; outline: none; letter-spacing: 1px;" onkeypress="if(event.key==='Enter') connectToPeer()">
             <button onclick="connectToPeer()" data-i18n="connectBtn" class="sidebar-action-btn btn-connect">BAĞLAN</button>
-            <button onclick="startCall()" data-i18n="voiceCall" class="sidebar-action-btn btn-call">SESLİ ARA</button>
+            <button onclick="startCall('audio')" data-i18n="voiceCall" class="sidebar-action-btn btn-call">SESLİ ARA</button>
+            <button onclick="startCall('video')" data-i18n="videoCall" class="sidebar-action-btn btn-video">KAMERALI ARA</button>
             <div>
                 <button class="sidebar-action-btn btn-sos" id="sos-btn" onclick="sendSOS()">🚨 ACİL</button>
                 <div id="sos-timer"></div>
@@ -511,7 +382,6 @@
 
     <!-- MAIN CHAT -->
     <div class="main-chat" id="drop-zone">
-        <!-- Chat header (shows active contact) -->
         <div id="chat-header">
             <div id="chat-header-avatar"></div>
             <div>
@@ -530,12 +400,10 @@
         <div class="typing-pulse" id="typing-ui" style="display:none;">birileri yazıyor...</div>
 
         <div class="input-area">
-            <label for="img-input" class="icon-btn" title="Resim Gönder">
-                <div class="mountain-icon">
-                    <div class="sun"></div>
-                </div>
+            <label for="media-input" class="icon-btn" title="Dosya Gönder">
+                <div class="mountain-icon"><div class="sun"></div></div>
             </label>
-            <input type="file" id="img-input" accept="image/*" style="display:none" onchange="handleImage(this)">
+            <input type="file" id="media-input" accept="image/*, video/mp4, video/webm" style="display:none" onchange="handleMedia(this)">
             <input type="text" id="message-input" data-i18n-placeholder="msgPlaceholder" placeholder="Mesajınızı yazın..."
                    onkeypress="if(event.key==='Enter') sendMessage()"
                    oninput="notifyTyping()">
@@ -543,20 +411,15 @@
         </div>
     </div>
 
-    <!-- RIGHT BAR — CONTACTS -->
+    <!-- RIGHT BAR -->
     <div class="right-bar">
         <div class="contacts-header">
-            <span class="contacts-title" data-i18n="contactsTitle">CONTACTS</span>
+            <span class="contacts-title" data-i18n="contactsTitle">KİŞİLER</span>
             <span class="contacts-count" id="contacts-total">0</span>
         </div>
-
-        <!-- Online now -->
         <div class="contacts-section-label" data-i18n="onlineNow">ŞU AN ÇEVRİMİÇİ</div>
         <div id="online-list"></div>
-
         <div class="contacts-divider"></div>
-
-        <!-- Saved contacts -->
         <div class="contacts-section-label" data-i18n="savedContacts">KAYDEDİLEN</div>
         <div id="contacts-list">
             <div class="no-contacts" id="no-contacts-msg" data-i18n="noContacts">
@@ -565,8 +428,6 @@
         </div>
     </div>
 </div>
-
-<audio id="remote-audio" autoplay></audio>
 
 <script>
 // ─── WALLPAPER ───────────────────────────────────────────────────────────────
@@ -588,106 +449,230 @@ function setWallpaper(input) {
 }
 function resetWallpaper() { localStorage.removeItem('acetalk_wallpaper'); applyWallpaper(DEFAULT_WALLPAPER); }
 
-// ─── I18N ────────────────────────────────────────────────────────────────────
+// ─── AVATAR / PROFILE LOGIC ──────────────────────────────────────────────────
+let myAvatarBase64 = localStorage.getItem('acetalk_avatar') || null;
+let peerAvatars = {}; 
+
+function updateMyAvatarUI() {
+    const display = document.getElementById('my-avatar-display');
+    const myName = document.getElementById('my-name-input').value || '?';
+    if(myAvatarBase64) {
+        display.innerHTML = `<img src="${myAvatarBase64}">`;
+    } else {
+        display.innerHTML = myName.charAt(0).toUpperCase();
+        display.style.background = '#1a252f';
+    }
+}
+
+function handleAvatarUpload(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => {
+            myAvatarBase64 = e.target.result;
+            localStorage.setItem('acetalk_avatar', myAvatarBase64);
+            updateMyAvatarUI();
+            updateMyProfile(); 
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function updateMyProfile() {
+    const myName = document.getElementById('my-name-input').value;
+    updateMyAvatarUI();
+    connections.forEach(c => { 
+        try { c.send({type: 'profile', name: myName, avatar: myAvatarBase64}); } catch(e){} 
+    });
+}
+
+// ─── I18N (11 LANGUAGES) ─────────────────────────────────────────────────────
 const i18n = {
     tr: {
-        myName: "ADIM", idPlaceholder: "Karşı tarafın numarası...", connectBtn: "BAĞLAN", voiceCall: "SESLİ ARA",
-        secureChat: "Güvenli ve şifreli uçtan uca sohbet.", enterId: "Bağlanmak için bir ID girin.",
-        msgPlaceholder: "Mesajınızı yazın...", calling: "ARANIYOR...",
-        closeCall: "KAPAT", typing: "yazıyor...",
-        sosBtn: "🚨 ACİL", sosCooldown: "saniye bekle", sosReceived: "ACİL YARDIM ÇAĞRISI",
-        sosFrom: "Gönderen", sosHops: "ağ üzerinden ulaştı", sosNoConn: "Bağlı kimse yok! Önce birine bağlan.",
-        wallpaperBtn: "🖼️ Duvar Kağıdı", resetWpBtn: "↺ Varsayılan WP",
-        micDenied: "Mikrofon erişimi reddedildi!", noConn: "Önce birine bağlan!",
-        connected: "🟢 BAĞLANDI",
-        contactsTitle: "KİŞİLER",
-        onlineNow: "ŞU AN ÇEVRİMİÇİ",
-        savedContacts: "KAYDEDİLEN",
-        noContacts: "Henüz kişi yok.\nBiri ile konuştuktan sonra burada görünür.",
-        onlineStatus: "Çevrimiçi",
-        offlineStatus: "Son görülme",
-        incomingCallSub: "Sesli arama geliyor",
-        answerBtn: "CEVAPLA",
-        rejectBtn: "REDDET",
-        loadHistory: "Geçmiş yükleniyor...",
-        chatWith: "ile sohbet"
+        slogan: "Simple Messenger", myName: "ADIM", idPlaceholder: "Karşı tarafın ismi...", connectBtn: "BAĞLAN", 
+        voiceCall: "SESLİ ARA", videoCall: "KAMERALI ARA", secureChat: "Güvenli ve şifreli uçtan uca sohbet.", enterId: "Bağlanmak için bir isim girin.",
+        msgPlaceholder: "Mesajınızı yazın...", calling: "ARANIYOR...", closeCall: "KAPAT", typing: "yazıyor...",
+        sosBtn: "🚨 ACİL", sosCooldown: "saniye bekle", sosReceived: "ACİL YARDIM ÇAĞRISI", sosFrom: "Gönderen", sosHops: "ağ üzerinden ulaştı", sosNoConn: "Bağlı kimse yok! Önce birine bağlan.",
+        wallpaperBtn: "🖼️ Duvar Kağıdı", resetWpBtn: "↺ Varsayılan WP", resetAccBtn: "⚠ Hesabı Sıfırla",
+        micDenied: "Kamera/Mikrofon erişimi reddedildi!", noConn: "Önce birine bağlan!", connected: "🟢 BAĞLANDI", contactsTitle: "KİŞİLER", onlineNow: "ŞU AN ÇEVRİMİÇİ",
+        savedContacts: "KAYDEDİLEN", noContacts: "Henüz kişi yok.\nBiri ile konuştuktan sonra burada görünür.", onlineStatus: "Çevrimiçi", offlineStatus: "Son görülme",
+        incomingVoice: "Sesli arama geliyor", incomingVideo: "Görüntülü arama geliyor", answerBtn: "CEVAPLA", rejectBtn: "REDDET",
+        setupTitle: "Hesabını oluştur", usernamePlace: "Kullanıcı Adı", startBtn: "BAŞLA ✓", setupDesc: "Bu senin eşsiz ID'n olacak. Başkaları sana bu isimle bağlanacak.",
+        delTitle: "Kişiyi sil", delDesc: "kişisini ve tüm mesaj geçmişini silmek istediğine emin misin?", delBtn: "SİL", cancelBtn: "İPTAL",
+        resetTitle: "Hesabı sıfırla", resetDesc: "Kullanıcı adın, görünen ismin ve tüm konuşma geçmişin silinecek. Bu işlem geri alınamaz.", resetBtn: "SIFIRLA",
+        fileTooBig: "Dosya boyutu çok büyük! Maksimum 50 MB.", nameTaken: "Bu isim alınmış! Şunlardan birini dene:",
+        nameShort: "En az 3 harf veya rakam olmalı!", checking: "Uygunluk kontrol ediliyor...", connError: "Bağlantı hatası, tekrar deneyin.",
+        nameInUse: "Bu isim başka bir cihazda açık!", videoMsg: "Video", imageMsg: "Resim", callName: "Birileri arıyor..."
     },
     en: {
-        myName: "MY NAME", idPlaceholder: "Their phone number...", connectBtn: "CONNECT", voiceCall: "VOICE CALL",
-        secureChat: "Secure and end-to-end encrypted chat.", enterId: "Enter an ID to connect.",
-        msgPlaceholder: "Type your message...", calling: "CALLING...",
-        closeCall: "HANG UP", typing: "is typing...",
-        sosBtn: "🚨 SOS", sosCooldown: "seconds wait", sosReceived: "EMERGENCY SOS RECEIVED",
-        sosFrom: "From", sosHops: "hops away", sosNoConn: "Nobody connected! Connect to someone first.",
-        wallpaperBtn: "🖼️ Wallpaper", resetWpBtn: "↺ Default WP",
-        micDenied: "Microphone access denied!", noConn: "Connect to someone first!",
-        connected: "🟢 CONNECTED",
-        contactsTitle: "CONTACTS",
-        onlineNow: "ONLINE NOW",
-        savedContacts: "SAVED",
-        noContacts: "No contacts yet.\nAppears after chatting with someone.",
-        onlineStatus: "Online",
-        offlineStatus: "Last seen",
-        incomingCallSub: "Incoming voice call",
-        answerBtn: "ANSWER",
-        rejectBtn: "REJECT",
-        loadHistory: "Loading history...",
-        chatWith: "Chat with"
+        slogan: "Simple Messenger", myName: "MY NAME", idPlaceholder: "Their username...", connectBtn: "CONNECT", 
+        voiceCall: "VOICE CALL", videoCall: "VIDEO CALL", secureChat: "Secure end-to-end encrypted chat.", enterId: "Enter an ID to connect.",
+        msgPlaceholder: "Type your message...", calling: "CALLING...", closeCall: "HANG UP", typing: "is typing...",
+        sosBtn: "🚨 SOS", sosCooldown: "seconds wait", sosReceived: "EMERGENCY SOS RECEIVED", sosFrom: "From", sosHops: "hops away", sosNoConn: "Nobody connected! Connect to someone first.",
+        wallpaperBtn: "🖼️ Wallpaper", resetWpBtn: "↺ Default WP", resetAccBtn: "⚠ Reset Account",
+        micDenied: "Camera/Mic access denied!", noConn: "Connect to someone first!", connected: "🟢 CONNECTED", contactsTitle: "CONTACTS", onlineNow: "ONLINE NOW",
+        savedContacts: "SAVED", noContacts: "No contacts yet.\nAppears after chatting.", onlineStatus: "Online", offlineStatus: "Last seen",
+        incomingVoice: "Incoming voice call", incomingVideo: "Incoming video call", answerBtn: "ANSWER", rejectBtn: "REJECT",
+        setupTitle: "Create your account", usernamePlace: "Username", startBtn: "START ✓", setupDesc: "This is your unique ID. Others will connect using this name.",
+        delTitle: "Delete contact", delDesc: "and all chat history? Are you sure?", delBtn: "DELETE", cancelBtn: "CANCEL",
+        resetTitle: "Reset account", resetDesc: "Your username, display name, and all history will be deleted. This cannot be undone.", resetBtn: "RESET",
+        fileTooBig: "File is too large! Maximum 50 MB.", nameTaken: "Name is taken! Try one of these:",
+        nameShort: "Must be at least 3 letters or numbers!", checking: "Checking availability...", connError: "Connection error, try again.",
+        nameInUse: "This name is open on another device!", videoMsg: "Video", imageMsg: "Image", callName: "Someone is calling..."
     },
-    ru: {
-        myName: "МОЕ ИМЯ", idPlaceholder: "Номер телефона...", connectBtn: "ПОДКЛЮЧИТЬ", voiceCall: "ГОЛОСОВОЙ ВЫЗОВ",
-        secureChat: "Безопасный чат с шифрованием.", enterId: "Введите ID для подключения.",
-        msgPlaceholder: "Введите сообщение...", calling: "ЗВОНОК...",
-        closeCall: "СБРОСИТЬ", typing: "пишет...",
-        sosBtn: "🚨 SOS", sosCooldown: "сек ожидание", sosReceived: "ПОЛУЧЕН СИГНАЛ SOS",
-        sosFrom: "От", sosHops: "прыжков", sosNoConn: "Нет подключений! Сначала подключитесь.",
-        wallpaperBtn: "🖼️ Обои", resetWpBtn: "↺ По умолчанию",
-        micDenied: "Доступ к микрофону запрещён!", noConn: "Сначала подключитесь!",
-        connected: "🟢 ПОДКЛЮЧЕНО",
-        contactsTitle: "КОНТАКТЫ",
-        onlineNow: "СЕЙЧАС В СЕТИ",
-        savedContacts: "СОХРАНЁННЫЕ",
-        noContacts: "Нет контактов.\nПоявится после общения.",
-        onlineStatus: "В сети",
-        offlineStatus: "Был(а)",
-        incomingCallSub: "Входящий голосовой вызов",
-        answerBtn: "ОТВЕТИТЬ",
-        rejectBtn: "ОТКЛОНИТЬ",
-        loadHistory: "Загрузка истории...",
-        chatWith: "Чат с"
+    es: {
+        slogan: "Mensajería Simple", myName: "MI NOMBRE", idPlaceholder: "Nombre de usuario...", connectBtn: "CONECTAR", 
+        voiceCall: "LLAMADA DE VOZ", videoCall: "VIDEOLLAMADA", secureChat: "Chat seguro cifrado de extremo a extremo.", enterId: "Ingresa un ID para conectar.",
+        msgPlaceholder: "Escribe tu mensaje...", calling: "LLAMANDO...", closeCall: "COLGAR", typing: "está escribiendo...",
+        sosBtn: "🚨 SOS", sosCooldown: "segundos espera", sosReceived: "SOS DE EMERGENCIA RECIBIDO", sosFrom: "De", sosHops: "saltos", sosNoConn: "¡Nadie conectado! Conéctate primero.",
+        wallpaperBtn: "🖼️ Fondo", resetWpBtn: "↺ Predeterminado", resetAccBtn: "⚠ Restablecer cuenta",
+        micDenied: "¡Acceso a cámara/micrófono denegado!", noConn: "¡Conéctate a alguien primero!", connected: "🟢 CONECTADO", contactsTitle: "CONTACTOS", onlineNow: "EN LÍNEA",
+        savedContacts: "GUARDADOS", noContacts: "Aún no hay contactos.\nAparecen tras chatear.", onlineStatus: "En línea", offlineStatus: "Visto últ.",
+        incomingVoice: "Llamada de voz entrante", incomingVideo: "Videollamada entrante", answerBtn: "RESPONDER", rejectBtn: "RECHAZAR",
+        setupTitle: "Crea tu cuenta", usernamePlace: "Usuario", startBtn: "INICIAR ✓", setupDesc: "Este es tu ID único. Otros se conectarán usando este nombre.",
+        delTitle: "Eliminar contacto", delDesc: "¿y todo el historial? ¿Estás seguro?", delBtn: "ELIMINAR", cancelBtn: "CANCELAR",
+        resetTitle: "Restablecer cuenta", resetDesc: "Tu nombre de usuario y todo el historial se eliminarán. Esto no se puede deshacer.", resetBtn: "RESTABLECER",
+        fileTooBig: "¡El archivo es demasiado grande! Máximo 50 MB.", nameTaken: "¡El nombre está en uso! Prueba uno de estos:",
+        nameShort: "¡Debe tener al menos 3 letras o números!", checking: "Comprobando disponibilidad...", connError: "Error de conexión, inténtalo de nuevo.",
+        nameInUse: "¡Este nombre está abierto en otro dispositivo!", videoMsg: "Video", imageMsg: "Imagen", callName: "Alguien llama..."
+    },
+    fr: {
+        slogan: "Messagerie Simple", myName: "MON NOM", idPlaceholder: "Nom d'utilisateur...", connectBtn: "CONNECTER", 
+        voiceCall: "APPEL VOCAL", videoCall: "APPEL VIDÉO", secureChat: "Chat sécurisé chiffré de bout en bout.", enterId: "Entrez un ID pour vous connecter.",
+        msgPlaceholder: "Tapez votre message...", calling: "APPEL...", closeCall: "RACCROCHER", typing: "écrit...",
+        sosBtn: "🚨 SOS", sosCooldown: "sec. attente", sosReceived: "APPEL D'URGENCE REÇU", sosFrom: "De", sosHops: "sauts", sosNoConn: "Personne n'est connecté !",
+        wallpaperBtn: "🖼️ Fond d'écran", resetWpBtn: "↺ Par défaut", resetAccBtn: "⚠ Réinitialiser",
+        micDenied: "Accès caméra/micro refusé !", noConn: "Connectez-vous d'abord !", connected: "🟢 CONNECTÉ", contactsTitle: "CONTACTS", onlineNow: "EN LIGNE",
+        savedContacts: "ENREGISTRÉS", noContacts: "Pas de contacts.\nApparaît après discussion.", onlineStatus: "En ligne", offlineStatus: "Vu le",
+        incomingVoice: "Appel vocal entrant", incomingVideo: "Appel vidéo entrant", answerBtn: "RÉPONDRE", rejectBtn: "REJETER",
+        setupTitle: "Créer un compte", usernamePlace: "Utilisateur", startBtn: "COMMENCER ✓", setupDesc: "C'est votre ID unique.",
+        delTitle: "Supprimer le contact", delDesc: "et tout l'historique ? Êtes-vous sûr(e) ?", delBtn: "SUPPRIMER", cancelBtn: "ANNULER",
+        resetTitle: "Réinitialiser", resetDesc: "Votre compte et historique seront supprimés. Action irréversible.", resetBtn: "RÉINITIALISER",
+        fileTooBig: "Fichier trop volumineux ! Max 50 Mo.", nameTaken: "Nom déjà pris ! Essayez :",
+        nameShort: "Au moins 3 lettres ou chiffres !", checking: "Vérification...", connError: "Erreur de connexion, réessayez.",
+        nameInUse: "Ce nom est ouvert sur un autre appareil !", videoMsg: "Vidéo", imageMsg: "Image", callName: "Quelqu'un appelle..."
     },
     de: {
-        myName: "MEIN NAME", idPlaceholder: "Telefonnummer...", connectBtn: "VERBINDEN", voiceCall: "ANRUFEN",
-        secureChat: "Sicherer und verschlüsselter Chat.", enterId: "Geben Sie eine ID ein.",
-        msgPlaceholder: "Nachricht schreiben...", calling: "ANRUF...",
-        closeCall: "AUFLEGEN", typing: "schreibt...",
-        sosBtn: "🚨 SOS", sosCooldown: "Sek warten", sosReceived: "NOTFALL SOS EMPFANGEN",
-        sosFrom: "Von", sosHops: "Hops entfernt", sosNoConn: "Niemand verbunden! Zuerst verbinden.",
-        wallpaperBtn: "🖼️ Hintergrundbild", resetWpBtn: "↺ Standard WP",
-        micDenied: "Mikrofonzugriff verweigert!", noConn: "Zuerst verbinden!",
-        connected: "🟢 VERBUNDEN",
-        contactsTitle: "KONTAKTE",
-        onlineNow: "JETZT ONLINE",
-        savedContacts: "GESPEICHERT",
-        noContacts: "Keine Kontakte.\nErscheint nach dem Chatten.",
-        onlineStatus: "Online",
-        offlineStatus: "Zuletzt gesehen",
-        incomingCallSub: "Eingehender Sprachanruf",
-        answerBtn: "ANNEHMEN",
-        rejectBtn: "ABLEHNEN",
-        loadHistory: "Verlauf laden...",
-        chatWith: "Chat mit"
+        slogan: "Einfacher Messenger", myName: "MEIN NAME", idPlaceholder: "Benutzername...", connectBtn: "VERBINDEN", 
+        voiceCall: "ANRUFEN", videoCall: "VIDEOANRUF", secureChat: "Sicherer und verschlüsselter Chat.", enterId: "Geben Sie eine ID ein.",
+        msgPlaceholder: "Nachricht schreiben...", calling: "ANRUF...", closeCall: "AUFLEGEN", typing: "schreibt...",
+        sosBtn: "🚨 SOS", sosCooldown: "Sek warten", sosReceived: "NOTFALL SOS EMPFANGEN", sosFrom: "Von", sosHops: "Hops", sosNoConn: "Niemand verbunden! Zuerst verbinden.",
+        wallpaperBtn: "🖼️ Hintergrundbild", resetWpBtn: "↺ Standard WP", resetAccBtn: "⚠ Konto zurücksetzen",
+        micDenied: "Kamera/Mikrofonzugriff verweigert!", noConn: "Zuerst verbinden!", connected: "🟢 VERBUNDEN", contactsTitle: "KONTAKTE", onlineNow: "JETZT ONLINE",
+        savedContacts: "GESPEICHERT", noContacts: "Keine Kontakte.\nErscheint nach dem Chatten.", onlineStatus: "Online", offlineStatus: "Zuletzt gesehen",
+        incomingVoice: "Eingehender Sprachanruf", incomingVideo: "Eingehender Videoanruf", answerBtn: "ANNEHMEN", rejectBtn: "ABLEHNEN",
+        setupTitle: "Konto erstellen", usernamePlace: "Benutzername", startBtn: "START ✓", setupDesc: "Dies ist deine einmalige ID.",
+        delTitle: "Kontakt löschen", delDesc: "und den gesamten Chatverlauf löschen?", delBtn: "LÖSCHEN", cancelBtn: "ABBRECHEN",
+        resetTitle: "Konto zurücksetzen", resetDesc: "Dein Konto und Verlauf werden gelöscht. Unwiderruflich.", resetBtn: "ZURÜCKSETZEN",
+        fileTooBig: "Datei ist zu groß! Maximal 50 MB.", nameTaken: "Name ist vergeben! Versuche:",
+        nameShort: "Mindestens 3 Zeichen!", checking: "Verfügbarkeit wird geprüft...", connError: "Verbindungsfehler, erneut versuchen.",
+        nameInUse: "Dieser Name ist auf einem anderen Gerät geöffnet!", videoMsg: "Video", imageMsg: "Bild", callName: "Jemand ruft an..."
+    },
+    ru: {
+        slogan: "Простой мессенджер", myName: "МОЕ ИМЯ", idPlaceholder: "Имя пользователя...", connectBtn: "ПОДКЛЮЧИТЬ", 
+        voiceCall: "ГОЛОСОВОЙ ВЫЗОВ", videoCall: "ВИДЕО ВЫЗОВ", secureChat: "Безопасный чат с шифрованием.", enterId: "Введите ID для подключения.",
+        msgPlaceholder: "Введите сообщение...", calling: "ЗВОНОК...", closeCall: "СБРОСИТЬ", typing: "пишет...",
+        sosBtn: "🚨 SOS", sosCooldown: "сек ожидание", sosReceived: "ПОЛУЧЕН СИГНАЛ SOS", sosFrom: "От", sosHops: "прыжков", sosNoConn: "Нет подключений! Сначала подключитесь.",
+        wallpaperBtn: "🖼️ Обои", resetWpBtn: "↺ По умолчанию", resetAccBtn: "⚠ Сброс аккаунта",
+        micDenied: "Доступ к микрофону запрещен!", noConn: "Сначала подключитесь!", connected: "🟢 ПОДКЛЮЧЕНО", contactsTitle: "КОНТАКТЫ", onlineNow: "В СЕТИ",
+        savedContacts: "СОХРАНЕННЫЕ", noContacts: "Нет контактов.\nПоявятся после общения.", onlineStatus: "В сети", offlineStatus: "Был(а)",
+        incomingVoice: "Входящий аудио звонок", incomingVideo: "Входящий видео звонок", answerBtn: "ОТВЕТИТЬ", rejectBtn: "ОТКЛОНИТЬ",
+        setupTitle: "Создать аккаунт", usernamePlace: "Логин", startBtn: "НАЧАТЬ ✓", setupDesc: "Это ваш уникальный ID. Другие будут подключаться по нему.",
+        delTitle: "Удалить контакт", delDesc: "и всю историю сообщений? Вы уверены?", delBtn: "УДАЛИТЬ", cancelBtn: "ОТМЕНА",
+        resetTitle: "Сброс", resetDesc: "Ваше имя и вся история будут удалены. Необратимо.", resetBtn: "СБРОСИТЬ",
+        fileTooBig: "Файл слишком большой! Максимум 50 МБ.", nameTaken: "Имя занято! Попробуйте:",
+        nameShort: "Минимум 3 символа!", checking: "Проверка доступности...", connError: "Ошибка, попробуйте еще раз.",
+        nameInUse: "Это имя открыто на другом устройстве!", videoMsg: "Видео", imageMsg: "Фото", callName: "Кто-то звонит..."
+    },
+    zh: {
+        slogan: "简单通讯", myName: "我的名字", idPlaceholder: "对方的用户名...", connectBtn: "连接", 
+        voiceCall: "语音通话", videoCall: "视频通话", secureChat: "安全的端到端加密聊天。", enterId: "输入ID以连接。",
+        msgPlaceholder: "输入您的消息...", calling: "呼叫中...", closeCall: "挂断", typing: "正在输入...",
+        sosBtn: "🚨 紧急", sosCooldown: "秒等待", sosReceived: "收到紧急求救", sosFrom: "来自", sosHops: "跳跃", sosNoConn: "无人连接！请先连接。",
+        wallpaperBtn: "🖼️ 壁纸", resetWpBtn: "↺ 默认壁纸", resetAccBtn: "⚠ 重置账户",
+        micDenied: "摄像头/麦克风访问被拒绝！", noConn: "请先连接某人！", connected: "🟢 已连接", contactsTitle: "联系人", onlineNow: "当前在线",
+        savedContacts: "已保存", noContacts: "暂无联系人。\n聊天后显示。", onlineStatus: "在线", offlineStatus: "最后可见",
+        incomingVoice: "语音来电", incomingVideo: "视频来电", answerBtn: "接听", rejectBtn: "拒绝",
+        setupTitle: "创建您的账户", usernamePlace: "用户名", startBtn: "开始 ✓", setupDesc: "这是您的唯一ID。其他人将使用此名称连接。",
+        delTitle: "删除联系人", delDesc: "及所有聊天记录？确定吗？", delBtn: "删除", cancelBtn: "取消",
+        resetTitle: "重置账户", resetDesc: "您的用户名和历史记录将被删除。无法撤销。", resetBtn: "重置",
+        fileTooBig: "文件过大！最大 50 MB。", nameTaken: "该名称已被占用！",
+        nameShort: "必须至少3个字符！", checking: "正在检查...", connError: "连接错误，请重试。",
+        nameInUse: "此名称已在另一台设备上打开！", videoMsg: "视频", imageMsg: "图片", callName: "有人来电..."
+    },
+    ar: {
+        slogan: "مراسلة بسيطة", myName: "اسمي", idPlaceholder: "اسم المستخدم...", connectBtn: "اتصل", 
+        voiceCall: "مكالمة صوتية", videoCall: "مكالمة فيديو", secureChat: "دردشة آمنة ومشفرة.", enterId: "أدخل المعرف للاتصال.",
+        msgPlaceholder: "اكتب رسالتك...", calling: "يتصل...", closeCall: "إنهاء", typing: "يكتب...",
+        sosBtn: "🚨 طوارئ", sosCooldown: "ثواني انتظار", sosReceived: "تم تلقي نداء طوارئ", sosFrom: "من", sosHops: "قفزات", sosNoConn: "لا يوجد أحد متصل!",
+        wallpaperBtn: "🖼️ خلفية", resetWpBtn: "↺ افتراضي", resetAccBtn: "⚠ إعادة ضبط",
+        micDenied: "تم رفض الوصول للميكروفون!", noConn: "اتصل بشخص أولاً!", connected: "🟢 متصل", contactsTitle: "جهات الاتصال", onlineNow: "متصل الآن",
+        savedContacts: "المحفوظة", noContacts: "لا توجد جهات اتصال.", onlineStatus: "متصل", offlineStatus: "آخر ظهور",
+        incomingVoice: "مكالمة صوتية واردة", incomingVideo: "مكالمة فيديو واردة", answerBtn: "إجابة", rejectBtn: "رفض",
+        setupTitle: "انشئ حسابك", usernamePlace: "المستخدم", startBtn: "ابدأ ✓", setupDesc: "هذا هو المعرف الفريد الخاص بك.",
+        delTitle: "حذف جهة الاتصال", delDesc: "وجميع سجلات الدردشة؟", delBtn: "حذف", cancelBtn: "إلغاء",
+        resetTitle: "إعادة ضبط", resetDesc: "سيتم حذف حسابك. لا يمكن التراجع.", resetBtn: "إعادة ضبط",
+        fileTooBig: "حجم الملف كبير! الحد الأقصى 50 ميغابايت.", nameTaken: "الاسم مستخدم! جرب غيره:",
+        nameShort: "يجب أن يتكون من 3 أحرف على الأقل!", checking: "جاري التحقق...", connError: "خطأ في الاتصال.",
+        nameInUse: "هذا الاسم مفتوح على جهاز آخر!", videoMsg: "فيديو", imageMsg: "صورة", callName: "شخص ما يتصل..."
+    },
+    pt: {
+        slogan: "Mensageiro Simples", myName: "MEU NOME", idPlaceholder: "Nome de usuário...", connectBtn: "CONECTAR", 
+        voiceCall: "CHAMADA DE VOZ", videoCall: "CHAMADA DE VÍDEO", secureChat: "Chat seguro criptografado.", enterId: "Insira um ID para conectar.",
+        msgPlaceholder: "Digite sua mensagem...", calling: "CHAMANDO...", closeCall: "DESLIGAR", typing: "está digitando...",
+        sosBtn: "🚨 SOS", sosCooldown: "segundos espera", sosReceived: "SOS DE EMERGÊNCIA RECEBIDO", sosFrom: "De", sosHops: "saltos", sosNoConn: "Ninguém conectado!",
+        wallpaperBtn: "🖼️ Papel de Parede", resetWpBtn: "↺ Padrão", resetAccBtn: "⚠ Redefinir Conta",
+        micDenied: "Acesso à câmera/microfone negado!", noConn: "Conecte-se primeiro!", connected: "🟢 CONECTADO", contactsTitle: "CONTATOS", onlineNow: "ONLINE AGORA",
+        savedContacts: "SALVOS", noContacts: "Sem contatos ainda.", onlineStatus: "Online", offlineStatus: "Visto por último",
+        incomingVoice: "Chamada de voz", incomingVideo: "Chamada de vídeo", answerBtn: "ATENDER", rejectBtn: "REJEITAR",
+        setupTitle: "Crie sua conta", usernamePlace: "Usuário", startBtn: "INICIAR ✓", setupDesc: "Este é o seu ID exclusivo.",
+        delTitle: "Excluir contato", delDesc: "e todo o histórico? Tem certeza?", delBtn: "EXCLUIR", cancelBtn: "CANCELAR",
+        resetTitle: "Redefinir conta", resetDesc: "Seu histórico será excluído permanentemente.", resetBtn: "REDEFINIR",
+        fileTooBig: "O arquivo é muito grande! Máximo 50 MB.", nameTaken: "Nome já em uso! Tente:",
+        nameShort: "Mínimo de 3 caracteres!", checking: "Verificando...", connError: "Erro de conexão, tente novamente.",
+        nameInUse: "Este nome está aberto em outro dispositivo!", videoMsg: "Vídeo", imageMsg: "Imagem", callName: "Alguém está ligando..."
+    },
+    ja: {
+        slogan: "シンプルメッセンジャー", myName: "私の名前", idPlaceholder: "相手のユーザー名...", connectBtn: "接続", 
+        voiceCall: "音声通話", videoCall: "ビデオ通話", secureChat: "安全で暗号化されたチャット。", enterId: "接続するにはIDを入力してください。",
+        msgPlaceholder: "メッセージを入力...", calling: "発信中...", closeCall: "切断", typing: "が入力中...",
+        sosBtn: "🚨 SOS", sosCooldown: "秒待機", sosReceived: "緊急SOS受信", sosFrom: "送信元", sosHops: "ホップ", sosNoConn: "誰も接続されていません！",
+        wallpaperBtn: "🖼️ 壁紙", resetWpBtn: "↺ デフォルト壁紙", resetAccBtn: "⚠ リセット",
+        micDenied: "マイクのアクセスが拒否されました！", noConn: "最初に接続してください！", connected: "🟢 接続済み", contactsTitle: "連絡先", onlineNow: "オンライン",
+        savedContacts: "保存済み", noContacts: "連絡先はありません。", onlineStatus: "オンライン", offlineStatus: "最終オンライン",
+        incomingVoice: "音声着信", incomingVideo: "ビデオ着信", answerBtn: "応答", rejectBtn: "拒否",
+        setupTitle: "アカウント作成", usernamePlace: "ユーザー名", startBtn: "開始 ✓", setupDesc: "これはあなたの固有IDです。",
+        delTitle: "連絡先を削除", delDesc: "とすべてのチャット履歴を削除しますか？", delBtn: "削除", cancelBtn: "キャンセル",
+        resetTitle: "リセット", resetDesc: "すべての履歴が削除されます。", resetBtn: "リセット",
+        fileTooBig: "ファイルが大きすぎます！最大50MB。", nameTaken: "既に使用されています！",
+        nameShort: "3文字以上必要です！", checking: "確認中...", connError: "接続エラー。",
+        nameInUse: "別のデバイスで開かれています！", videoMsg: "ビデオ", imageMsg: "画像", callName: "着信中..."
+    },
+    hi: {
+        slogan: "सरल मैसेंजर", myName: "मेरा नाम", idPlaceholder: "उनका उपयोगकर्ता नाम...", connectBtn: "जोड़ें", 
+        voiceCall: "वॉयस कॉल", videoCall: "वीडियो कॉल", secureChat: "सुरक्षित एन्क्रिप्टेड चैट।", enterId: "कनेक्ट करने के लिए ID दर्ज करें।",
+        msgPlaceholder: "अपना संदेश टाइप करें...", calling: "कॉल कर रहा है...", closeCall: "कॉल काटें", typing: "टाइप कर रहा है...",
+        sosBtn: "🚨 आपातकाल", sosCooldown: "सेकंड प्रतीक्षा", sosReceived: "आपातकालीन SOS प्राप्त", sosFrom: "से", sosHops: "हॉप्स", sosNoConn: "कोई कनेक्ट नहीं है!",
+        wallpaperBtn: "🖼️ वॉलपेपर", resetWpBtn: "↺ डिफ़ॉल्ट", resetAccBtn: "⚠ खाता रीसेट करें",
+        micDenied: "माइक एक्सेस अस्वीकृत!", noConn: "पहले किसी से कनेक्ट करें!", connected: "🟢 कनेक्टेड", contactsTitle: "संपर्क", onlineNow: "अभी ऑनलाइन",
+        savedContacts: "सहेजे गए", noContacts: "कोई संपर्क नहीं।", onlineStatus: "ऑनलाइन", offlineStatus: "पिछली बार देखा गया",
+        incomingVoice: "आने वाली वॉयस कॉल", incomingVideo: "आने वाली वीडियो कॉल", answerBtn: "उत्तर दें", rejectBtn: "अस्वीकार करें",
+        setupTitle: "खाता बनाएँ", usernamePlace: "उपयोगकर्ता नाम", startBtn: "शुरू करें ✓", setupDesc: "यह आपकी अनूठी ID है।",
+        delTitle: "संपर्क हटाएं", delDesc: "और सारा चैट इतिहास? क्या आप आश्वस्त हैं?", delBtn: "हटाएं", cancelBtn: "रद्द करें",
+        resetTitle: "खाता रीसेट करें", resetDesc: "आपका सारा इतिहास हटा दिया जाएगा।", resetBtn: "रीसेट",
+        fileTooBig: "फ़ाइल बहुत बड़ी है! अधिकतम 50 MB।", nameTaken: "नाम पहले से लिया गया है!",
+        nameShort: "कम से कम 3 अक्षर होने चाहिए!", checking: "जांच हो रही है...", connError: "कनेक्शन त्रुटि।",
+        nameInUse: "यह नाम दूसरे डिवाइस पर खुला है!", videoMsg: "वीडियो", imageMsg: "छवि", callName: "कोई कॉल कर रहा है..."
     }
 };
 
-let currentLang = 'tr';
-
+let currentLang = localStorage.getItem('acetalk_lang') || 'tr';
 function setLanguage(lang) {
     currentLang = lang;
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        const m = (btn.getAttribute('onclick') || '').match(/'(\w+)'/);
-        if(m) btn.classList.toggle('active', m[1] === lang);
-    });
+    localStorage.setItem('acetalk_lang', lang);
+    
+    const selectEl = document.getElementById('lang-select');
+    if (selectEl && selectEl.value !== lang) selectEl.value = lang;
+
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if(i18n[lang]?.[key]) el.innerText = i18n[lang][key];
@@ -698,31 +683,19 @@ function setLanguage(lang) {
     });
     const sosBtn = document.getElementById('sos-btn');
     if(sosBtn && !sosBtn.disabled) sosBtn.innerText = i18n[lang].sosBtn;
-    const typingUi = document.getElementById('typing-ui');
-    if(typingUi && typingUi.style.display !== 'none') {
-        const name = typingUi.innerText.split(' ')[0];
-        typingUi.innerText = name + ' ' + i18n[lang].typing;
-    }
     renderContacts();
 }
 
 // ─── CONTACTS STORAGE ────────────────────────────────────────────────────────
-// Structure: { peerId: { name, lastSeen, messages: [{type, user, body, time}] } }
+function loadContacts() { try { return JSON.parse(localStorage.getItem('acetalk_contacts') || '{}'); } catch { return {}; } }
+function saveContacts(contacts) { localStorage.setItem('acetalk_contacts', JSON.stringify(contacts)); }
 
-function loadContacts() {
-    try { return JSON.parse(localStorage.getItem('acetalk_contacts') || '{}'); }
-    catch { return {}; }
-}
-function saveContacts(contacts) {
-    localStorage.setItem('acetalk_contacts', JSON.stringify(contacts));
-}
 function upsertContact(peerId, name, message) {
     const contacts = loadContacts();
-    if (!contacts[peerId]) contacts[peerId] = { name: name || peerId, lastSeen: null, messages: [] };
+    if (!contacts[peerId]) contacts[peerId] = { name: name || peerIdToName(peerId), lastSeen: null, messages: [] };
     if (name) contacts[peerId].name = name;
     if (message) {
         contacts[peerId].messages.push(message);
-        // Keep last 200 messages per contact
         if (contacts[peerId].messages.length > 200) contacts[peerId].messages = contacts[peerId].messages.slice(-200);
     }
     contacts[peerId].lastSeen = Date.now();
@@ -730,44 +703,42 @@ function upsertContact(peerId, name, message) {
     renderContacts();
 }
 
-// ─── ACTIVE CHAT STATE ───────────────────────────────────────────────────────
-let activePeerId = null; // which contact's history is shown
-
+let activePeerId = null; 
 function openContact(peerId) {
     activePeerId = peerId;
+    localStorage.setItem('acetalk_active_peer', peerId);
     const contacts = loadContacts();
     const contact = contacts[peerId];
     if (!contact) return;
 
-    // Update header
     const header = document.getElementById('chat-header');
     const avatar = document.getElementById('chat-header-avatar');
     const headerName = document.getElementById('chat-header-name');
     const headerStatus = document.getElementById('chat-header-status');
 
     header.style.display = 'flex';
-    avatar.style.background = stringToColor(peerId);
-    avatar.innerText = (contact.name || '?').charAt(0).toUpperCase();
-    headerName.innerText = contact.name || peerId;
+    if(peerAvatars[peerId]) {
+        avatar.innerHTML = `<img src="${peerAvatars[peerId]}">`;
+    } else {
+        avatar.style.background = stringToColor(peerId);
+        avatar.innerHTML = (contact.name || '?').charAt(0).toUpperCase();
+    }
+    
+    headerName.innerText = contact.name || peerIdToName(peerId);
     const isOnline = connections.find(c => c.peer === peerId);
     headerStatus.innerText = isOnline ? i18n[currentLang].onlineStatus : (i18n[currentLang].offlineStatus + ': ' + formatLastSeen(contact.lastSeen));
 
-    // Load messages
     const box = document.getElementById('chat-box');
     const welcome = document.getElementById('welcome-msg');
     if (welcome) welcome.style.display = 'none';
     box.innerHTML = '';
 
     contact.messages.forEach(m => {
-        if (m.type === 'local') {
-            addMessage('', m.body, 'local', m.time, false);
-        } else {
-            addMessage(m.user || contact.name, m.body, 'remote', m.time, false);
-        }
+        addMessage(m.type === 'local' ? '' : (m.user || contact.name), m.body, m.type, m.time, false, m.seen);
     });
 
     box.scrollTop = box.scrollHeight;
-    renderContacts(); // refresh active state
+    renderContacts(); 
 }
 
 function formatLastSeen(ts) {
@@ -776,15 +747,12 @@ function formatLastSeen(ts) {
     return d.toLocaleDateString([], {day:'2-digit', month:'2-digit'}) + ' ' + d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 }
 
-// ─── RENDER CONTACTS ─────────────────────────────────────────────────────────
 function renderContacts() {
     const contacts = loadContacts();
     const list = document.getElementById('contacts-list');
-    const noMsg = document.getElementById('no-contacts-msg');
     const totalEl = document.getElementById('contacts-total');
     const keys = Object.keys(contacts);
 
-    // Sort: online first, then by lastSeen desc
     const onlineIds = new Set(connections.map(c => c.peer));
     keys.sort((a, b) => {
         const ao = onlineIds.has(a), bo = onlineIds.has(b);
@@ -793,7 +761,6 @@ function renderContacts() {
     });
 
     totalEl.innerText = keys.length;
-
     if (keys.length === 0) {
         list.innerHTML = '<div class="no-contacts" id="no-contacts-msg">' + i18n[currentLang].noContacts + '</div>';
         return;
@@ -805,18 +772,28 @@ function renderContacts() {
         const isOnline = onlineIds.has(peerId);
         const isActive = peerId === activePeerId;
         const lastMsg = c.messages.length ? c.messages[c.messages.length - 1] : null;
-        const lastText = lastMsg ? (lastMsg.body.startsWith('<') ? '📷 Resim' : lastMsg.body.substring(0, 28) + (lastMsg.body.length > 28 ? '…' : '')) : '';
+        let lastText = '';
+        if(lastMsg) {
+            if(lastMsg.body.includes('<video')) lastText = '🎥 ' + i18n[currentLang].videoMsg;
+            else if(lastMsg.body.includes('<img')) lastText = '📷 ' + i18n[currentLang].imageMsg;
+            else lastText = lastMsg.body.substring(0, 28) + (lastMsg.body.length > 28 ? '…' : '');
+        }
 
         const card = document.createElement('div');
         card.className = 'contact-card' + (isOnline ? ' online-now' : '') + (isActive ? ' active' : '');
         card.onclick = () => openContact(peerId);
+        
+        const avatarHtml = peerAvatars[peerId] 
+            ? `<img src="${peerAvatars[peerId]}">` 
+            : `${(c.name || '?').charAt(0).toUpperCase()}`;
+        
         card.innerHTML = `
-            <div class="contact-avatar" style="background:${stringToColor(peerId)}">
-                ${(c.name || '?').charAt(0).toUpperCase()}
+            <div class="contact-avatar" style="${!peerAvatars[peerId] ? 'background:'+stringToColor(peerId) : ''}">
+                ${avatarHtml}
                 ${isOnline ? '<div class="contact-online-dot"></div>' : ''}
             </div>
             <div class="contact-info">
-                <div class="contact-name">${c.name || peerIdToPhone(peerId)}</div>
+                <div class="contact-name">${c.name || peerIdToName(peerId)}</div>
                 <div class="contact-last">${lastText || (isOnline ? i18n[currentLang].onlineStatus : '')}</div>
             </div>
             <button class="contact-del-btn" onclick="openDeleteModal('${peerId}', event)" title="Sil">✕</button>
@@ -824,7 +801,6 @@ function renderContacts() {
         list.appendChild(card);
     });
 
-    // Online section
     updateOnlineList();
 }
 
@@ -836,13 +812,18 @@ function updateOnlineList() {
         return;
     }
     connections.forEach(c => {
-        const displayName = peerNames[c.peer] || peerIdToPhone(c.peer);
+        const displayName = peerNames[c.peer] || peerIdToName(c.peer);
         const card = document.createElement('div');
         card.className = 'contact-card online-now';
         card.onclick = () => openContact(c.peer);
+        
+        const avatarHtml = peerAvatars[c.peer] 
+            ? `<img src="${peerAvatars[c.peer]}">` 
+            : `${displayName.charAt(0).toUpperCase()}`;
+
         card.innerHTML = `
-            <div class="contact-avatar" style="background:${stringToColor(c.peer)}">
-                ${displayName.charAt(0).toUpperCase()}
+            <div class="contact-avatar" style="${!peerAvatars[c.peer] ? 'background:'+stringToColor(c.peer) : ''}">
+                ${avatarHtml}
                 <div class="contact-online-dot"></div>
             </div>
             <div class="contact-info">
@@ -854,110 +835,109 @@ function updateOnlineList() {
     });
 }
 
-// ─── PEER SETUP ───────────────────────────────────────────────────────────────
+// ─── SETUP & USERNAME CREATION ───────────────────────────────────────────────
 window.addEventListener('load', () => {
     const saved = localStorage.getItem('acetalk_wallpaper');
     applyWallpaper(saved || DEFAULT_WALLPAPER);
-    renderContacts();
+    updateMyAvatarUI();
+    setLanguage(currentLang);
 
-    const savedPhone = localStorage.getItem('acetalk_phone');
-    if (savedPhone) {
-        initPeer(savedPhone);
+    const savedUser = localStorage.getItem('acetalk_username');
+    if (savedUser) {
+        document.getElementById('my-name-input').value = localStorage.getItem('acetalk_displayname') || savedUser;
+        initPeer(savedUser);
     } else {
         document.getElementById('phone-setup').style.display = 'flex';
     }
 });
 
-function confirmPhone() {
-    const raw = document.getElementById('phone-number-input').value.trim().replace(/\s+/g, '');
-    const errEl = document.getElementById('phone-setup-error');
-    if (!raw || raw.length < 7) { errEl.innerText = 'Geçerli bir numara gir!'; return; }
-    const clean = raw.replace(/[^\d+]/g, '');
-    if (clean.length < 7) { errEl.innerText = 'Numara çok kısa!'; return; }
-    errEl.innerText = '';
-    // Transition to name step
-    const phoneStep = document.getElementById('phone-step');
-    const nameStep  = document.getElementById('name-step');
-    document.getElementById('dot-1').classList.remove('active');
-    document.getElementById('dot-2').classList.add('active');
-    document.getElementById('setup-phone-preview').innerText = clean;
-    phoneStep.style.animation = 'none';
-    phoneStep.style.opacity = '0';
-    phoneStep.style.transform = 'translateX(-40px)';
-    phoneStep.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
-    setTimeout(() => {
-        phoneStep.style.display = 'none';
-        nameStep.style.display = 'flex';
-        document.getElementById('display-name-input').focus();
-        // Store temporarily
-        window._pendingPhone = clean;
-    }, 250);
-}
-
-function confirmName() {
-    const nameVal = document.getElementById('display-name-input').value.trim();
-    const phone = window._pendingPhone;
-    if (!phone) return;
-    localStorage.setItem('acetalk_phone', phone);
-    if (nameVal) {
-        localStorage.setItem('acetalk_displayname', nameVal);
-        document.getElementById('my-name-input').value = nameVal;
+function tryCreateAccount() {
+    const raw = document.getElementById('username-input').value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+    const errDiv = document.getElementById('setup-error');
+    const sugDiv = document.getElementById('setup-suggestions');
+    const btn = document.getElementById('setup-btn');
+    
+    if (raw.length < 3) { 
+        errDiv.innerText = i18n[currentLang].nameShort; 
+        sugDiv.innerHTML = '';
+        return; 
     }
-    document.getElementById('phone-setup').style.display = 'none';
-    initPeer(phone);
+
+    errDiv.innerText = i18n[currentLang].checking;
+    errDiv.style.color = "#00aff0";
+    sugDiv.innerHTML = '';
+    btn.disabled = true;
+
+    const testId = 'ace_' + raw;
+    const testPeer = new Peer(testId);
+
+    testPeer.on('open', (id) => {
+        localStorage.setItem('acetalk_username', raw);
+        localStorage.setItem('acetalk_displayname', document.getElementById('username-input').value.trim()); 
+        testPeer.destroy(); 
+        
+        document.getElementById('phone-setup').style.display = 'none';
+        document.getElementById('my-name-input').value = localStorage.getItem('acetalk_displayname');
+        initPeer(raw); 
+    });
+
+    testPeer.on('error', (err) => {
+        btn.disabled = false;
+        errDiv.style.color = "var(--sos-red)";
+        
+        if (err.type === 'unavailable-id') {
+            errDiv.innerText = i18n[currentLang].nameTaken;
+            const suffixes = [Math.floor(Math.random()*100), '_ace', '26', 'tr'];
+            suffixes.forEach(s => {
+                const sBtn = document.createElement('button');
+                sBtn.innerText = raw + s;
+                sBtn.style.cssText = "background:#1a252f; color:#00aff0; border:1px solid #34495e; padding:5px 10px; cursor:pointer; font-size:11px; border-radius:0;";
+                sBtn.onclick = () => {
+                    document.getElementById('username-input').value = raw + s;
+                    tryCreateAccount();
+                };
+                sugDiv.appendChild(sBtn);
+            });
+        } else {
+            errDiv.innerText = i18n[currentLang].connError;
+        }
+        testPeer.destroy();
+    });
 }
 
-// ─── DELETE MODAL ─────────────────────────────────────────────────────────────
+// ─── PEER LOGIC & AUTO-RECONNECT ─────────────────────────────────────────────
 let _deleteTargetId = null;
-
 function openDeleteModal(peerId, e) {
     e.stopPropagation();
     _deleteTargetId = peerId;
-    const contacts = loadContacts();
-    const c = contacts[peerId];
-    const displayName = (c && c.name) ? c.name : peerIdToPhone(peerId);
-    document.getElementById('delete-modal-name').innerText = '"' + displayName + '"';
+    const c = loadContacts()[peerId];
+    const name = (c && c.name) ? c.name : peerIdToName(peerId);
+    document.getElementById('delete-modal-sub').innerHTML = `<span style="color: #00ffcc; font-weight: bold;">${name}</span> ` + i18n[currentLang].delDesc;
     document.getElementById('delete-modal').style.display = 'flex';
 }
-
-function closeDeleteModal() {
-    document.getElementById('delete-modal').style.display = 'none';
-    _deleteTargetId = null;
-}
-
+function closeDeleteModal() { document.getElementById('delete-modal').style.display = 'none'; _deleteTargetId = null; }
 function confirmDelete() {
     if (!_deleteTargetId) return;
     const contacts = loadContacts();
     delete contacts[_deleteTargetId];
     saveContacts(contacts);
-    // If deleted contact was active, clear chat
     if (activePeerId === _deleteTargetId) {
         activePeerId = null;
+        localStorage.removeItem('acetalk_active_peer');
         document.getElementById('chat-header').style.display = 'none';
-        document.getElementById('chat-box').innerHTML = '<div id="welcome-msg" style="margin: auto; text-align: center; color: #ccc;"><p>Güvenli ve şifreli uçtan uca sohbet.</p><small>Bağlanmak için bir ID girin.</small></div>';
+        document.getElementById('chat-box').innerHTML = '<div id="welcome-msg" style="margin: auto; text-align: center; color: #ccc;"><p data-i18n="secureChat">' + i18n[currentLang].secureChat + '</p></div>';
     }
-    closeDeleteModal();
-    renderContacts();
+    closeDeleteModal(); renderContacts();
 }
 
-// ─── RESET ACCOUNT ────────────────────────────────────────────────────────────
-function openResetModal() {
-    document.getElementById('reset-modal').style.display = 'flex';
-}
-function closeResetModal() {
-    document.getElementById('reset-modal').style.display = 'none';
-}
+function openResetModal() { document.getElementById('reset-modal').style.display = 'flex'; }
+function closeResetModal() { document.getElementById('reset-modal').style.display = 'none'; }
 function confirmResetAccount() {
-    // Disconnect all peers
     connections.forEach(c => { try { c.close(); } catch(e){} });
     if (peer) { try { peer.destroy(); } catch(e){} }
-    // Wipe all acetalk storage (keep wallpaper)
     const wp = localStorage.getItem('acetalk_wallpaper');
-    localStorage.removeItem('acetalk_phone');
-    localStorage.removeItem('acetalk_displayname');
-    localStorage.removeItem('acetalk_contacts');
+    localStorage.clear();
     if (wp) localStorage.setItem('acetalk_wallpaper', wp);
-    // Reload page to show setup screen fresh
     location.reload();
 }
 
@@ -966,30 +946,38 @@ let connections = [];
 let peerNames = {};
 let currentCall = null;
 let pendingCall = null;
+let pendingCallType = 'audio';
 let typingTimeout = null;
 
-function initPeer(phoneId) {
-    const peerId = 'ace_' + phoneId.replace(/\+/g, '00').replace(/[^\w]/g, '');
-
-    // Apply saved display name
-    const savedName = localStorage.getItem('acetalk_displayname');
-    if (savedName) document.getElementById('my-name-input').value = savedName;
-
-    setTimeout(() => document.body.classList.add('loaded'), 2500);
+function initPeer(username) {
+    const peerId = 'ace_' + username;
+    setTimeout(() => document.body.classList.add('loaded'), 2000);
 
     peer = new Peer(peerId);
+    peer.on('open', id => { 
+        document.getElementById('my-id').innerText = '@' + username; 
+        document.body.classList.add('loaded');
+        
+        const savedContacts = loadContacts();
+        Object.keys(savedContacts).forEach(pid => {
+            if(pid !== id) {
+                if (!connections.find(c => c.peer === pid)) {
+                    setupConn(peer.connect(pid));
+                }
+            }
+        });
 
-    peer.on('open', id => {
-        // Display as the original phone number
-        document.getElementById('my-id').innerText = localStorage.getItem('acetalk_phone');
+        const lastActive = localStorage.getItem('acetalk_active_peer');
+        if (lastActive && savedContacts[lastActive]) {
+            openContact(lastActive);
+        }
     });
 
     peer.on('error', err => {
         if (err.type === 'unavailable-id') {
-            // ID taken — someone else is using this number right now
             document.getElementById('phone-setup').style.display = 'flex';
-            document.getElementById('phone-setup-error').innerText = 'Bu numara şu an başka bir cihazda açık!';
-            localStorage.removeItem('acetalk_phone');
+            document.getElementById('setup-error').innerText = i18n[currentLang].nameInUse;
+            localStorage.removeItem('acetalk_username');
             if (peer) { peer.destroy(); peer = null; }
             document.body.classList.remove('loaded');
         }
@@ -999,18 +987,17 @@ function initPeer(phoneId) {
     peer.on('call', handleIncomingCall);
 }
 
-function phoneToId(phone) {
-    return 'ace_' + phone.trim().replace(/\s/g,'').replace(/\+/g, '00').replace(/[^\w]/g, '');
-}
+function peerIdToName(peerId) { return peerId.replace(/^ace_/, ''); }
 
 function connectToPeer() {
-    const raw = document.getElementById('peer-id-input').value.trim().replace(/\s+/g, '');
+    const raw = document.getElementById('peer-id-input').value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
     if (!raw) return;
-    const pid = phoneToId(raw);
+    const pid = 'ace_' + raw;
     if (connections.find(c => c.peer === pid)) return;
+    
     setupConn(peer.connect(pid));
-    // Store original phone for display
     peerNames[pid] = peerNames[pid] || raw;
+    document.getElementById('peer-id-input').value = ''; 
 }
 
 function setupConn(conn) {
@@ -1018,8 +1005,7 @@ function setupConn(conn) {
         if (!connections.find(c => c.peer === conn.peer)) {
             connections.push(conn);
             const myName = document.getElementById('my-name-input').value;
-            conn.send({type: 'profile', name: myName});
-            // Upsert contact (no message yet)
+            conn.send({type: 'profile', name: myName, avatar: myAvatarBase64});
             upsertContact(conn.peer, peerNames[conn.peer] || null);
             updateOnlineList();
             renderContacts();
@@ -1028,40 +1014,41 @@ function setupConn(conn) {
     conn.on('data', data => {
         if (data.type === 'profile') {
             peerNames[conn.peer] = data.name;
+            if(data.avatar) peerAvatars[conn.peer] = data.avatar;
             upsertContact(conn.peer, data.name);
-            renderContacts();
+            if(activePeerId === conn.peer) openContact(conn.peer); 
         }
         else if (data.type === 'msg') {
             playAudio('snd-msg');
             const parsed = parseMarkdown(data.body);
-            // Save to contact history
-            upsertContact(conn.peer, peerNames[conn.peer] || null, {
-                type: 'remote', user: data.name, body: parsed, time: data.time
-            });
-            // If this contact is active, show message in chat
-            if (activePeerId === conn.peer) {
-                addMessage(data.name, parsed, 'remote', data.time, true);
-            }
+            upsertContact(conn.peer, peerNames[conn.peer] || null, { type: 'remote', user: data.name, body: parsed, time: data.time });
+            if (activePeerId === conn.peer) addMessage(data.name, parsed, 'remote', data.time, true);
             conn.send({type: 'seen', msgId: data.time});
         }
-        else if (data.type === 'seen') { markAsSeen(data.msgId); }
+        else if (data.type === 'seen') { 
+            markAsSeen(data.msgId); 
+            const contacts = loadContacts();
+            if (contacts[conn.peer]) {
+                const msg = contacts[conn.peer].messages.find(m => m.time === data.msgId);
+                if (msg) {
+                    msg.seen = true;
+                    saveContacts(contacts);
+                }
+            }
+        }
         else if (data.type === 'typing') { showTyping(data.name, data.state); }
         else if (data.type === 'sos') { handleSOS(data); }
     });
     conn.on('close', () => {
         connections = connections.filter(c => c.peer !== conn.peer);
-        // Update lastSeen for contact
         const contacts = loadContacts();
-        if (contacts[conn.peer]) {
-            contacts[conn.peer].lastSeen = Date.now();
-            saveContacts(contacts);
-        }
+        if (contacts[conn.peer]) { contacts[conn.peer].lastSeen = Date.now(); saveContacts(contacts); }
         renderContacts();
     });
-    conn.on('error', err => console.warn('conn error', err));
+    conn.on('error', err => { });
 }
 
-// ─── SOS (FIXED) ─────────────────────────────────────────────────────────────
+// ─── SOS ─────────────────────────────────────────────────────────────────────
 const seenSOS = new Set();
 let sosCooldownTimer = null;
 const SOS_COOLDOWN = 60;
@@ -1079,8 +1066,7 @@ function sendSOS() {
 }
 
 function handleSOS(data) {
-    if (seenSOS.has(data.id)) return;
-    if (data.ttl <= 0) return;
+    if (seenSOS.has(data.id) || data.ttl <= 0) return;
     seenSOS.add(data.id);
     playAudio('snd-sos');
     addSOSMessage(data.fromName, data.hopCount + 1, false);
@@ -1098,8 +1084,6 @@ function addSOSMessage(fromName, hops, isSelf) {
     div.innerHTML = '<div class="sos-label">⚠ ' + lang.sosReceived + '</div><b style="font-size:15px;">' + (isSelf ? '🆘 ' : '🚨 ') + fromName + '</b><div class="sos-from">' + lang.sosFrom + ': ' + fromName + '</div>' + hopText + '<div class="msg-meta" style="color:#884444;">' + time + '</div>';
     box.appendChild(div);
     box.scrollTop = box.scrollHeight;
-    document.title = '🚨 SOS – ' + fromName + ' | AceTalk';
-    setTimeout(() => document.title = 'AceTalk | Simple Messenger', 8000);
 }
 
 function startSOSCooldown() {
@@ -1115,40 +1099,56 @@ function startSOSCooldown() {
             btn.disabled = false;
             timerEl.innerText = '';
             btn.innerText = i18n[currentLang].sosBtn;
-        } else {
-            timerEl.innerText = remaining + ' ' + i18n[currentLang].sosCooldown;
-        }
+        } else { timerEl.innerText = remaining + ' ' + i18n[currentLang].sosCooldown; }
     }, 1000);
 }
 
-// ─── CALLS (FIXED) ───────────────────────────────────────────────────────────
-function startCall() {
+// ─── CALLS (AUDIO & VIDEO) ───────────────────────────────────────────────────
+function startCall(type) {
     if (connections.length === 0) { alert(i18n[currentLang].noConn); return; }
-    // Prefer active contact, fallback to first connection
-    const targetId = activePeerId && connections.find(c => c.peer === activePeerId)
-        ? activePeerId : connections[0].peer;
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-        const call = peer.call(targetId, stream);
+    const targetId = activePeerId && connections.find(c => c.peer === activePeerId) ? activePeerId : connections[0].peer;
+    const constraints = type === 'video' ? { video: true, audio: true } : { video: false, audio: true };
+
+    navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+        const call = peer.call(targetId, stream, { metadata: { type: type } });
         currentCall = call;
-        document.getElementById('call-name').innerText = peerNames[targetId] || targetId;
+        
+        document.getElementById('call-name').innerText = peerNames[targetId] || peerIdToName(targetId);
         document.getElementById('call-status').innerText = i18n[currentLang].calling;
+        
+        if (type === 'video') {
+            document.getElementById('call-icon').style.display = 'none';
+            document.getElementById('call-videos').style.display = 'flex';
+            document.getElementById('local-video').srcObject = stream;
+        } else {
+            document.getElementById('call-icon').style.display = 'block';
+            document.getElementById('call-videos').style.display = 'none';
+        }
+
         document.getElementById('call-overlay').style.display = 'flex';
         playAudio('snd-call');
+
         call.on('stream', remoteStream => {
             document.getElementById('snd-call').pause();
-            document.getElementById('remote-audio').srcObject = remoteStream;
             document.getElementById('call-status').innerText = i18n[currentLang].connected;
+            if (type === 'video') { document.getElementById('remote-video').srcObject = remoteStream; } 
+            else { document.getElementById('remote-audio').srcObject = remoteStream; }
         });
         call.on('close', () => endCall());
         call.on('error', () => endCall());
     }).catch(() => alert(i18n[currentLang].micDenied));
 }
 
-// Incoming call — no confirm(), custom panel
 function handleIncomingCall(call) {
     pendingCall = call;
-    const callerName = peerNames[call.peer] || call.peer.replace('ace_','').replace(/^00/,'+');
-    document.getElementById('incoming-call-name').innerText = '📞 ' + callerName;
+    pendingCallType = (call.metadata && call.metadata.type) ? call.metadata.type : 'audio';
+    
+    const callerName = peerNames[call.peer] || peerIdToName(call.peer);
+    const label = pendingCallType === 'video' ? '📹 ' : '📞 ';
+    const subText = pendingCallType === 'video' ? i18n[currentLang].incomingVideo : i18n[currentLang].incomingVoice;
+
+    document.getElementById('incoming-call-name').innerText = label + callerName;
+    document.getElementById('incoming-call-sub').innerText = subText;
     document.getElementById('incoming-call-panel').style.display = 'flex';
     playAudio('snd-call');
 }
@@ -1157,15 +1157,31 @@ function answerCall() {
     document.getElementById('incoming-call-panel').style.display = 'none';
     document.getElementById('snd-call').pause();
     if (!pendingCall) return;
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+    
+    const constraints = pendingCallType === 'video' ? { video: true, audio: true } : { video: false, audio: true };
+
+    navigator.mediaDevices.getUserMedia(constraints).then(stream => {
         pendingCall.answer(stream);
         currentCall = pendingCall;
         pendingCall = null;
-        document.getElementById('call-name').innerText = peerNames[currentCall.peer] || currentCall.peer;
+        
+        document.getElementById('call-name').innerText = peerNames[currentCall.peer] || peerIdToName(currentCall.peer);
         document.getElementById('call-status').innerText = i18n[currentLang].connected;
+        
+        if (pendingCallType === 'video') {
+            document.getElementById('call-icon').style.display = 'none';
+            document.getElementById('call-videos').style.display = 'flex';
+            document.getElementById('local-video').srcObject = stream;
+        } else {
+            document.getElementById('call-icon').style.display = 'block';
+            document.getElementById('call-videos').style.display = 'none';
+        }
+
         document.getElementById('call-overlay').style.display = 'flex';
+
         currentCall.on('stream', remoteStream => {
-            document.getElementById('remote-audio').srcObject = remoteStream;
+            if (pendingCallType === 'video') { document.getElementById('remote-video').srcObject = remoteStream; } 
+            else { document.getElementById('remote-audio').srcObject = remoteStream; }
         });
         currentCall.on('close', () => endCall());
         currentCall.on('error', () => endCall());
@@ -1182,20 +1198,17 @@ function endCall() {
     if (currentCall) { currentCall.close(); currentCall = null; }
     document.getElementById('snd-call').pause();
     document.getElementById('call-overlay').style.display = 'none';
+    
+    const localVid = document.getElementById('local-video');
+    const remoteVid = document.getElementById('remote-video');
+    if (localVid.srcObject) { localVid.srcObject.getTracks().forEach(track => track.stop()); localVid.srcObject = null; }
+    if (remoteVid.srcObject) { remoteVid.srcObject.getTracks().forEach(track => track.stop()); remoteVid.srcObject = null; }
 }
 
-// ─── MESSAGES ────────────────────────────────────────────────────────────────
+// ─── MESSAGES & MEDIA ────────────────────────────────────────────────────────
 function parseMarkdown(text) {
-    return text
-        .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
-        .replace(/\*(.*?)\*/g, '<i>$1</i>')
-        .replace(/~~(.*?)~~/g, '<s>$1</s>')
-        .replace(/`(.*?)`/g, '<code>$1</code>');
-}
-
-function updateMyProfile() {
-    const myName = document.getElementById('my-name-input').value;
-    connections.forEach(c => { try { c.send({type: 'profile', name: myName}); } catch(e){} });
+    if (text === 'acetalkplanspremium0') { alert("Premium Easter Egg (Tested)!"); return "Premium Kodu Girildi"; }
+    return text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\*(.*?)\*/g, '<i>$1</i>').replace(/~~(.*?)~~/g, '<s>$1</s>').replace(/`(.*?)`/g, '<code>$1</code>');
 }
 
 function sendMessage() {
@@ -1207,25 +1220,17 @@ function sendMessage() {
 
     const body = input.value;
     const parsed = parseMarkdown(body);
+    const targets = activePeerId && connections.find(c => c.peer === activePeerId) ? connections.filter(c => c.peer === activePeerId) : connections;
 
-    // Send to active peer or broadcast
-    const targets = activePeerId && connections.find(c => c.peer === activePeerId)
-        ? connections.filter(c => c.peer === activePeerId)
-        : connections;
-
-    targets.forEach(c => { try { c.send({type: 'msg', name: myName, body: body, time: time}); } catch(e){} });
-
-    // Save to active contact history
-    if (activePeerId) {
-        upsertContact(activePeerId, peerNames[activePeerId] || null, { type: 'local', body: parsed, time: time });
-    }
-
+    targets.forEach(c => { try { c.send({type: 'msg', name: myName, body: parsed, time: time}); } catch(e){} });
+    if (activePeerId) upsertContact(activePeerId, peerNames[activePeerId] || null, { type: 'local', body: parsed, time: time });
+    
     addMessage('', parsed, 'local', time, true);
     input.value = '';
     notifyTyping(false);
 }
 
-function addMessage(user, text, type, time, scroll) {
+function addMessage(user, text, type, time, scroll, isSeen = false) {
     const box = document.getElementById('chat-box');
     const welcome = document.getElementById('welcome-msg');
     if (welcome) welcome.style.display = 'none';
@@ -1233,9 +1238,14 @@ function addMessage(user, text, type, time, scroll) {
     const id = 'msg-' + time.replace(/[:\s]/g, '');
     const div = document.createElement('div');
     div.className = 'msg ' + type;
+    
+    const checkmarks = isSeen 
+        ? `<span id="seen-${id}" class="seen-icon" style="margin-left:4px;">✔✔</span>` 
+        : `<span id="seen-${id}" style="margin-left:4px;">✔</span>`;
+
     div.innerHTML = (user ? '<strong>' + user + '</strong><br>' : '') + text +
         '<div class="msg-meta">' + displayTime +
-        (type === 'local' ? ' <span id="seen-' + id + '" style="margin-left:4px;">✔</span>' : '') +
+        (type === 'local' ? ' ' + checkmarks : '') +
         '</div>';
     box.appendChild(div);
     if (scroll) box.scrollTop = box.scrollHeight;
@@ -1247,35 +1257,41 @@ function markAsSeen(time) {
     if (el) { el.innerHTML = '✔✔'; el.classList.add('seen-icon'); }
 }
 
-function handleImage(input) {
-    if (input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = e => {
-            const imgHtml = '<img src="' + e.target.result + '" style="max-width:100%; margin-top:5px; display:block;">';
-            sendSpecialMessage(imgHtml);
-        };
-        reader.readAsDataURL(input.files[0]);
+function handleMedia(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const fileSizeMB = file.size / (1024 * 1024);
+    if (fileSizeMB > 50) {
+        alert(i18n[currentLang].fileTooBig);
+        return;
     }
+
+    const reader = new FileReader();
+    reader.onload = e => {
+        let mediaHtml = '';
+        if (file.type.startsWith('image/')) {
+            mediaHtml = '<img src="' + e.target.result + '" style="max-width:100%; margin-top:5px; display:block;">';
+        } else if (file.type.startsWith('video/')) {
+            mediaHtml = '<video src="' + e.target.result + '" controls style="max-width:100%; margin-top:5px; display:block; border: 1px solid var(--skype-blue);"></video>';
+        }
+        if (mediaHtml) sendSpecialMessage(mediaHtml);
+    };
+    reader.readAsDataURL(file);
 }
 
 function sendSpecialMessage(content) {
     const myName = document.getElementById('my-name-input').value;
     const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    const targets = activePeerId && connections.find(c => c.peer === activePeerId)
-        ? connections.filter(c => c.peer === activePeerId)
-        : connections;
+    const targets = activePeerId && connections.find(c => c.peer === activePeerId) ? connections.filter(c => c.peer === activePeerId) : connections;
     targets.forEach(c => { try { c.send({type: 'msg', name: myName, body: content, time: time}); } catch(e){} });
-    if (activePeerId) {
-        upsertContact(activePeerId, null, { type: 'local', body: content, time: time });
-    }
+    if (activePeerId) upsertContact(activePeerId, null, { type: 'local', body: content, time: time });
     addMessage('', content, 'local', time, true);
 }
 
 function notifyTyping(state = true) {
     const myName = document.getElementById('my-name-input').value;
-    const targets = activePeerId && connections.find(c => c.peer === activePeerId)
-        ? connections.filter(c => c.peer === activePeerId)
-        : connections;
+    const targets = activePeerId && connections.find(c => c.peer === activePeerId) ? connections.filter(c => c.peer === activePeerId) : connections;
     targets.forEach(c => { try { c.send({type: 'typing', name: myName, state: state}); } catch(e){} });
     if (state) { clearTimeout(typingTimeout); typingTimeout = setTimeout(() => notifyTyping(false), 3000); }
 }
@@ -1286,19 +1302,12 @@ function showTyping(name, state) {
     else { ui.style.display = 'none'; }
 }
 
-// ─── UTILS ───────────────────────────────────────────────────────────────────
-function peerIdToPhone(peerId) {
-    // ace_00905... → +905... | ace_05... → 05...
-    return peerId.replace(/^ace_/, '').replace(/^00/, '+');
-}
-
 function stringToColor(str) {
     let hash = 0;
     for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
     let color = '#';
     for (let i = 0; i < 3; i++) {
         let v = (hash >> (i * 8)) & 0xFF;
-        // darken a bit so white text is readable
         v = Math.max(40, Math.min(180, v));
         color += ('00' + v.toString(16)).substr(-2);
     }
@@ -1307,16 +1316,17 @@ function stringToColor(str) {
 
 function playAudio(id) { document.getElementById(id).play().catch(() => {}); }
 
-// Drag & drop image
 const dropZone = document.getElementById('drop-zone');
 dropZone.addEventListener('dragover', e => e.preventDefault());
 dropZone.addEventListener('drop', e => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = ev => sendSpecialMessage('<img src="' + ev.target.result + '" style="max-width:100%; margin-top:5px; display:block;">');
-        reader.readAsDataURL(file);
+    if (file) {
+        const input = document.getElementById('media-input');
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        input.files = dt.files;
+        handleMedia(input);
     }
 });
 </script>
