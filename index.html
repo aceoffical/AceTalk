@@ -362,7 +362,7 @@
             <div class="status-header">
                 <label for="my-avatar-input" class="my-avatar-upload" id="my-avatar-display" title="Profil Fotoğrafını Değiştir">?</label>
                 <input type="file" id="my-avatar-input" accept="image/*" style="display:none" onchange="handleAvatarUpload(this)">
-                <input type="text" id="my-name-input" class="status-input" value="AceUser" onchange="updateMyProfile()" title="Sohbette görünecek adın">
+                <input type="text" id="my-name-input" class="status-input" value="AceUser" readonly title="Sohbette görünecek adın">
             </div>
             <b style="font-size: 10px; color: var(--skype-blue);" data-i18n="myName">ADIM</b>
             <small style="display:block; margin-top:5px; font-size: 9px; color: #7f8c8d;">👤 <span id="my-id" style="color: #00ffcc; cursor:pointer;" onclick="navigator.clipboard.writeText(this.innerText).then(()=>{this.style.color='#fff';setTimeout(()=>this.style.color='#00ffcc',1000)})" title="Kopyalamak için tıkla">...</span></small>
