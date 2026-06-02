@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>AceTalk | Simple Messenger</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="icon" type="image/png" href="icon-192-new.png?v=3">
     <link rel="apple-touch-icon" href="icon-192-new.png?v=3">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet">
@@ -64,7 +65,7 @@
             80%     { transform: translateX(2px); }
         }
 
-        body, html { height: 100%; margin: 0; font-family: 'Ubuntu', sans-serif; font-weight: 300; overflow: hidden; background-color: var(--sidebar-bg); }
+        body, html { height: 100%; margin: 0; font-family: 'Ubuntu', sans-serif; font-weight: 300; overflow: hidden; background-color: var(--sidebar-bg); display: flex; flex-direction: column; }
 
         /* SPLASH */
         #splash-screen {
@@ -78,7 +79,12 @@
         .splash-loader::after { content: ''; position: absolute; left: -100%; width: 100%; height: 100%; background: var(--skype-blue); animation: loading 1.5s infinite; }
         @keyframes loading { 100% { left: 100%; } }
 
-        .app-container { display: flex; height: 100vh; width: 100vw; opacity: 0; }
+        /* MOBILE NAV (Hidden on desktop) */
+        #mobile-nav { display: none; background: #1a252f; color: white; padding: 15px 20px; justify-content: space-between; align-items: center; border-bottom: 1px solid #111d28; z-index: 100; width: 100%; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .mobile-btn { background: none; border: none; color: white; font-size: 22px; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; transition: color 0.2s; }
+        .mobile-btn:hover { color: var(--skype-blue); }
+
+        .app-container { flex: 1; display: flex; width: 100vw; opacity: 0; position: relative; overflow: hidden; }
         .loaded .app-container { opacity: 1; }
 
         /* SIDEBAR */
@@ -95,26 +101,7 @@
         
         /* MODERN LANG SELECTOR */
         .lang-switcher { margin-bottom: 20px; }
-        .lang-select {
-            width: 100%;
-            background: #1a252f;
-            border: 1px solid #34495e;
-            color: #ccc;
-            padding: 10px 12px;
-            font-family: 'Ubuntu', sans-serif;
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            outline: none;
-            cursor: pointer;
-            appearance: none;
-            -webkit-appearance: none;
-            background-image: url('data:image/svg+xml;utf8,<svg fill="%2300aff0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-            background-repeat: no-repeat;
-            background-position-x: 95%;
-            background-position-y: 50%;
-            transition: border-color 0.2s ease, color 0.2s ease;
-        }
+        .lang-select { width: 100%; background: #1a252f; border: 1px solid #34495e; color: #ccc; padding: 10px 12px; font-family: 'Ubuntu', sans-serif; font-size: 12px; font-weight: bold; letter-spacing: 1px; outline: none; cursor: pointer; appearance: none; -webkit-appearance: none; background-image: url('data:image/svg+xml;utf8,<svg fill="%2300aff0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); background-repeat: no-repeat; background-position-x: 95%; background-position-y: 50%; transition: border-color 0.2s ease, color 0.2s ease; }
         .lang-select:hover { border-color: var(--skype-blue); color: white; }
         .lang-select option { background: #1e2d3d; color: white; padding: 10px; font-weight: normal; }
 
@@ -126,8 +113,13 @@
         @keyframes msgIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .local { background: var(--msg-local); align-self: flex-end; border: 1px solid var(--msg-local-border); border-right: 4px solid var(--skype-blue); color: var(--chat-text); }
         .remote { background: var(--msg-remote); align-self: flex-start; border: 1px solid var(--msg-remote-border); border-left: 4px solid #bdc3c7; color: var(--chat-text); }
-        .msg-meta { font-size: 9px; margin-top: 5px; color: #999; display: flex; justify-content: flex-end; align-items: center; gap: 3px; }
+        .msg-body { word-wrap: break-word; }
+        .msg-meta { font-size: 9px; margin-top: 5px; color: #999; display: flex; justify-content: flex-end; align-items: center; gap: 5px; }
         .seen-icon { color: var(--skype-blue); font-weight: bold; }
+        
+        /* TRANSLATE BTN */
+        .translate-btn { background: none; border: none; font-size: 11px; padding: 0; cursor: pointer; color: inherit; opacity: 0.6; transition: 0.2s; margin-right: 2px; }
+        .translate-btn:hover { opacity: 1; transform: scale(1.15); color: var(--skype-blue); }
 
         /* SOS */
         .msg-sos { max-width: 90%; align-self: center; background: #2d0000; border: 2px solid var(--sos-red); border-left: 6px solid var(--sos-red); color: #ff6b6b; padding: 14px 20px; font-size: 14px; animation: sosPulse 0.5s ease-out, msgIn 0.3s ease-out; }
@@ -159,12 +151,17 @@
         #contacts-list::-webkit-scrollbar-track { background: transparent; }
         #contacts-list::-webkit-scrollbar-thumb { background: #34495e; }
 
-        /* Contact card */
+        /* Kırmızı silme butonunun (X) zıplamasını çözen kod */
         .contact-card { display: flex; align-items: center; gap: 10px; padding: 9px 8px; cursor: pointer; border-left: 3px solid transparent; transition: background 0.15s ease, border-color 0.15s ease, padding-left 0.15s ease; position: relative; }
         .contact-card:hover { background: rgba(0,175,240,0.07); border-left-color: var(--skype-blue); padding-left: 12px; }
         .contact-card.active { background: rgba(0,175,240,0.13); border-left-color: var(--skype-blue); }
         .contact-card.online-now { border-left-color: var(--call-green); }
         .contact-card.online-now:hover { border-left-color: var(--call-green); }
+
+        .contact-del-btn { display: none; position: absolute; right: 6px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #4a6278; font-size: 15px; cursor: pointer; padding: 4px 6px; line-height: 1; transition: color 0.15s ease; }
+        .contact-del-btn:hover { color: var(--sos-red) !important; transform: translateY(-50%) scale(1.2); }
+        .contact-del-btn:active { transform: translateY(-50%) scale(0.9) !important; }
+        .contact-card:hover .contact-del-btn { display: block; }
 
         .contact-avatar { width: 34px; height: 34px; min-width: 34px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 13px; position: relative; overflow: hidden; border: 1px solid #34495e; }
         .contact-avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -174,7 +171,6 @@
         .contact-last { font-size: 10px; color: #4a6278; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
         .no-contacts { padding: 20px 16px; font-size: 11px; color: #4a6278; text-align: center; line-height: 1.6; }
 
-        /* Chat header */
         #chat-header { display: none; padding: 12px 30px; background: #f7f7f7; border-bottom: 1px solid #eee; align-items: center; gap: 12px; }
         #chat-header-avatar { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 13px; overflow: hidden; border: 1px solid #ccc; }
         #chat-header-avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -185,12 +181,10 @@
         #call-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44, 62, 80, 0.97); z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; color: white; }
         #call-overlay button:hover { filter: brightness(1.15); }
         #call-overlay button:active { transform: scale(0.96); }
-        
         #call-videos { display: none; width: 100%; max-width: 800px; position: relative; margin-top: 20px; align-items: center; justify-content: center; }
         #remote-video { width: 100%; max-height: 65vh; border: 2px solid var(--call-green); background: #000; }
         #local-video { position: absolute; bottom: 15px; right: 15px; width: 140px; border: 2px solid var(--skype-blue); background: #000; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
 
-        /* Incoming call panel */
         #incoming-call-panel { position: fixed; bottom: 30px; right: 260px; background: #1e2d3d; border: 1px solid var(--call-green); border-left: 4px solid var(--call-green); padding: 16px 20px; z-index: 10001; display: none; flex-direction: column; gap: 10px; animation: slideInPanel 0.3s ease-out; min-width: 240px; }
         @keyframes slideInPanel { from { opacity:0; transform: translateX(20px); } to { opacity:1; transform: translateX(0); } }
         #incoming-call-name { color: white; font-weight: bold; font-size: 14px; }
@@ -238,10 +232,58 @@
         .btn-modal-delete { background: var(--sos-red); color: white; }
         .btn-modal-cancel { background: #2c3e50; color: #aaa; border: 1px solid #34495e; }
 
-        .contact-card { position: relative; }
-        .contact-del-btn { display: none; position: absolute; right: 6px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #4a6278; font-size: 15px; cursor: pointer; padding: 4px 6px; line-height: 1; transition: color 0.15s ease; }
-        .contact-del-btn:hover { color: var(--sos-red) !important; transform: translateY(-50%) scale(1.2); }
-        .contact-card:hover .contact-del-btn { display: block; }
+        /* PC modunda mobilden arta kalan gereksiz gri X kapatma butonlarını gizle */
+        @media (min-width: 769px) {
+            .sidebar .mobile-btn, .right-bar .mobile-btn { display: none !important; }
+        }
+
+        /* RESPONSIVE CSS (PHONE MODE) */
+        @media (max-width: 768px) {
+            #mobile-nav { display: flex; }
+            
+            /* Overlay Tasarımı */
+            #mobile-overlay {
+                display: block;
+                position: fixed;
+                top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0, 0, 0, 0.6);
+                backdrop-filter: blur(4px);
+                z-index: 45;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s ease, visibility 0.3s ease;
+            }
+            #mobile-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            /* Performanslı kaydırma için left/right yerine transform kullanıyoruz */
+            .sidebar { 
+                position: fixed; left: 0; top: 0; height: 100dvh; width: 85%; max-width: 320px; 
+                transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                z-index: 50; box-shadow: 5px 0 15px rgba(0,0,0,0.5); 
+            }
+            .right-bar { 
+                position: fixed; right: 0; top: 0; height: 100dvh; width: 85%; max-width: 320px; 
+                transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+                z-index: 50; box-shadow: -5px 0 15px rgba(0,0,0,0.5); 
+            }
+            
+            .sidebar.mobile-open { transform: translateX(0); }
+            .right-bar.mobile-open { transform: translateX(0); }
+            
+            #incoming-call-panel { right: 5%; bottom: 20px; min-width: 90%; }
+            .msg { max-width: 85%; }
+            
+            /* Mobil klavye açıldığında UI'ın bozulmasını engellemek için */
+            .app-container { height: calc(100dvh - 60px); }
+            .main-chat { height: 100%; }
+            
+            /* Telefon alt ekran boşluğu (iOS/Android Safe Area) */
+            .input-area { padding: 12px 15px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+            #chat-box { padding: 20px 15px; }
+        }
     </style>
 </head>
 <body>
@@ -249,6 +291,13 @@
 <audio id="snd-msg" src="https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3"></audio>
 <audio id="snd-call" src="https://assets.mixkit.co/active_storage/sfx/1359/1359-preview.mp3" loop></audio>
 <audio id="snd-sos" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
+
+<!-- MOBILE TOP NAV -->
+<div id="mobile-nav">
+    <button class="mobile-btn" onclick="toggleMobileSidebar('left')">☰</button>
+    <strong style="letter-spacing: 1px; font-size: 18px; color: var(--skype-blue);">AceTalk</strong>
+    <button class="mobile-btn" onclick="toggleMobileSidebar('right')">👥</button>
+</div>
 
 <!-- CALL OVERLAY (active call) -->
 <div id="call-overlay">
@@ -279,9 +328,7 @@
 <div id="delete-modal">
     <div class="modal-box">
         <div class="modal-title" data-i18n="delTitle">Kişiyi sil</div>
-        <div class="modal-sub" id="delete-modal-sub">
-            <!-- JS dynamically injects translated text here -->
-        </div>
+        <div class="modal-sub" id="delete-modal-sub"></div>
         <div class="modal-btns">
             <button class="btn-modal-delete" onclick="confirmDelete()" data-i18n="delBtn">SİL</button>
             <button class="btn-modal-cancel" onclick="closeDeleteModal()" data-i18n="cancelBtn">İPTAL</button>
@@ -324,6 +371,9 @@
     <div class="splash-loader"></div>
 </div>
 
+<!-- MOBİL OVERLAY (PC'de görünmez) -->
+<div id="mobile-overlay" onclick="closeAllMobileMenus()"></div>
+
 <div class="app-container">
     <!-- LEFT SIDEBAR -->
     <div class="sidebar">
@@ -332,6 +382,8 @@
                 <h1 class="brand-name">AceTalk</h1>
                 <div class="sidebar-slogan" data-i18n="slogan">Simple Messenger</div>
             </div>
+            <!-- Mobile close button -->
+            <button class="mobile-btn" style="color:#7f8c8d; font-size: 28px;" onclick="toggleMobileSidebar('left')">×</button>
         </div>
 
         <div class="lang-switcher">
@@ -381,7 +433,7 @@
     </div>
 
     <!-- MAIN CHAT -->
-    <div class="main-chat" id="drop-zone">
+    <div class="main-chat" id="drop-zone" onclick="closeAllMobileMenus()">
         <div id="chat-header">
             <div id="chat-header-avatar"></div>
             <div>
@@ -415,7 +467,9 @@
     <div class="right-bar">
         <div class="contacts-header">
             <span class="contacts-title" data-i18n="contactsTitle">KİŞİLER</span>
-            <span class="contacts-count" id="contacts-total">0</span>
+            <!-- Mobile close button -->
+            <button class="mobile-btn" style="color:#7f8c8d; font-size: 28px;" onclick="toggleMobileSidebar('right')">×</button>
+            <span class="contacts-count" id="contacts-total" style="margin-left:auto;">0</span>
         </div>
         <div class="contacts-section-label" data-i18n="onlineNow">ŞU AN ÇEVRİMİÇİ</div>
         <div id="online-list"></div>
@@ -448,6 +502,33 @@ function setWallpaper(input) {
     }
 }
 function resetWallpaper() { localStorage.removeItem('acetalk_wallpaper'); applyWallpaper(DEFAULT_WALLPAPER); }
+
+// ─── MOBILE CONTROLS ─────────────────────────────────────────────────────────
+function toggleMobileSidebar(side) {
+    const left = document.querySelector('.sidebar');
+    const right = document.querySelector('.right-bar');
+    const overlay = document.getElementById('mobile-overlay');
+    
+    if(side === 'left') { 
+        left.classList.add('mobile-open'); 
+        right.classList.remove('mobile-open'); 
+    } else { 
+        right.classList.add('mobile-open'); 
+        left.classList.remove('mobile-open'); 
+    }
+    
+    if(overlay) overlay.classList.add('active');
+}
+
+function closeAllMobileMenus() {
+    if (window.innerWidth <= 768) {
+        document.querySelector('.sidebar').classList.remove('mobile-open');
+        document.querySelector('.right-bar').classList.remove('mobile-open');
+        
+        const overlay = document.getElementById('mobile-overlay');
+        if(overlay) overlay.classList.remove('active');
+    }
+}
 
 // ─── AVATAR / PROFILE LOGIC ──────────────────────────────────────────────────
 let myAvatarBase64 = localStorage.getItem('acetalk_avatar') || null;
@@ -501,7 +582,8 @@ const i18n = {
         resetTitle: "Hesabı sıfırla", resetDesc: "Kullanıcı adın, görünen ismin ve tüm konuşma geçmişin silinecek. Bu işlem geri alınamaz.", resetBtn: "SIFIRLA",
         fileTooBig: "Dosya boyutu çok büyük! Maksimum 50 MB.", nameTaken: "Bu isim alınmış! Şunlardan birini dene:",
         nameShort: "En az 3 harf veya rakam olmalı!", checking: "Uygunluk kontrol ediliyor...", connError: "Bağlantı hatası, tekrar deneyin.",
-        nameInUse: "Bu isim başka bir cihazda açık!", videoMsg: "Video", imageMsg: "Resim", callName: "Birileri arıyor..."
+        nameInUse: "Bu isim başka bir cihazda açık!", videoMsg: "Video", imageMsg: "Resim", callName: "Birileri arıyor...",
+        translated: "(Çevrildi)"
     },
     en: {
         slogan: "Simple Messenger", myName: "MY NAME", idPlaceholder: "Their username...", connectBtn: "CONNECT", 
@@ -517,7 +599,8 @@ const i18n = {
         resetTitle: "Reset account", resetDesc: "Your username, display name, and all history will be deleted. This cannot be undone.", resetBtn: "RESET",
         fileTooBig: "File is too large! Maximum 50 MB.", nameTaken: "Name is taken! Try one of these:",
         nameShort: "Must be at least 3 letters or numbers!", checking: "Checking availability...", connError: "Connection error, try again.",
-        nameInUse: "This name is open on another device!", videoMsg: "Video", imageMsg: "Image", callName: "Someone is calling..."
+        nameInUse: "This name is open on another device!", videoMsg: "Video", imageMsg: "Image", callName: "Someone is calling...",
+        translated: "(Translated)"
     },
     es: {
         slogan: "Mensajería Simple", myName: "MI NOMBRE", idPlaceholder: "Nombre de usuario...", connectBtn: "CONECTAR", 
@@ -533,7 +616,8 @@ const i18n = {
         resetTitle: "Restablecer cuenta", resetDesc: "Tu nombre de usuario y todo el historial se eliminarán. Esto no se puede deshacer.", resetBtn: "RESTABLECER",
         fileTooBig: "¡El archivo es demasiado grande! Máximo 50 MB.", nameTaken: "¡El nombre está en uso! Prueba uno de estos:",
         nameShort: "¡Debe tener al menos 3 letras o números!", checking: "Comprobando disponibilidad...", connError: "Error de conexión, inténtalo de nuevo.",
-        nameInUse: "¡Este nombre está abierto en otro dispositivo!", videoMsg: "Video", imageMsg: "Imagen", callName: "Alguien llama..."
+        nameInUse: "¡Este nombre está abierto en otro dispositivo!", videoMsg: "Video", imageMsg: "Imagen", callName: "Alguien llama...",
+        translated: "(Traducido)"
     },
     fr: {
         slogan: "Messagerie Simple", myName: "MON NOM", idPlaceholder: "Nom d'utilisateur...", connectBtn: "CONNECTER", 
@@ -549,7 +633,8 @@ const i18n = {
         resetTitle: "Réinitialiser", resetDesc: "Votre compte et historique seront supprimés. Action irréversible.", resetBtn: "RÉINITIALISER",
         fileTooBig: "Fichier trop volumineux ! Max 50 Mo.", nameTaken: "Nom déjà pris ! Essayez :",
         nameShort: "Au moins 3 lettres ou chiffres !", checking: "Vérification...", connError: "Erreur de connexion, réessayez.",
-        nameInUse: "Ce nom est ouvert sur un autre appareil !", videoMsg: "Vidéo", imageMsg: "Image", callName: "Quelqu'un appelle..."
+        nameInUse: "Ce nom est ouvert sur un autre appareil !", videoMsg: "Vidéo", imageMsg: "Image", callName: "Quelqu'un appelle...",
+        translated: "(Traduit)"
     },
     de: {
         slogan: "Einfacher Messenger", myName: "MEIN NAME", idPlaceholder: "Benutzername...", connectBtn: "VERBINDEN", 
@@ -565,7 +650,8 @@ const i18n = {
         resetTitle: "Konto zurücksetzen", resetDesc: "Dein Konto und Verlauf werden gelöscht. Unwiderruflich.", resetBtn: "ZURÜCKSETZEN",
         fileTooBig: "Datei ist zu groß! Maximal 50 MB.", nameTaken: "Name ist vergeben! Versuche:",
         nameShort: "Mindestens 3 Zeichen!", checking: "Verfügbarkeit wird geprüft...", connError: "Verbindungsfehler, erneut versuchen.",
-        nameInUse: "Dieser Name ist auf einem anderen Gerät geöffnet!", videoMsg: "Video", imageMsg: "Bild", callName: "Jemand ruft an..."
+        nameInUse: "Dieser Name ist auf einem anderen Gerät geöffnet!", videoMsg: "Video", imageMsg: "Bild", callName: "Jemand ruft an...",
+        translated: "(Übersetzt)"
     },
     ru: {
         slogan: "Простой мессенджер", myName: "МОЕ ИМЯ", idPlaceholder: "Имя пользователя...", connectBtn: "ПОДКЛЮЧИТЬ", 
@@ -581,7 +667,8 @@ const i18n = {
         resetTitle: "Сброс", resetDesc: "Ваше имя и вся история будут удалены. Необратимо.", resetBtn: "СБРОСИТЬ",
         fileTooBig: "Файл слишком большой! Максимум 50 МБ.", nameTaken: "Имя занято! Попробуйте:",
         nameShort: "Минимум 3 символа!", checking: "Проверка доступности...", connError: "Ошибка, попробуйте еще раз.",
-        nameInUse: "Это имя открыто на другом устройстве!", videoMsg: "Видео", imageMsg: "Фото", callName: "Кто-то звонит..."
+        nameInUse: "Это имя открыто на другом устройстве!", videoMsg: "Видео", imageMsg: "Фото", callName: "Кто-то звонит...",
+        translated: "(Переведено)"
     },
     zh: {
         slogan: "简单通讯", myName: "我的名字", idPlaceholder: "对方的用户名...", connectBtn: "连接", 
@@ -597,7 +684,8 @@ const i18n = {
         resetTitle: "重置账户", resetDesc: "您的用户名和历史记录将被删除。无法撤销。", resetBtn: "重置",
         fileTooBig: "文件过大！最大 50 MB。", nameTaken: "该名称已被占用！",
         nameShort: "必须至少3个字符！", checking: "正在检查...", connError: "连接错误，请重试。",
-        nameInUse: "此名称已在另一台设备上打开！", videoMsg: "视频", imageMsg: "图片", callName: "有人来电..."
+        nameInUse: "此名称已在另一台设备上打开！", videoMsg: "视频", imageMsg: "图片", callName: "有人来电...",
+        translated: "(已翻译)"
     },
     ar: {
         slogan: "مراسلة بسيطة", myName: "اسمي", idPlaceholder: "اسم المستخدم...", connectBtn: "اتصل", 
@@ -613,7 +701,8 @@ const i18n = {
         resetTitle: "إعادة ضبط", resetDesc: "سيتم حذف حسابك. لا يمكن التراجع.", resetBtn: "إعادة ضبط",
         fileTooBig: "حجم الملف كبير! الحد الأقصى 50 ميغابايت.", nameTaken: "الاسم مستخدم! جرب غيره:",
         nameShort: "يجب أن يتكون من 3 أحرف على الأقل!", checking: "جاري التحقق...", connError: "خطأ في الاتصال.",
-        nameInUse: "هذا الاسم مفتوح على جهاز آخر!", videoMsg: "فيديو", imageMsg: "صورة", callName: "شخص ما يتصل..."
+        nameInUse: "هذا الاسم مفتوح على جهاز آخر!", videoMsg: "فيديو", imageMsg: "صورة", callName: "شخص ما يتصل...",
+        translated: "(مترجم)"
     },
     pt: {
         slogan: "Mensageiro Simples", myName: "MEU NOME", idPlaceholder: "Nome de usuário...", connectBtn: "CONECTAR", 
@@ -629,7 +718,8 @@ const i18n = {
         resetTitle: "Redefinir conta", resetDesc: "Seu histórico será excluído permanentemente.", resetBtn: "REDEFINIR",
         fileTooBig: "O arquivo é muito grande! Máximo 50 MB.", nameTaken: "Nome já em uso! Tente:",
         nameShort: "Mínimo de 3 caracteres!", checking: "Verificando...", connError: "Erro de conexão, tente novamente.",
-        nameInUse: "Este nome está aberto em outro dispositivo!", videoMsg: "Vídeo", imageMsg: "Imagem", callName: "Alguém está ligando..."
+        nameInUse: "Este nome está aberto em outro dispositivo!", videoMsg: "Vídeo", imageMsg: "Imagem", callName: "Alguém está ligando...",
+        translated: "(Traduzido)"
     },
     ja: {
         slogan: "シンプルメッセンジャー", myName: "私の名前", idPlaceholder: "相手のユーザー名...", connectBtn: "接続", 
@@ -645,7 +735,8 @@ const i18n = {
         resetTitle: "リセット", resetDesc: "すべての履歴が削除されます。", resetBtn: "リセット",
         fileTooBig: "ファイルが大きすぎます！最大50MB。", nameTaken: "既に使用されています！",
         nameShort: "3文字以上必要です！", checking: "確認中...", connError: "接続エラー。",
-        nameInUse: "別のデバイスで開かれています！", videoMsg: "ビデオ", imageMsg: "画像", callName: "着信中..."
+        nameInUse: "別のデバイスで開かれています！", videoMsg: "ビデオ", imageMsg: "画像", callName: "着信中...",
+        translated: "(翻訳済み)"
     },
     hi: {
         slogan: "सरल मैसेंजर", myName: "मेरा नाम", idPlaceholder: "उनका उपयोगकर्ता नाम...", connectBtn: "जोड़ें", 
@@ -661,7 +752,8 @@ const i18n = {
         resetTitle: "खाता रीसेट करें", resetDesc: "आपका सारा इतिहास हटा दिया जाएगा।", resetBtn: "रीसेट",
         fileTooBig: "फ़ाइल बहुत बड़ी है! अधिकतम 50 MB।", nameTaken: "नाम पहले से लिया गया है!",
         nameShort: "कम से कम 3 अक्षर होने चाहिए!", checking: "जांच हो रही है...", connError: "कनेक्शन त्रुटि।",
-        nameInUse: "यह नाम दूसरे डिवाइस पर खुला है!", videoMsg: "वीडियो", imageMsg: "छवि", callName: "कोई कॉल कर रहा है..."
+        nameInUse: "यह नाम दूसरे डिवाइस पर खुला है!", videoMsg: "वीडियो", imageMsg: "छवि", callName: "कोई कॉल कर रहा है...",
+        translated: "(अनुवादित)"
     }
 };
 
@@ -686,6 +778,27 @@ function setLanguage(lang) {
     renderContacts();
 }
 
+// ─── GOOGLE TRANSLATE (MESSAGES) ─────────────────────────────────────────────
+async function translateMsg(btn, bodyId) {
+    if(btn.innerText === '⏳') return;
+    const bodyDiv = document.getElementById(bodyId);
+    const rawText = bodyDiv.innerText;
+    btn.innerText = '⏳';
+    try {
+        const res = await fetch('https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=' + currentLang + '&dt=t&q=' + encodeURIComponent(rawText));
+        const data = await res.json();
+        let translated = '';
+        data[0].forEach(item => { if(item[0]) translated += item[0]; });
+        
+        bodyDiv.innerHTML = parseMarkdown(translated) + `<br><small style="font-size:9px; opacity:0.6;">${i18n[currentLang].translated}</small>`;
+        btn.innerText = '✅';
+        btn.onclick = null; 
+    } catch(e) {
+        btn.innerText = '❌';
+        setTimeout(() => btn.innerText = '🌐', 2000);
+    }
+}
+
 // ─── CONTACTS STORAGE ────────────────────────────────────────────────────────
 function loadContacts() { try { return JSON.parse(localStorage.getItem('acetalk_contacts') || '{}'); } catch { return {}; } }
 function saveContacts(contacts) { localStorage.setItem('acetalk_contacts', JSON.stringify(contacts)); }
@@ -707,6 +820,8 @@ let activePeerId = null;
 function openContact(peerId) {
     activePeerId = peerId;
     localStorage.setItem('acetalk_active_peer', peerId);
+    closeAllMobileMenus();
+    
     const contacts = loadContacts();
     const contact = contacts[peerId];
     if (!contact) return;
@@ -998,6 +1113,7 @@ function connectToPeer() {
     setupConn(peer.connect(pid));
     peerNames[pid] = peerNames[pid] || raw;
     document.getElementById('peer-id-input').value = ''; 
+    closeAllMobileMenus();
 }
 
 function setupConn(conn) {
@@ -1235,7 +1351,7 @@ function addMessage(user, text, type, time, scroll, isSeen = false) {
     const welcome = document.getElementById('welcome-msg');
     if (welcome) welcome.style.display = 'none';
     const displayTime = time.substring(0, 5);
-    const id = 'msg-' + time.replace(/[:\s]/g, '');
+    const id = 'msg-' + time.replace(/[:\s]/g, '') + '-' + Math.floor(Math.random()*1000);
     const div = document.createElement('div');
     div.className = 'msg ' + type;
     
@@ -1243,8 +1359,14 @@ function addMessage(user, text, type, time, scroll, isSeen = false) {
         ? `<span id="seen-${id}" class="seen-icon" style="margin-left:4px;">✔✔</span>` 
         : `<span id="seen-${id}" style="margin-left:4px;">✔</span>`;
 
-    div.innerHTML = (user ? '<strong>' + user + '</strong><br>' : '') + text +
-        '<div class="msg-meta">' + displayTime +
+    let translateBtn = '';
+    if(type === 'remote' && !text.includes('<img') && !text.includes('<video')) {
+        translateBtn = `<button class="translate-btn" onclick="translateMsg(this, 'body-${id}')" title="Çevir">🌐</button>`;
+    }
+
+    div.innerHTML = (user ? '<strong>' + user + '</strong><br>' : '') + 
+        '<div class="msg-body" id="body-' + id + '">' + text + '</div>' +
+        '<div class="msg-meta">' + translateBtn + displayTime +
         (type === 'local' ? ' ' + checkmarks : '') +
         '</div>';
     box.appendChild(div);
