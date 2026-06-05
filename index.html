@@ -136,10 +136,6 @@
         #message-input { flex: 1; padding: 14px; border: 1px solid var(--input-border); outline: none; font-size: 14px; background: var(--input-bg); color: var(--input-color); font-family: 'Ubuntu', sans-serif; }
         .icon-btn { cursor: pointer; display: flex; align-items: center; transition: 0.2s; user-select: none; color: var(--skype-blue); }
         .icon-btn:hover { transform: none !important; }
-        .mountain-icon { width: 24px; height: 24px; position: relative; overflow: hidden; border: 2px solid currentColor; }
-        .mountain-icon::before { content: ''; position: absolute; bottom: -2px; left: 1px; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 12px solid currentColor; }
-        .mountain-icon::after { content: ''; position: absolute; bottom: -2px; left: 8px; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 9px solid currentColor; }
-        .sun { position: absolute; top: 3px; right: 3px; width: 5px; height: 5px; background: currentColor; border-radius: 50% !important; }
 
         /* RIGHT BAR */
         .right-bar { width: 240px; background: var(--contacts-bg); border-left: 1px solid #111d28; padding: 0; display: flex; flex-direction: column; overflow: hidden; position: relative; }
@@ -271,7 +267,6 @@
             .input-area { padding: 12px 15px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
             #chat-box { padding: 20px 15px; }
 
-            /* MOBİL ÖLÇEKLENDİRME DÜZELTMELERİ */
             .sidebar .close-btn { position: absolute; top: 15px; right: 15px; font-size: 32px; display: block !important; z-index: 10; }
             .right-bar .close-btn { position: absolute; top: 15px; left: 15px; font-size: 32px; display: block !important; z-index: 10; }
             
@@ -279,12 +274,8 @@
             .brand-name { font-size: 28px; }
             
             .contacts-header { 
-                display: flex; 
-                justify-content: space-between; 
-                align-items: center; 
-                padding-top: 65px; 
-                padding-left: 20px; 
-                padding-right: 20px;
+                display: flex; justify-content: space-between; align-items: center; 
+                padding-top: 65px; padding-left: 20px; padding-right: 20px;
                 border-bottom: 1px solid #111d28; 
             }
             .contacts-title { font-size: 14px; letter-spacing: 1px; margin: 0; }
@@ -298,12 +289,14 @@
 <audio id="snd-call" src="https://assets.mixkit.co/active_storage/sfx/1359/1359-preview.mp3" loop></audio>
 <audio id="snd-sos" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
 
+<!-- MOBILE TOP NAV -->
 <div id="mobile-nav">
     <button class="mobile-btn" onclick="toggleMobileSidebar('left')">☰</button>
     <strong style="letter-spacing: 1px; font-size: 18px; color: var(--skype-blue);">AceTalk</strong>
     <button class="mobile-btn" onclick="toggleMobileSidebar('right')">👥</button>
 </div>
 
+<!-- CALL OVERLAY -->
 <div id="call-overlay">
     <div id="call-icon" style="font-size: 60px; margin-bottom: 20px;">📞</div>
     <h2 id="call-name">AceTalk Voice</h2>
@@ -316,6 +309,7 @@
     <button onclick="endCall()" data-i18n="closeCall" style="background: var(--call-red); color: white; border: none; padding: 15px 40px; font-weight: bold; cursor: pointer; margin-top: 30px;">KAPAT</button>
 </div>
 
+<!-- INCOMING CALL PANEL -->
 <div id="incoming-call-panel">
     <div>
         <div id="incoming-call-name" data-i18n="callName">Birileri arıyor...</div>
@@ -327,6 +321,7 @@
     </div>
 </div>
 
+<!-- DELETE CONFIRM MODAL -->
 <div id="delete-modal">
     <div class="modal-box">
         <div class="modal-title" data-i18n="delTitle">Kişiyi sil</div>
@@ -338,6 +333,7 @@
     </div>
 </div>
 
+<!-- RESET ACCOUNT MODAL -->
 <div id="reset-modal">
     <div class="modal-box" style="border-top-color: #e67e22;">
         <div class="modal-title" data-i18n="resetTitle">Hesabı sıfırla</div>
@@ -349,6 +345,7 @@
     </div>
 </div>
 
+<!-- SETUP SCREEN -->
 <div id="phone-setup" style="display:none;">
     <h2>AceTalk</h2>
     <p data-i18n="setupTitle">Hesabını oluştur</p>
@@ -364,6 +361,7 @@
     </div>
 </div>
 
+<!-- SPLASH -->
 <div id="splash-screen">
     <h1 style="color: var(--skype-blue); font-weight: 700; font-size: 48px; margin: 0;">AceTalk</h1>
     <div class="sidebar-slogan" data-i18n="slogan" style="color: white; margin-top: 5px;">Simple Messenger</div>
@@ -372,7 +370,14 @@
 
 <div id="mobile-overlay" onclick="closeAllMobileMenus()"></div>
 
+<!-- IMAGE LIGHTBOX / VIEWER -->
+<div id="image-viewer" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); z-index:99999; align-items:center; justify-content:center; backdrop-filter: blur(5px);">
+    <button onclick="closeImageViewer()" style="position:absolute; top:25px; right:25px; font-size:35px; font-weight:bold; color:white; background:none; border:none; cursor:pointer; transition: transform 0.2s;">✕</button>
+    <img id="image-viewer-img" src="" style="max-width:90%; max-height:90%; object-fit:contain; border-radius: 0; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+</div>
+
 <div class="app-container">
+    <!-- LEFT SIDEBAR -->
     <div class="sidebar">
         <button class="mobile-btn close-btn" style="color:#7f8c8d;" onclick="toggleMobileSidebar('left')">×</button>
         <div class="brand-section">
@@ -403,6 +408,7 @@
             <button onclick="openResetModal()" class="wp-btn" style="color:#e74c3c; border-left-color: transparent;" data-i18n="resetAccBtn">⚠ Hesabı Sıfırla</button>
         </div>
 
+        <!-- MY STATUS BOX -->
         <div class="my-status-box">
             <div class="status-header">
                 <label for="my-avatar-input" class="my-avatar-upload" id="my-avatar-display" title="Profil Fotoğrafını Değiştir">?</label>
@@ -425,6 +431,7 @@
         </div>
     </div>
 
+    <!-- MAIN CHAT -->
     <div class="main-chat" id="drop-zone" onclick="closeAllMobileMenus()">
         <div id="chat-header">
             <div id="chat-header-avatar"></div>
@@ -445,9 +452,12 @@
 
         <div class="input-area">
             <label for="media-input" class="icon-btn" title="Dosya Gönder">
-                <div class="mountain-icon"><div class="sun"></div></div>
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+                </svg>
             </label>
-            <input type="file" id="media-input" accept="image/*, video/mp4, video/webm" style="display:none" onchange="handleMedia(this)">
+            <input type="file" id="media-input" accept="*/*" style="display:none" onchange="handleMedia(this)">
+            
             <input type="text" id="message-input" data-i18n-placeholder="msgPlaceholder" placeholder="Mesajınızı yazın..."
                    onkeypress="if(event.key==='Enter') sendMessage()"
                    oninput="notifyTyping()">
@@ -455,6 +465,7 @@
         </div>
     </div>
 
+    <!-- RIGHT BAR -->
     <div class="right-bar">
         <button class="mobile-btn close-btn" style="color:#7f8c8d;" onclick="toggleMobileSidebar('right')">×</button>
         <div class="contacts-header">
@@ -472,6 +483,7 @@
             </div>
         </div>
         
+        <!-- BİLGİ BÖLÜMÜ -->
         <div data-i18n="appInfo" style="font-size: 9px; color: #4a6278; text-align: center; padding: 12px 10px; line-height: 1.6; letter-spacing: 0.5px; border-top: 1px solid #111d28; margin-top: auto; z-index: 5;">
             AceTalk MileStone 3 • Kurucu: Ace © 2026 • Uçtan uca şifreli • Designed in Baku
         </div>
@@ -551,24 +563,35 @@ function updateMyProfile() {
     connections.forEach(c => { try { c.send({type: 'profile', name: myName, avatar: myAvatarBase64}); } catch(e){} });
 }
 
-// ─── I18N (TÜM 11 DİL GÜNCELLENDİ) ─────────────────────────────────────────────
+// ─── DİLLER ──────────────────────────────────────────────────────────────────
 const i18n = {
-    tr: { appInfo: "AceTalk MileStone 3 • Kurucu: Ace © 2026 • Uçtan uca şifreli • Designed in Baku", slogan: "Simple Messenger", myName: "ADIM", idPlaceholder: "Karşı tarafın ismi...", connectBtn: "BAĞLAN", voiceCall: "SESLİ ARA", videoCall: "KAMERALI ARA", secureChat: "Güvenli ve şifreli uçtan uca sohbet.", enterId: "Bağlanmak için bir isim girin.", msgPlaceholder: "Mesajınızı yazın...", calling: "ARANIYOR...", closeCall: "KAPAT", typing: "yazıyor...", sosBtn: "🚨 ACİL", sosCooldown: "saniye bekle", sosReceived: "ACİL YARDIM ÇAĞRISI", sosFrom: "Gönderen", sosHops: "ağ üzerinden ulaştı", sosNoConn: "Bağlı kimse yok! Önce birine bağlan.", wallpaperBtn: "❖ Duvar Kağıdı", resetWpBtn: "↺ Varsayılan WP", resetAccBtn: "⚠ Hesabı Sıfırla", micDenied: "Kamera/Mikrofon erişimi reddedildi!", noConn: "Şimdilik yalnızsın.", emptyOnline: "Burası çok ıssız..", connected: "🟢 BAĞLANDI", contactsTitle: "KİŞİLER", onlineNow: "ŞU AN ÇEVRİMİÇİ", savedContacts: "KAYDEDİLEN", noContacts: "Henüz kişi yok.\nBiri ile konuştuktan sonra burada görünür.", onlineStatus: "Çevrimiçi", offlineStatus: "Son görülme", incomingVoice: "Sesli arama geliyor", incomingVideo: "Görüntülü arama geliyor", answerBtn: "CEVAPLA", rejectBtn: "REDDET", setupTitle: "Hesabını oluştur", usernamePlace: "Kullanıcı Adı", startBtn: "BAŞLA ✓", setupDesc: "Bu senin eşsiz ID'n olacak. Başkaları sana bu isimle bağlanacak.", delTitle: "Kişiyi sil", delDesc: "kişisini ve tüm mesaj geçmişini silmek istediğine emin misin?", delBtn: "SİL", cancelBtn: "İPTAL", resetTitle: "Hesabı sıfırla", resetDesc: "Kullanıcı adın, görünen ismin ve tüm konuşma geçmişin silinecek. Bu işlem geri alınamaz.", resetBtn: "SIFIRLA", fileTooBig: "Dosya boyutu çok büyük! Maksimum 50 MB.", nameTaken: "Bu isim alınmış! Şunlardan birini dene:", nameShort: "En az 3 harf veya rakam olmalı!", checking: "Uygunluk kontrol ediliyor...", connError: "Bağlantı hatası, tekrar deneyin.", nameInUse: "Bu isim başka bir cihazda açık!", videoMsg: "Video", imageMsg: "Resim", callName: "Birileri arıyor...", translated: "(Çevrildi)" },
-    en: { appInfo: "AceTalk MileStone 3 • Founder: Ace © 2026 • End-to-End Encrypted • Designed in Baku", slogan: "Simple Messenger", myName: "MY NAME", idPlaceholder: "Their username...", connectBtn: "CONNECT", voiceCall: "VOICE CALL", videoCall: "VIDEO CALL", secureChat: "Secure end-to-end encrypted chat.", enterId: "Enter an ID to connect.", msgPlaceholder: "Type your message...", calling: "CALLING...", closeCall: "HANG UP", typing: "is typing...", sosBtn: "🚨 SOS", sosCooldown: "seconds wait", sosReceived: "EMERGENCY SOS RECEIVED", sosFrom: "From", sosHops: "hops away", sosNoConn: "Nobody connected!", wallpaperBtn: "❖ Wallpaper", resetWpBtn: "↺ Default WP", resetAccBtn: "⚠ Reset Account", micDenied: "Camera/Mic access denied!", noConn: "You're alone for now.", emptyOnline: "It's so deserted here..", connected: "🟢 CONNECTED", contactsTitle: "CONTACTS", onlineNow: "ONLINE NOW", savedContacts: "SAVED", noContacts: "No contacts yet.\nAppears after chatting.", onlineStatus: "Online", offlineStatus: "Last seen", incomingVoice: "Incoming voice call", incomingVideo: "Incoming video call", answerBtn: "ANSWER", rejectBtn: "REJECT", setupTitle: "Create your account", usernamePlace: "Username", startBtn: "START ✓", setupDesc: "This is your unique ID. Others will connect using this name.", delTitle: "Delete contact", delDesc: "and all chat history? Are you sure?", delBtn: "DELETE", cancelBtn: "CANCEL", resetTitle: "Reset account", resetDesc: "Your username, display name, and all history will be deleted. This cannot be undone.", resetBtn: "RESET", fileTooBig: "File is too large! Maximum 50 MB.", nameTaken: "Name is taken! Try one of these:", nameShort: "Must be at least 3 letters or numbers!", checking: "Checking availability...", connError: "Connection error, try again.", nameInUse: "This name is open on another device!", videoMsg: "Video", imageMsg: "Image", callName: "Someone is calling...", translated: "(Translated)" },
-    es: { appInfo: "AceTalk MileStone 3 • Fundador: Ace © 2026 • Cifrado de extremo a extremo • Diseñado en Bakú", slogan: "Mensajería Simple", myName: "MI NOMBRE", idPlaceholder: "Nombre de usuario...", connectBtn: "CONECTAR", voiceCall: "LLAMADA DE VOZ", videoCall: "VIDEOLLAMADA", secureChat: "Chat seguro cifrado de extremo a extremo.", enterId: "Ingresa un ID para conectar.", msgPlaceholder: "Escribe tu mensaje...", calling: "LLAMANDO...", closeCall: "COLGAR", typing: "está escribiendo...", sosBtn: "🚨 SOS", sosCooldown: "segundos espera", sosReceived: "SOS DE EMERGENCIA RECIBIDO", sosFrom: "De", sosHops: "saltos", sosNoConn: "¡Nadie conectado!", wallpaperBtn: "❖ Fondo", resetWpBtn: "↺ Predeterminado", resetAccBtn: "⚠ Restablecer cuenta", micDenied: "¡Acceso denegado!", noConn: "Estás solo por ahora.", emptyOnline: "Está muy desierto aquí..", connected: "🟢 CONECTADO", contactsTitle: "CONTACTOS", onlineNow: "EN LÍNEA", savedContacts: "GUARDADOS", noContacts: "Aún no hay contactos.", onlineStatus: "En línea", offlineStatus: "Visto últ.", incomingVoice: "Llamada de voz entrante", incomingVideo: "Videollamada entrante", answerBtn: "RESPONDER", rejectBtn: "RECHAZAR", setupTitle: "Crea tu cuenta", usernamePlace: "Usuario", startBtn: "INICIAR ✓", setupDesc: "Este es tu ID único.", delTitle: "Eliminar contacto", delDesc: "¿y todo el historial? ¿Estás seguro?", delBtn: "ELIMINAR", cancelBtn: "CANCELAR", resetTitle: "Restablecer cuenta", resetDesc: "Esto no se puede deshacer.", resetBtn: "RESTABLECER", fileTooBig: "¡Máximo 50 MB!", nameTaken: "¡Nombre en uso!", nameShort: "¡Mínimo 3 caracteres!", checking: "Comprobando...", connError: "Error de conexión.", nameInUse: "¡Abierto en otro dispositivo!", videoMsg: "Video", imageMsg: "Imagen", callName: "Alguien llama...", translated: "(Traduzido)" },
-    fr: { appInfo: "AceTalk MileStone 3 • Fondateur: Ace © 2026 • Chiffrement de bout en bout • Conçu à Bakou", slogan: "Messagerie Simple", myName: "MON NOM", idPlaceholder: "Nom d'utilisateur...", connectBtn: "CONNECTER", voiceCall: "APPEL VOCAL", videoCall: "APPEL VIDÉO", secureChat: "Chat sécurisé de bout en bout.", enterId: "Entrez un ID pour vous connecter.", msgPlaceholder: "Tapez votre message...", calling: "APPEL...", closeCall: "RACCROCHER", typing: "écrit...", sosBtn: "🚨 SOS", sosCooldown: "secondes d'attente", sosReceived: "SOS D'URGENCE REÇU", sosFrom: "De", sosHops: "sauts", sosNoConn: "Personne n'est connecté !", wallpaperBtn: "❖ Fond d'écran", resetWpBtn: "↺ Par défaut", resetAccBtn: "⚠ Réinitialiser le compte", micDenied: "Accès Caméra/Micro refusé !", noConn: "Tu es seul pour le moment.", emptyOnline: "C'est très désert ici..", connected: "🟢 CONNECTÉ", contactsTitle: "CONTACTS", onlineNow: "EN LIGNE", savedContacts: "ENREGISTRÉS", noContacts: "Aucun contact.\nApparaît après avoir discuté.", onlineStatus: "En ligne", offlineStatus: "Vu la dernière fois", incomingVoice: "Appel vocal entrant", incomingVideo: "Appel vidéo entrant", answerBtn: "RÉPONDRE", rejectBtn: "REJETER", setupTitle: "Créez votre compte", usernamePlace: "Nom d'utilisateur", startBtn: "COMMENCER ✓", setupDesc: "C'est votre ID unique.", delTitle: "Supprimer le contact", delDesc: "et tout l'historique ? Êtes-vous sûr ?", delBtn: "SUPPRIMER", cancelBtn: "ANNULER", resetTitle: "Réinitialiser", resetDesc: "Action irréversible.", resetBtn: "RÉINITIALISER", fileTooBig: "Fichier trop volumineux ! 50 Mo max.", nameTaken: "Nom pris !", nameShort: "3 caractères minimum !", checking: "Vérification...", connError: "Erreur de connexion.", nameInUse: "Nom utilisé ailleurs !", videoMsg: "Vidéo", imageMsg: "Image", callName: "Quelqu'un appelle...", translated: "(Traduit)" },
-    de: { appInfo: "AceTalk MileStone 3 • Gründer: Ace © 2026 • Ende-zu-Ende verschlüsselt • Entworfen in Baku", slogan: "Einfacher Messenger", myName: "MEIN NAME", idPlaceholder: "Benutzername...", connectBtn: "VERBINDEN", voiceCall: "SPRACHANRUF", videoCall: "VIDEOANRUF", secureChat: "Sicherer, verschlüsselter Chat.", enterId: "ID eingeben, um zu verbinden.", msgPlaceholder: "Nachricht eingeben...", calling: "RUFT AN...", closeCall: "AUFLEGEN", typing: "schreibt...", sosBtn: "🚨 SOS", sosCooldown: "Sekunden warten", sosReceived: "NOTFALL-SOS ERHALTEN", sosFrom: "Von", sosHops: "Hops", sosNoConn: "Niemand verbunden!", wallpaperBtn: "❖ Hintergrund", resetWpBtn: "↺ Standard", resetAccBtn: "⚠ Konto zurücksetzen", micDenied: "Kamera/Mikrofon verweigert!", noConn: "Du bist vorerst allein.", emptyOnline: "Es ist sehr verlassen hier..", connected: "🟢 VERBUNDEN", contactsTitle: "KONTAKTE", onlineNow: "ONLINE", savedContacts: "GESPEICHERT", noContacts: "Noch keine Kontakte.", onlineStatus: "Online", offlineStatus: "Zuletzt gesehen", incomingVoice: "Eingehender Sprachanruf", incomingVideo: "Eingehender Videoanruf", answerBtn: "ANTWORTEN", rejectBtn: "ABLEHNEN", setupTitle: "Konto erstellen", usernamePlace: "Benutzername", startBtn: "STARTEN ✓", setupDesc: "Dies ist deine eindeutige ID.", delTitle: "Kontakt löschen", delDesc: "und den gesamten Verlauf? Sicher?", delBtn: "LÖSCHEN", cancelBtn: "ABBRECHEN", resetTitle: "Zurücksetzen", resetDesc: "Kann nicht rückgängig gemacht werden.", resetBtn: "ZURÜCKSETZEN", fileTooBig: "Datei zu groß! Max 50 MB.", nameTaken: "Name vergeben!", nameShort: "Min. 3 Zeichen!", checking: "Prüfe...", connError: "Verbindungsfehler.", nameInUse: "Woanders geöffnet!", videoMsg: "Video", imageMsg: "Bild", callName: "Jemand ruft an...", translated: "(Übersetzt)" },
-    ru: { appInfo: "AceTalk MileStone 3 • Создатель: Ace © 2026 • Сквозное шифрование • Разработано в Баку", slogan: "Простой Мессенджер", myName: "МОЕ ИМЯ", idPlaceholder: "Имя пользователя...", connectBtn: "ПОДКЛЮЧИТЬ", voiceCall: "ГОЛОСОВОЙ ВЫЗОВ", videoCall: "ВИДЕОЗВОНОК", secureChat: "Безопасный зашифрованный чат.", enterId: "Введите ID для подключения.", msgPlaceholder: "Введите сообщение...", calling: "ЗВОНОК...", closeCall: "ЗАВЕРШИТЬ", typing: "печатает...", sosBtn: "🚨 SOS", sosCooldown: "сек ожидание", sosReceived: "ПОЛУЧЕН ЭКСТРЕННЫЙ SOS", sosFrom: "От", sosHops: "узлов", sosNoConn: "Нет подключений!", wallpaperBtn: "❖ Обои", resetWpBtn: "↺ По умолчанию", resetAccBtn: "⚠ Сбросить аккаунт", micDenied: "Доступ к камере/микрофону запрещен!", noConn: "Пока ты один.", emptyOnline: "Здесь так пустынно..", connected: "🟢 ПОДКЛЮЧЕНО", contactsTitle: "КОНТАКТЫ", onlineNow: "В СЕТИ", savedContacts: "СОХРАНЕННЫЕ", noContacts: "Пока нет контактов.", onlineStatus: "В сети", offlineStatus: "Был(а)", incomingVoice: "Входящий голосовой вызов", incomingVideo: "Входящий видеозвонок", answerBtn: "ОТВЕТИТЬ", rejectBtn: "ОТКЛОНИТЬ", setupTitle: "Создать аккаунт", usernamePlace: "Имя пользователя", startBtn: "НАЧАТЬ ✓", setupDesc: "Это ваш уникальный ID.", delTitle: "Удалить контакт", delDesc: "и всю историю чата? Вы уверены?", delBtn: "УДАЛИТЬ", cancelBtn: "ОТМЕНА", resetTitle: "Сбросить", resetDesc: "Это действие необратимо.", resetBtn: "СБРОСИТЬ", fileTooBig: "Файл слишком большой! Макс 50 МБ.", nameTaken: "Имя занято!", nameShort: "Минимум 3 символа!", checking: "Проверка...", connError: "Ошибка подключения.", nameInUse: "Открыто на другом устройстве!", videoMsg: "Видео", imageMsg: "Фото", callName: "Вам звонят...", translated: "(Переведено)" },
-    zh: { appInfo: "AceTalk MileStone 3 • 创始人: Ace © 2026 • 端到端加密 • 巴库设计", slogan: "简单即时通讯", myName: "我的名字", idPlaceholder: "用户名...", connectBtn: "连接", voiceCall: "语音通话", videoCall: "视频通话", secureChat: "安全的端到端加密聊天", enterId: "输入ID进行连接", msgPlaceholder: "输入您的消息...", calling: "呼叫中...", closeCall: "挂断", typing: "正在输入...", sosBtn: "🚨 紧急", sosCooldown: "秒等待", sosReceived: "收到紧急SOS", sosFrom: "来自", sosHops: "跳", sosNoConn: "无人连接！", wallpaperBtn: "❖ 壁纸", resetWpBtn: "↺ 默认壁纸", resetAccBtn: "⚠ 重置账户", micDenied: "摄像头/麦克风访问被拒！", noConn: "你现在一个人。", emptyOnline: "这里很冷清..", connected: "🟢 已连接", contactsTitle: "联系人", onlineNow: "当前在线", savedContacts: "已保存", noContacts: "暂无联系人。", onlineStatus: "在线", offlineStatus: "最后上线", incomingVoice: "语音来电", incomingVideo: "视频来电", answerBtn: "接听", rejectBtn: "拒绝", setupTitle: "创建账户", usernamePlace: "用户名", startBtn: "开始 ✓", setupDesc: "这是您的唯一ID。", delTitle: "删除联系人", delDesc: "以及所有记录？确定吗？", delBtn: "删除", cancelBtn: "取消", resetTitle: "重置账户", resetDesc: "此操作无法撤销。", resetBtn: "重置", fileTooBig: "文件太大！最大 50 MB。", nameTaken: "名称已被占用！", nameShort: "至少3个字符！", checking: "检查中...", connError: "连接错误。", nameInUse: "在其他设备上已打开！", videoMsg: "视频", imageMsg: "图片", callName: "有人来电...", translated: "(已翻译)" },
-    ar: { appInfo: "AceTalk MileStone 3 • المؤسس: Ace © 2026 • مشفر بالكامل • صُمم في باكو", slogan: "مراسلة بسيطة", myName: "اسمي", idPlaceholder: "اسم المستخدم...", connectBtn: "اتصال", voiceCall: "مكالمة صوتية", videoCall: "مكالمة فيديو", secureChat: "دردشة آمنة ومشفرة.", enterId: "أدخل المعرف للاتصال.", msgPlaceholder: "اكتب رسالتك...", calling: "يتصل...", closeCall: "إنهاء", typing: "يكتب...", sosBtn: "🚨 طوارئ", sosCooldown: "ثانية انتظار", sosReceived: "تم استلام نداء طوارئ", sosFrom: "من", sosHops: "قفزات", sosNoConn: "لا يوجد اتصال!", wallpaperBtn: "❖ خلفية", resetWpBtn: "↺ افتراضي", resetAccBtn: "⚠ إعادة ضبط", micDenied: "تم رفض الوصول للميكروفون/الكاميرا!", noConn: "أنت وحدك الآن.", emptyOnline: "المكان مهجور جدا..", connected: "🟢 متصل", contactsTitle: "جهات الاتصال", onlineNow: "متصل الآن", savedContacts: "محفوظ", noContacts: "لا توجد جهات اتصال.", onlineStatus: "متصل", offlineStatus: "آخر ظهور", incomingVoice: "مكالمة صوتية واردة", incomingVideo: "مكالمة فيديو واردة", answerBtn: "رد", rejectBtn: "رفض", setupTitle: "إنشاء حساب", usernamePlace: "اسم المستخدم", startBtn: "ابدأ ✓", setupDesc: "هذا هو المعرف الفريد الخاص بك.", delTitle: "حذف جهة الاتصال", delDesc: "وجميع السجلات؟ هل أنت متأكد؟", delBtn: "حذف", cancelBtn: "إلغاء", resetTitle: "إعادة ضبط", resetDesc: "لا يمكن التراجع عن هذا.", resetBtn: "إعادة ضبط", fileTooBig: "الملف كبير جدًا! بحد أقصى 50 ميجابايت.", nameTaken: "الاسم مأخوذ!", nameShort: "3 أحرف على الأقل!", checking: "جارٍ التحقق...", connError: "خطأ في الاتصال.", nameInUse: "الاسم مستخدم في جهاز آخر!", videoMsg: "فيديو", imageMsg: "صورة", callName: "شخص ما يتصل...", translated: "(مترجم)" },
-    pt: { appInfo: "AceTalk MileStone 3 • Fundador: Ace © 2026 • Criptografia de ponta a ponta • Projetado em Baku", slogan: "Mensageiro Simples", myName: "MEU NOME", idPlaceholder: "Nome de usuário...", connectBtn: "CONECTAR", voiceCall: "CHAMADA DE VOZ", videoCall: "CHAMADA DE VÍDEO", secureChat: "Chat seguro e criptografado.", enterId: "Insira um ID para conectar.", msgPlaceholder: "Digite sua mensagem...", calling: "CHAMANDO...", closeCall: "DESLIGAR", typing: "escrevendo...", sosBtn: "🚨 SOS", sosCooldown: "segundos espera", sosReceived: "SOS DE EMERGÊNCIA RECEBIDO", sosFrom: "De", sosHops: "saltos", sosNoConn: "Ninguém conectado!", wallpaperBtn: "❖ Papel de parede", resetWpBtn: "↺ Padrão", resetAccBtn: "⚠ Redefinir conta", micDenied: "Acesso à Câmera/Microfone negado!", noConn: "Você está sozinho por enquanto.", emptyOnline: "Está muito deserto aqui..", connected: "🟢 CONECTADO", contactsTitle: "CONTATOS", onlineNow: "ONLINE", savedContacts: "SALVOS", noContacts: "Sem contatos ainda.", onlineStatus: "Online", offlineStatus: "Visto por último", incomingVoice: "Chamada de voz", incomingVideo: "Chamada de vídeo", answerBtn: "ATENDER", rejectBtn: "REJEITAR", setupTitle: "Crie sua conta", usernamePlace: "Usuário", startBtn: "INICIAR ✓", setupDesc: "Este é o seu ID único.", delTitle: "Excluir contato", delDesc: "e todo o histórico? Tem certeza?", delBtn: "EXCLUIR", cancelBtn: "CANCELAR", resetTitle: "Redefinir", resetDesc: "Isso não pode ser desfeito.", resetBtn: "REDEFINIR", fileTooBig: "Arquivo muito grande! Máximo 50 MB.", nameTaken: "Nome em uso!", nameShort: "Mínimo de 3 caracteres!", checking: "Verificando...", connError: "Erro de conexão.", nameInUse: "Aberto em outro dispositivo!", videoMsg: "Vídeo", imageMsg: "Imagem", callName: "Alguém está ligando...", translated: "(Traduzido)" },
-    ja: { appInfo: "AceTalk MileStone 3 • 創設者: Ace © 2026 • エンドツーエンド暗号化 • バクーで設計", slogan: "シンプルメッセンジャー", myName: "私の名前", idPlaceholder: "ユーザー名...", connectBtn: "接続", voiceCall: "音声通話", videoCall: "ビデオ通話", secureChat: "安全な暗号化チャット", enterId: "接続するIDを入力", msgPlaceholder: "メッセージを入力...", calling: "発信中...", closeCall: "切断", typing: "入力中...", sosBtn: "🚨 SOS", sosCooldown: "秒待機", sosReceived: "緊急SOS受信", sosFrom: "送信元", sosHops: "ホップ", sosNoConn: "誰も接続していません！", wallpaperBtn: "❖ 壁紙", resetWpBtn: "↺ デフォルト", resetAccBtn: "⚠ アカウントリセット", micDenied: "カメラ/マイクへのアクセスが拒否されました！", noConn: "今は一人です。", emptyOnline: "ここはとても寂しいです..", connected: "🟢 接続済み", contactsTitle: "連絡先", onlineNow: "オンライン", savedContacts: "保存済み", noContacts: "連絡先がありません。", onlineStatus: "オンライン", offlineStatus: "最終ログイン", incomingVoice: "音声着信", incomingVideo: "ビデオ着信", answerBtn: "応答", rejectBtn: "拒否", setupTitle: "アカウント作成", usernamePlace: "ユーザー名", startBtn: "開始 ✓", setupDesc: "これはあなたの一意のIDです。", delTitle: "連絡先を削除", delDesc: "すべての履歴も削除しますか？", delBtn: "削除", cancelBtn: "キャンセル", resetTitle: "リセット", resetDesc: "元に戻すことはできません。", resetBtn: "リセット", fileTooBig: "ファイルが大きすぎます！最大50MB。", nameTaken: "その名前は使われています！", nameShort: "3文字以上必要です！", checking: "確認中...", connError: "接続エラー", nameInUse: "他のデバイスで開かれています！", videoMsg: "動画", imageMsg: "画像", callName: "着信中...", translated: "(翻訳済み)" },
-    hi: { appInfo: "AceTalk MileStone 3 • संस्थापक: Ace © 2026 • एंड-टू-एंड एन्क्रिप्टेड • बाकू में डिज़ाइन किया गया", slogan: "सिंपल मैसेंजर", myName: "मेरा नाम", idPlaceholder: "यूज़रनेम...", connectBtn: "कनेक्ट करें", voiceCall: "वॉयस कॉल", videoCall: "वीडियो कॉल", secureChat: "सुरक्षित एन्क्रिप्टेड चैट।", enterId: "कनेक्ट करने के लिए ID डालें।", msgPlaceholder: "अपना मैसेज टाइप करें...", calling: "कॉलिंग...", closeCall: "कॉल काटें", typing: "टाइप कर रहा है...", sosBtn: "🚨 आपातकालीन", sosCooldown: "सेकंड प्रतीक्षा", sosReceived: "आपातकालीन SOS प्राप्त", sosFrom: "से", sosHops: "हॉप्स", sosNoConn: "कोई कनेक्ट नहीं है!", wallpaperBtn: "❖ वॉलपेपर", resetWpBtn: "↺ डिफ़ॉल्ट", resetAccBtn: "⚠ खाता रीसेट करें", micDenied: "कैमरा/माइक एक्सेस अस्वीकृत!", noConn: "अभी के लिए तुम अकेले हो।", emptyOnline: "यहाँ बहुत सन्नाटा है..", connected: "🟢 कनेक्टेड", contactsTitle: "संपर्क", onlineNow: "ऑनलाइन", savedContacts: "सहेजे गए", noContacts: "कोई संपर्क नहीं।", onlineStatus: "ऑनलाइन", offlineStatus: "अंतिम बार देखा गया", incomingVoice: "इनकमिंग वॉयस कॉल", incomingVideo: "इनकमिंग वीडियो कॉल", answerBtn: "उत्तर दें", rejectBtn: "अस्वीकार करें", setupTitle: "खाता बनाएं", usernamePlace: "यूज़रनेम", startBtn: "शुरू करें ✓", setupDesc: "यह आपकी विशिष्ट ID है।", delTitle: "संपर्क हटाएं", delDesc: "और सभी चैट इतिहास? क्या आप सुनिश्चित हैं?", delBtn: "हटाएं", cancelBtn: "रद्द करें", resetTitle: "रीसेट करें", resetDesc: "इसे पूर्ववत नहीं किया जा सकता।", resetBtn: "रीसेट", fileTooBig: "फ़ाइल बहुत बड़ी है! अधिकतम 50 MB।", nameTaken: "नाम लिया जा चुका है!", nameShort: "कम से कम 3 अक्षर होने चाहिए!", checking: "जांच कर रहा है...", connError: "कनेक्शन त्रुटि।", nameInUse: "अन्य डिवाइस पर खुला है!", videoMsg: "वीडियो", imageMsg: "छवि", callName: "कोई कॉल कर रहा है...", translated: "(अनुवादित)" }
+    tr: { appInfo: "AceTalk MileStone 3 • Kurucu: Ace © 2026 • Uçtan uca şifreli • Designed in Baku", slogan: "Simple Messenger", myName: "ADIM", idPlaceholder: "Karşı tarafın ismi...", connectBtn: "BAĞLAN", voiceCall: "SESLİ ARA", videoCall: "KAMERALI ARA", secureChat: "Güvenli ve şifreli uçtan uca sohbet.", enterId: "Bağlanmak için bir isim girin.", msgPlaceholder: "Mesajınızı yazın...", calling: "ARANIYOR...", closeCall: "KAPAT", typing: "yazıyor...", sosBtn: "🚨 ACİL", sosCooldown: "saniye bekle", sosReceived: "ACİL YARDIM ÇAĞRISI", sosFrom: "Gönderen", sosHops: "ağ üzerinden ulaştı", sosNoConn: "Bağlı kimse yok! Önce birine bağlan.", wallpaperBtn: "❖ Duvar Kağıdı", resetWpBtn: "↺ Varsayılan WP", resetAccBtn: "⚠ Hesabı Sıfırla", micDenied: "Kamera/Mikrofon erişimi reddedildi!", noConn: "Şimdilik yalnızsın.", emptyOnline: "Burası çok ıssız..", connected: "🟢 BAĞLANDI", contactsTitle: "KİŞİLER", onlineNow: "ŞU AN ÇEVRİMİÇİ", savedContacts: "KAYDEDİLEN", noContacts: "Henüz kişi yok.\nBiri ile konuştuktan sonra burada görünür.", onlineStatus: "Çevrimiçi", offlineStatus: "Son görülme", incomingVoice: "Sesli arama geliyor", incomingVideo: "Görüntülü arama geliyor", answerBtn: "CEVAPLA", rejectBtn: "REDDET", setupTitle: "Hesabını oluştur", usernamePlace: "Kullanıcı Adı", startBtn: "BAŞLA ✓", setupDesc: "Bu senin eşsiz ID'n olacak. Başkaları sana bu isimle bağlanacak.", delTitle: "Kişiyi sil", delDesc: "kişisini ve tüm mesaj geçmişini silmek istediğine emin misin?", delBtn: "SİL", cancelBtn: "İPTAL", resetTitle: "Hesabı sıfırla", resetDesc: "Kullanıcı adın, görünen ismin ve tüm konuşma geçmişin silinecek. Bu işlem geri alınamaz.", resetBtn: "SIFIRLA", fileTooBig: "Dosya boyutu çok büyük! Maksimum 50 MB.", nameTaken: "Bu isim alınmış! Şunlardan birini dene:", nameShort: "En az 3 harf veya rakam olmalı!", checking: "Uygunluk kontrol ediliyor...", connError: "Bağlantı hatası, tekrar deneyin.", nameInUse: "Bu isim başka bir cihazda açık!", videoMsg: "Video", imageMsg: "Resim", fileMsg: "Dosya", callName: "Birileri arıyor...", translated: "(Çevrildi)", downloadBtn: "Yükle", previewBtn: "Önizle", unsafeWarn: "Güvenli dosya olmayabilir!\nYine de indirmek istiyor musun?" },
+    en: { appInfo: "AceTalk MileStone 3 • Founder: Ace © 2026 • End-to-End Encrypted • Designed in Baku", slogan: "Simple Messenger", myName: "MY NAME", idPlaceholder: "Their username...", connectBtn: "CONNECT", voiceCall: "VOICE CALL", videoCall: "VIDEO CALL", secureChat: "Secure end-to-end encrypted chat.", enterId: "Enter an ID to connect.", msgPlaceholder: "Type your message...", calling: "CALLING...", closeCall: "HANG UP", typing: "is typing...", sosBtn: "🚨 SOS", sosCooldown: "seconds wait", sosReceived: "EMERGENCY SOS RECEIVED", sosFrom: "From", sosHops: "hops away", sosNoConn: "Nobody connected!", wallpaperBtn: "❖ Wallpaper", resetWpBtn: "↺ Default WP", resetAccBtn: "⚠ Reset Account", micDenied: "Camera/Mic access denied!", noConn: "You're alone for now.", emptyOnline: "It's so deserted here..", connected: "🟢 CONNECTED", contactsTitle: "CONTACTS", onlineNow: "ONLINE NOW", savedContacts: "SAVED", noContacts: "No contacts yet.\nAppears after chatting.", onlineStatus: "Online", offlineStatus: "Last seen", incomingVoice: "Incoming voice call", incomingVideo: "Incoming video call", answerBtn: "ANSWER", rejectBtn: "REJECT", setupTitle: "Create your account", usernamePlace: "Username", startBtn: "START ✓", setupDesc: "This is your unique ID. Others will connect using this name.", delTitle: "Delete contact", delDesc: "and all chat history? Are you sure?", delBtn: "DELETE", cancelBtn: "CANCEL", resetTitle: "Reset account", resetDesc: "Your username, display name, and all history will be deleted. This cannot be undone.", resetBtn: "RESET", fileTooBig: "File is too large! Maximum 50 MB.", nameTaken: "Name is taken! Try one of these:", nameShort: "Must be at least 3 letters or numbers!", checking: "Checking availability...", connError: "Connection error, try again.", nameInUse: "This name is open on another device!", videoMsg: "Video", imageMsg: "Image", fileMsg: "File", callName: "Someone is calling...", translated: "(Translated)", downloadBtn: "Download", previewBtn: "Preview", unsafeWarn: "This file may be unsafe!\nDo you still want to download?" },
+    es: { appInfo: "AceTalk MileStone 3 • Fundador: Ace © 2026 • Cifrado de extremo a extremo • Diseñado en Bakú", slogan: "Mensajero Simple", myName: "MI NOMBRE", idPlaceholder: "Nombre de usuario...", connectBtn: "CONECTAR", voiceCall: "LLAMADA", videoCall: "VIDEOLLAMADA", secureChat: "Chat seguro de extremo a extremo.", enterId: "Introduce un ID para conectar.", msgPlaceholder: "Escribe tu mensaje...", calling: "LLAMANDO...", closeCall: "COLGAR", typing: "está escribiendo...", sosBtn: "🚨 SOS", sosCooldown: "segundos de espera", sosReceived: "SOS RECIBIDO", sosFrom: "De", sosHops: "saltos", sosNoConn: "¡Nadie conectado!", wallpaperBtn: "❖ Fondo", resetWpBtn: "↺ Fondo Default", resetAccBtn: "⚠ Restablecer Cuenta", micDenied: "¡Acceso a cámara/micrófono denegado!", noConn: "Estás solo por ahora.", emptyOnline: "Está muy desierto aquí..", connected: "🟢 CONECTADO", contactsTitle: "CONTACTOS", onlineNow: "EN LÍNEA", savedContacts: "GUARDADOS", noContacts: "Sin contactos aún.\nAparecen tras chatear.", onlineStatus: "En línea", offlineStatus: "Última vez", incomingVoice: "Llamada de voz", incomingVideo: "Videollamada", answerBtn: "RESPONDER", rejectBtn: "RECHAZAR", setupTitle: "Crea tu cuenta", usernamePlace: "Usuario", startBtn: "COMENZAR ✓", setupDesc: "Este es tu ID único. Otros se conectarán usando este nombre.", delTitle: "Eliminar contacto", delDesc: "y todo el historial? ¿Estás seguro?", delBtn: "ELIMINAR", cancelBtn: "CANCELAR", resetTitle: "Restablecer cuenta", resetDesc: "Tu usuario y todo el historial serán eliminados. No se puede deshacer.", resetBtn: "RESTABLECER", fileTooBig: "¡Archivo demasiado grande! Máximo 50 MB.", nameTaken: "¡Nombre ocupado! Intenta estos:", nameShort: "¡Debe tener al menos 3 letras o números!", checking: "Comprobando...", connError: "Error de conexión, intenta de nuevo.", nameInUse: "¡Este nombre está abierto en otro dispositivo!", videoMsg: "Vídeo", imageMsg: "Imagen", fileMsg: "Archivo", callName: "Alguien llama...", translated: "(Traducido)", downloadBtn: "Descargar", previewBtn: "Vista previa", unsafeWarn: "¡Este archivo puede ser inseguro!\n¿Aún deseas descargarlo?" },
+    fr: { appInfo: "AceTalk MileStone 3 • Fondateur: Ace © 2026 • Chiffrement de bout en bout • Conçu à Bakou", slogan: "Messagerie Simple", myName: "MON NOM", idPlaceholder: "Leur nom d'utilisateur...", connectBtn: "CONNECTER", voiceCall: "APPEL VOCAL", videoCall: "APPEL VIDÉO", secureChat: "Chat sécurisé de bout en bout.", enterId: "Entrez un ID pour vous connecter.", msgPlaceholder: "Tapez votre message...", calling: "APPEL...", closeCall: "RACCROCHER", typing: "écrit...", sosBtn: "🚨 SOS", sosCooldown: "secondes d'attente", sosReceived: "SOS REÇU", sosFrom: "De", sosHops: "sauts", sosNoConn: "Personne n'est connecté!", wallpaperBtn: "❖ Fond d'écran", resetWpBtn: "↺ Fond Default", resetAccBtn: "⚠ Réinitialiser le compte", micDenied: "Accès caméra/micro refusé!", noConn: "Vous êtes seul pour l'instant.", emptyOnline: "C'est si désert ici..", connected: "🟢 CONNECTÉ", contactsTitle: "CONTACTS", onlineNow: "EN LIGNE", savedContacts: "ENREGISTRÉS", noContacts: "Pas de contacts.\nApparaîtront après discussion.", onlineStatus: "En ligne", offlineStatus: "Vu(e)", incomingVoice: "Appel vocal entrant", incomingVideo: "Appel vidéo entrant", answerBtn: "RÉPONDRE", rejectBtn: "REJETER", setupTitle: "Créez votre compte", usernamePlace: "Nom d'utilisateur", startBtn: "DÉMARRER ✓", setupDesc: "C'est votre ID unique. Les autres s'y connecteront.", delTitle: "Supprimer contact", delDesc: "et tout l'historique ? Sûr ?", delBtn: "SUPPRIMER", cancelBtn: "ANNULER", resetTitle: "Réinitialiser", resetDesc: "Votre nom et l'historique seront supprimés. Irréversible.", resetBtn: "RÉINITIALISER", fileTooBig: "Fichier trop volumineux ! Max 50 Mo.", nameTaken: "Nom pris ! Essayez ceux-ci :", nameShort: "Au moins 3 lettres ou chiffres !", checking: "Vérification...", connError: "Erreur de connexion, réessayez.", nameInUse: "Ce nom est ouvert sur un autre appareil !", videoMsg: "Vidéo", imageMsg: "Image", fileMsg: "Fichier", callName: "Quelqu'un appelle...", translated: "(Traduit)", downloadBtn: "Télécharger", previewBtn: "Aperçu", unsafeWarn: "Fichier potentiellement dangereux !\nTélécharger quand même ?" },
+    de: { appInfo: "AceTalk MileStone 3 • Gründer: Ace © 2026 • Ende-zu-Ende verschlüsselt • Entworfen in Baku", slogan: "Einfacher Messenger", myName: "MEIN NAME", idPlaceholder: "Benutzername...", connectBtn: "VERBINDEN", voiceCall: "ANRUF", videoCall: "VIDEOANRUF", secureChat: "Sicherer Ende-zu-Ende Chat.", enterId: "Gib eine ID ein, um zu verbinden.", msgPlaceholder: "Schreibe eine Nachricht...", calling: "RUFT AN...", closeCall: "AUFLEGEN", typing: "schreibt...", sosBtn: "🚨 SOS", sosCooldown: "Sekunden warten", sosReceived: "SOS ERHALTEN", sosFrom: "Von", sosHops: "Sprünge", sosNoConn: "Niemand verbunden!", wallpaperBtn: "❖ Hintergrund", resetWpBtn: "↺ Standard-WP", resetAccBtn: "⚠ Konto zurücksetzen", micDenied: "Kamera/Mikrofon Zugriff verweigert!", noConn: "Du bist vorerst allein.", emptyOnline: "Es ist so verlassen hier..", connected: "🟢 VERBUNDEN", contactsTitle: "KONTAKTE", onlineNow: "JETZT ONLINE", savedContacts: "GESPEICHERT", noContacts: "Noch keine Kontakte.\nErscheinen nach dem Chat.", onlineStatus: "Online", offlineStatus: "Zuletzt gesehen", incomingVoice: "Sprachanruf", incomingVideo: "Videoanruf", answerBtn: "ANTWORTEN", rejectBtn: "ABLEHNEN", setupTitle: "Konto erstellen", usernamePlace: "Benutzername", startBtn: "START ✓", setupDesc: "Dies ist deine ID. Andere werden sich damit verbinden.", delTitle: "Kontakt löschen", delDesc: "und den gesamten Chat? Sicher?", delBtn: "LÖSCHEN", cancelBtn: "ABBRECHEN", resetTitle: "Konto zurücksetzen", resetDesc: "Dein Benutzername und Chatverlauf werden gelöscht. Nicht rückgängig zu machen.", resetBtn: "ZURÜCKSETZEN", fileTooBig: "Datei zu groß! Maximal 50 MB.", nameTaken: "Name vergeben! Versuche diese:", nameShort: "Mindestens 3 Buchstaben oder Zahlen!", checking: "Prüfe Verfügbarkeit...", connError: "Verbindungsfehler, versuche es erneut.", nameInUse: "Dieser Name ist auf einem anderen Gerät geöffnet!", videoMsg: "Video", imageMsg: "Bild", fileMsg: "Datei", callName: "Jemand ruft an...", translated: "(Übersetzt)", downloadBtn: "Herunterladen", previewBtn: "Vorschau", unsafeWarn: "Datei könnte unsicher sein!\nTrotzdem herunterladen?" },
+    ru: { appInfo: "AceTalk MileStone 3 • Создатель: Ace © 2026 • Сквозное шифрование • Разработано в Баку", slogan: "Простой мессенджер", myName: "МОЕ ИМЯ", idPlaceholder: "Имя пользователя...", connectBtn: "ПОДКЛЮЧИТЬСЯ", voiceCall: "ГОЛОСОВОЙ", videoCall: "ВИДЕОЗВОНОК", secureChat: "Безопасный зашифрованный чат.", enterId: "Введите ID для подключения.", msgPlaceholder: "Введите сообщение...", calling: "ЗВОНОК...", closeCall: "ЗАВЕРШИТЬ", typing: "печатает...", sosBtn: "🚨 SOS", sosCooldown: "секунд ожидания", sosReceived: "SOS ПОЛУЧЕН", sosFrom: "От", sosHops: "прыжков", sosNoConn: "Никого нет в сети!", wallpaperBtn: "❖ Обои", resetWpBtn: "↺ Обои по умолчанию", resetAccBtn: "⚠ Сбросить аккаунт", micDenied: "Доступ к микрофону запрещен!", noConn: "Вы пока одни.", emptyOnline: "Здесь так пусто..", connected: "🟢 ПОДКЛЮЧЕНО", contactsTitle: "КОНТАКТЫ", onlineNow: "В СЕТИ", savedContacts: "СОХРАНЕННЫЕ", noContacts: "Пока нет контактов.\nПоявятся после общения.", onlineStatus: "В сети", offlineStatus: "Был(а)", incomingVoice: "Голосовой вызов", incomingVideo: "Видеозвонок", answerBtn: "ОТВЕТИТЬ", rejectBtn: "ОТКЛОНИТЬ", setupTitle: "Создайте аккаунт", usernamePlace: "Имя пользователя", startBtn: "НАЧАТЬ ✓", setupDesc: "Это ваш ID. Другие будут подключаться по нему.", delTitle: "Удалить контакт", delDesc: "и всю историю чата? Вы уверены?", delBtn: "УДАЛИТЬ", cancelBtn: "ОТМЕНА", resetTitle: "Сброс аккаунта", resetDesc: "Ваше имя и история будут удалены. Это необратимо.", resetBtn: "СБРОСИТЬ", fileTooBig: "Файл слишком большой! Макс 50 МБ.", nameTaken: "Имя занято! Попробуйте эти:", nameShort: "Минимум 3 буквы или цифры!", checking: "Проверка...", connError: "Ошибка подключения.", nameInUse: "Это имя открыто на другом устройстве!", videoMsg: "Видео", imageMsg: "Фото", fileMsg: "Файл", callName: "Кто-то звонит...", translated: "(Переведено)", downloadBtn: "Скачать", previewBtn: "Просмотр", unsafeWarn: "Этот файл может быть опасен!\nВсе равно скачать?" },
+    zh: { appInfo: "AceTalk MileStone 3 • 创始人: Ace © 2026 • 端到端加密 • 设计于巴库", slogan: "简单通讯器", myName: "我的名字", idPlaceholder: "对方的用户名...", connectBtn: "连接", voiceCall: "语音通话", videoCall: "视频通话", secureChat: "安全的端到端加密聊天。", enterId: "输入ID以连接。", msgPlaceholder: "输入您的消息...", calling: "呼叫中...", closeCall: "挂断", typing: "正在输入...", sosBtn: "🚨 紧急呼叫", sosCooldown: "秒后重试", sosReceived: "收到紧急呼叫", sosFrom: "来自", sosHops: "跳跃", sosNoConn: "没有连接任何人！", wallpaperBtn: "❖ 壁纸", resetWpBtn: "↺ 默认壁纸", resetAccBtn: "⚠ 重置账户", micDenied: "摄像头/麦克风访问被拒绝！", noConn: "你现在是一个人。", emptyOnline: "这里太荒凉了..", connected: "🟢 已连接", contactsTitle: "联系人", onlineNow: "当前在线", savedContacts: "已保存", noContacts: "暂无联系人。\n聊天后显示。", onlineStatus: "在线", offlineStatus: "最后上线", incomingVoice: "来电语音", incomingVideo: "来电视频", answerBtn: "接听", rejectBtn: "拒绝", setupTitle: "创建你的账户", usernamePlace: "用户名", startBtn: "开始 ✓", setupDesc: "这是您的唯一ID。其他人将使用此名称连接。", delTitle: "删除联系人", delDesc: "及所有聊天记录？您确定吗？", delBtn: "删除", cancelBtn: "取消", resetTitle: "重置账户", resetDesc: "您的用户名和所有历史记录将被删除。此操作无法撤销。", resetBtn: "重置", fileTooBig: "文件太大！最大 50 MB。", nameTaken: "名称已被占用！尝试这些：", nameShort: "必须至少3个字母或数字！", checking: "检查可用性...", connError: "连接错误，请重试。", nameInUse: "此名称已在另一台设备上打开！", videoMsg: "视频", imageMsg: "图片", fileMsg: "文件", callName: "有人来电...", translated: "(已翻译)", downloadBtn: "下载", previewBtn: "预览", unsafeWarn: "此文件可能不安全！\n您仍要下载吗？" },
+    ar: { appInfo: "AceTalk MileStone 3 • المؤسس: Ace © 2026 • مشفر من طرف إلى طرف • صمم في باكو", slogan: "مراسلة بسيطة", myName: "اسمي", idPlaceholder: "اسم المستخدم...", connectBtn: "اتصال", voiceCall: "مكالمة صوتية", videoCall: "مكالمة فيديو", secureChat: "دردشة آمنة مشفرة من طرف إلى طرف.", enterId: "أدخل معرف للاتصال.", msgPlaceholder: "اكتب رسالتك...", calling: "يتصل...", closeCall: "إنهاء", typing: "يكتب...", sosBtn: "🚨 طوارئ", sosCooldown: "ثواني للانتظار", sosReceived: "تم استلام نداء طوارئ", sosFrom: "من", sosHops: "قفزات", sosNoConn: "لا أحد متصل!", wallpaperBtn: "❖ خلفية", resetWpBtn: "↺ خلفية افتراضية", resetAccBtn: "⚠ إعادة ضبط الحساب", micDenied: "تم رفض الوصول للكاميرا/الميكروفون!", noConn: "أنت وحدك الآن.", emptyOnline: "المكان مهجور هنا..", connected: "🟢 متصل", contactsTitle: "جهات الاتصال", onlineNow: "متصل الآن", savedContacts: "المحفوظة", noContacts: "لا توجد جهات اتصال.\nتظهر بعد الدردشة.", onlineStatus: "متصل", offlineStatus: "آخر ظهور", incomingVoice: "مكالمة صوتية واردة", incomingVideo: "مكالمة فيديو واردة", answerBtn: "رد", rejectBtn: "رفض", setupTitle: "أنشئ حسابك", usernamePlace: "اسم المستخدم", startBtn: "ابدأ ✓", setupDesc: "هذا هو المعرف الفريد الخاص بك.", delTitle: "حذف جهة الاتصال", delDesc: "وكل السجل؟ هل أنت متأكد؟", delBtn: "حذف", cancelBtn: "إلغاء", resetTitle: "إعادة ضبط الحساب", resetDesc: "سيتم حذف حسابك وسجلك بالكامل. لا يمكن التراجع.", resetBtn: "إعادة ضبط", fileTooBig: "الملف كبير جدا! الحد الأقصى 50 ميغابايت.", nameTaken: "الاسم مأخوذ! جرب هذه:", nameShort: "يجب أن يكون 3 أحرف أو أرقام على الأقل!", checking: "جار التحقق...", connError: "خطأ في الاتصال، أعد المحاولة.", nameInUse: "هذا الاسم مفتوح على جهاز آخر!", videoMsg: "فيديو", imageMsg: "صورة", fileMsg: "ملف", callName: "شخص ما يتصل...", translated: "(مترجم)", downloadBtn: "تنزيل", previewBtn: "معاينة", unsafeWarn: "قد يكون الملف غير آمن!\nهل تريد تنزيله؟" },
+    pt: { appInfo: "AceTalk MileStone 3 • Fundador: Ace © 2026 • Criptografia de ponta a ponta • Projetado em Baku", slogan: "Mensageiro Simples", myName: "MEU NOME", idPlaceholder: "Nome de usuário...", connectBtn: "CONECTAR", voiceCall: "CHAMADA DE VOZ", videoCall: "CHAMADA DE VÍDEO", secureChat: "Chat seguro de ponta a ponta.", enterId: "Insira um ID para conectar.", msgPlaceholder: "Digite sua mensagem...", calling: "CHAMANDO...", closeCall: "DESLIGAR", typing: "está digitando...", sosBtn: "🚨 SOS", sosCooldown: "segundos", sosReceived: "SOS RECEBIDO", sosFrom: "De", sosHops: "saltos", sosNoConn: "Ninguém conectado!", wallpaperBtn: "❖ Papel de parede", resetWpBtn: "↺ WP Padrão", resetAccBtn: "⚠ Redefinir Conta", micDenied: "Acesso à câmera/microfone negado!", noConn: "Você está sozinho por enquanto.", emptyOnline: "Está tão deserto aqui..", connected: "🟢 CONECTADO", contactsTitle: "CONTATOS", onlineNow: "ONLINE AGORA", savedContacts: "SALVOS", noContacts: "Sem contatos ainda.\nAparecem após conversar.", onlineStatus: "Online", offlineStatus: "Visto por último", incomingVoice: "Chamada de voz", incomingVideo: "Chamada de vídeo", answerBtn: "ATENDER", rejectBtn: "REJEITAR", setupTitle: "Crie sua conta", usernamePlace: "Usuário", startBtn: "INICIAR ✓", setupDesc: "Este é o seu ID único. Outros se conectarão usando este nome.", delTitle: "Excluir contato", delDesc: "e todo o histórico? Tem certeza?", delBtn: "EXCLUIR", cancelBtn: "CANCELAR", resetTitle: "Redefinir conta", resetDesc: "Seu usuário e histórico serão excluídos. Irreversível.", resetBtn: "REDEFINIR", fileTooBig: "Arquivo muito grande! Máximo de 50 MB.", nameTaken: "Nome ocupado! Tente estes:", nameShort: "Mínimo de 3 letras ou números!", checking: "Verificando...", connError: "Erro de conexão, tente novamente.", nameInUse: "Este nome está aberto em outro dispositivo!", videoMsg: "Vídeo", imageMsg: "Imagem", fileMsg: "Arquivo", callName: "Alguém está ligando...", translated: "(Traduzido)", downloadBtn: "Baixar", previewBtn: "Pré-visualizar", unsafeWarn: "Este arquivo pode ser inseguro!\nAinda deseja baixar?" },
+    ja: { appInfo: "AceTalk MileStone 3 • 創設者: Ace © 2026 • エンドツーエンド暗号化 • バクーで設計", slogan: "シンプルメッセンジャー", myName: "私の名前", idPlaceholder: "相手のユーザー名...", connectBtn: "接続", voiceCall: "音声通話", videoCall: "ビデオ通話", secureChat: "安全なエンドツーエンド暗号化チャット。", enterId: "接続するIDを入力。", msgPlaceholder: "メッセージを入力...", calling: "発信中...", closeCall: "切断", typing: "入力中...", sosBtn: "🚨 SOS", sosCooldown: "秒待機", sosReceived: "SOS 受信", sosFrom: "送信者", sosHops: "ホップ", sosNoConn: "誰も接続されていません！", wallpaperBtn: "❖ 壁紙", resetWpBtn: "↺ デフォルト壁紙", resetAccBtn: "⚠ アカウントリセット", micDenied: "マイクへのアクセスが拒否されました！", noConn: "今は一人です。", emptyOnline: "ここはとても静かです..", connected: "🟢 接続済み", contactsTitle: "連絡先", onlineNow: "オンライン", savedContacts: "保存済み", noContacts: "連絡先はまだありません。\nチャット後に表示されます。", onlineStatus: "オンライン", offlineStatus: "最終オンライン", incomingVoice: "音声着信", incomingVideo: "ビデオ着信", answerBtn: "応答", rejectBtn: "拒否", setupTitle: "アカウント作成", usernamePlace: "ユーザー名", startBtn: "開始 ✓", setupDesc: "これは固有IDです。他の人はこの名前で接続します。", delTitle: "連絡先を削除", delDesc: "すべての履歴を削除しますか？", delBtn: "削除", cancelBtn: "キャンセル", resetTitle: "アカウントをリセット", resetDesc: "ユーザー名と履歴が削除されます。元には戻せません。", resetBtn: "リセット", fileTooBig: "ファイルが大きすぎます！最大 50 MB。", nameTaken: "名前が使用されています！次をお試しください:", nameShort: "3文字以上の英数字が必要です！", checking: "確認中...", connError: "接続エラー、再試行してください。", nameInUse: "この名前は他のデバイスで開かれています！", videoMsg: "ビデオ", imageMsg: "画像", fileMsg: "ファイル", callName: "着信中...", translated: "(翻訳済み)", downloadBtn: "ダウンロード", previewBtn: "プレビュー", unsafeWarn: "安全でないファイルの可能性があります！\nダウンロードしますか？" },
+    hi: { appInfo: "AceTalk MileStone 3 • संस्थापक: Ace © 2026 • एंड-टू-एंड एन्क्रिप्टेड • बाकू में डिज़ाइन किया गया", slogan: "सिंपल मैसेंजर", myName: "मेरा नाम", idPlaceholder: "उनका यूज़रनेम...", connectBtn: "कनेक्ट करें", voiceCall: "वॉयस कॉल", videoCall: "वीडियो कॉल", secureChat: "सुरक्षित एंड-टू-एंड एन्क्रिप्टेड चैट।", enterId: "कनेक्ट करने के लिए ID दर्ज करें।", msgPlaceholder: "अपना मैसेज टाइप करें...", calling: "कॉलिंग...", closeCall: "कट करें", typing: "टाइप कर रहा है...", sosBtn: "🚨 SOS", sosCooldown: "सेकंड प्रतीक्षा", sosReceived: "SOS प्राप्त हुआ", sosFrom: "प्रेषक", sosHops: "हॉप्स", sosNoConn: "कोई कनेक्ट नहीं है!", wallpaperBtn: "❖ वॉलपेपर", resetWpBtn: "↺ डिफ़ॉल्ट WP", resetAccBtn: "⚠ अकाउंट रीसेट करें", micDenied: "कैमरा/माइक एक्सेस अस्वीकृत!", noConn: "आप अभी अकेले हैं।", emptyOnline: "यहाँ बहुत सन्नाटा है..", connected: "🟢 कनेक्टेड", contactsTitle: "संपर्क", onlineNow: "अभी ऑनलाइन", savedContacts: "सहेजे गए", noContacts: "कोई संपर्क नहीं।\nचैट करने के बाद दिखाई देंगे।", onlineStatus: "ऑनलाइन", offlineStatus: "अंतिम बार देखा गया", incomingVoice: "इनकमिंग वॉयस कॉल", incomingVideo: "इनकमिंग वीडियो कॉल", answerBtn: "उत्तर दें", rejectBtn: "अस्वीकार करें", setupTitle: "अपना खाता बनाएं", usernamePlace: "यूज़रनेम", startBtn: "शुरू करें ✓", setupDesc: "यह आपकी विशिष्ट आईडी है। अन्य लोग इस नाम से जुड़ेंगे।", delTitle: "संपर्क हटाएं", delDesc: "और सारा इतिहास? क्या आप आश्वस्त हैं?", delBtn: "हटाएं", cancelBtn: "रद्द करें", resetTitle: "अकाउंट रीसेट करें", resetDesc: "आपका यूज़रनेम और सारा इतिहास हटा दिया जाएगा। इसे वापस नहीं लाया जा सकता।", resetBtn: "रीसेट", fileTooBig: "फ़ाइल बहुत बड़ी है! अधिकतम 50 MB।", nameTaken: "नाम लिया जा चुका है! इन्हें आज़माएँ:", nameShort: "कम से कम 3 अक्षर या अंक होने चाहिए!", checking: "उपलब्धता की जाँच की जा रही है...", connError: "कनेक्शन त्रुटि, पुनः प्रयास करें।", nameInUse: "यह नाम किसी अन्य डिवाइस पर खुला है!", videoMsg: "वीडियो", imageMsg: "छवि", fileMsg: "फ़ाइल", callName: "कोई कॉल कर रहा है...", translated: "(अनुवादित)", downloadBtn: "डाउनलोड", previewBtn: "पूर्वावलोकन", unsafeWarn: "यह फ़ाइल असुरक्षित हो सकती है!\nक्या आप अभी भी डाउनलोड करना चाहते हैं?" }
 };
 
 let currentLang = localStorage.getItem('acetalk_lang') || 'tr';
-
 function getLang() { return i18n[currentLang] || i18n['en'] || i18n['tr']; }
+
+function applyDynamicTranslations(container = document) {
+    const l = getLang();
+    container.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if(l[key]) el.innerHTML = l[key];
+    });
+    container.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if(l[key]) el.placeholder = l[key];
+    });
+}
 
 function setLanguage(lang) {
     currentLang = lang;
@@ -576,23 +599,14 @@ function setLanguage(lang) {
     const selectEl = document.getElementById('lang-select');
     if (selectEl && selectEl.value !== lang) selectEl.value = lang;
 
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        const l = getLang();
-        if(l[key]) el.innerHTML = l[key];
-    });
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-        const key = el.getAttribute('data-i18n-placeholder');
-        const l = getLang();
-        if(l[key]) el.placeholder = l[key];
-    });
+    applyDynamicTranslations(); // Tüm ekranı çevir
     
     renderContacts();
     updateOnlineList();
     if (activePeerId) openContact(activePeerId); 
 }
 
-// ─── GOOGLE TRANSLATE (MESSAGES) ─────────────────────────────────────────────
+// ─── GOOGLE TRANSLATE ────────────────────────────────────────────────────────
 async function translateMsg(btn, bodyId) {
     if(btn.innerText === '⏳') return;
     const bodyDiv = document.getElementById(bodyId);
@@ -650,11 +664,9 @@ function openContact(peerId) {
     if(peerAvatars[peerId]) { avatar.innerHTML = `<img src="${peerAvatars[peerId]}">`; } 
     else { avatar.style.background = stringToColor(peerId); avatar.innerHTML = (contact.name || '?').charAt(0).toUpperCase(); }
     
-    const e2eStatus = e2eKeys[peerId] ? '<span style="color:#2ecc71; font-size:10px; margin-left:5px; background:rgba(46,204,113,0.1); padding:2px 5px; border-radius:3px;" title="Uçtan Uca Şifreli">🔒 E2E</span>' : '';
-    headerName.innerHTML = (contact.name || peerIdToName(peerId)) + e2eStatus;
+    headerName.innerHTML = contact.name || peerIdToName(peerId);
 
     const isOnline = connections.find(c => c.peer === peerId);
-    
     const l = getLang();
     headerStatus.innerText = isOnline ? l.onlineStatus : (l.offlineStatus + ': ' + formatLastSeen(contact.lastSeen));
 
@@ -722,6 +734,7 @@ function renderContacts() {
         if(lastMsg) {
             if(lastMsg.body.includes('<video')) lastText = '🎥 ' + l.videoMsg;
             else if(lastMsg.body.includes('<img')) lastText = '📷 ' + l.imageMsg;
+            else if(lastMsg.body.includes('<a href="data:')) lastText = '📄 ' + l.fileMsg;
             else lastText = lastMsg.body.substring(0, 28) + (lastMsg.body.length > 28 ? '…' : '');
         }
 
@@ -840,30 +853,20 @@ function tryCreateAccount() {
     });
 }
 
-// ─── E2E ENCRYPTION LOGIC (WEB CRYPTO API) ──────────────────────────────────
-let e2eKeys = {}; // Stores shared symmetric keys per peer connection
+// ─── E2E ENCRYPTION LOGIC ──────────────────────────────────────────────────
+let e2eKeys = {}; 
 
 async function generateE2EKey() {
     return await crypto.subtle.generateKey({name: "AES-GCM", length: 256}, true, ["encrypt", "decrypt"]);
 }
-
-async function exportKey(key) {
-    const exported = await crypto.subtle.exportKey("jwk", key);
-    return exported;
-}
-
-async function importKey(jwk) {
-    return await crypto.subtle.importKey("jwk", jwk, {name: "AES-GCM"}, true, ["encrypt", "decrypt"]);
-}
+async function exportKey(key) { return await crypto.subtle.exportKey("jwk", key); }
+async function importKey(jwk) { return await crypto.subtle.importKey("jwk", jwk, {name: "AES-GCM"}, true, ["encrypt", "decrypt"]); }
 
 async function encryptMsg(text, key) {
     const iv = crypto.getRandomValues(new Uint8Array(12));
     const encoded = new TextEncoder().encode(text);
     const encrypted = await crypto.subtle.encrypt({name: "AES-GCM", iv: iv}, key, encoded);
-    return {
-        iv: Array.from(iv),
-        data: btoa(String.fromCharCode.apply(null, new Uint8Array(encrypted)))
-    };
+    return { iv: Array.from(iv), data: btoa(String.fromCharCode.apply(null, new Uint8Array(encrypted))) };
 }
 
 async function decryptMsg(encryptedPayload, key) {
@@ -977,13 +980,11 @@ function setupConn(conn) {
             updateOnlineList();
             renderContacts();
             
-            // E2E Key Exchange Initiation: Sadece bir taraf (ID'si küçük olan) anahtar üretip dağıtır
             if (peer.id < conn.peer && window.crypto && crypto.subtle) {
                 generateE2EKey().then(key => {
                     e2eKeys[conn.peer] = key;
                     exportKey(key).then(jwk => {
                         conn.send({type: 'e2e_key', jwk: jwk});
-                        if (activePeerId === conn.peer) openContact(conn.peer); // Arayüzü güncelle (Kilit ikonunu göster)
                     });
                 });
             }
@@ -1011,23 +1012,15 @@ function setupConn(conn) {
             if(activePeerId === conn.peer) openContact(conn.peer); 
         }
         else if (data.type === 'e2e_key') {
-            importKey(data.jwk).then(key => {
-                e2eKeys[conn.peer] = key;
-                if (activePeerId === conn.peer) openContact(conn.peer); // Arayüzü güncelle (Kilit ikonunu göster)
-            }).catch(e => console.error("E2E anahtarı alınamadı", e));
+            importKey(data.jwk).then(key => { e2eKeys[conn.peer] = key; }).catch(e => console.error("E2E anahtarı alınamadı", e));
         }
         else if (data.type === 'msg') {
             (async () => {
                 playAudio('snd-msg');
                 let parsed = data.body;
                 
-                // Eğer mesaj şifreliyse ve bizim de anahtarımız varsa çöz
                 if (data.isEncrypted && e2eKeys[conn.peer]) {
-                    try {
-                        parsed = await decryptMsg(data.body, e2eKeys[conn.peer]);
-                    } catch(e) {
-                        parsed = "🔒 [Şifreli Mesaj Çözülemedi]";
-                    }
+                    try { parsed = await decryptMsg(data.body, e2eKeys[conn.peer]); } catch(e) { parsed = "🔒 [Şifreli Mesaj Çözülemedi]"; }
                 } else if (data.isEncrypted && !e2eKeys[conn.peer]) {
                     parsed = "🔒 [E2E Anahtarı Bekleniyor]";
                 } else {
@@ -1035,18 +1028,10 @@ function setupConn(conn) {
                 }
 
                 const isSeen = (activePeerId === conn.peer && document.visibilityState === 'visible');
-                
                 upsertContact(conn.peer, peerNames[conn.peer] || null, { type: 'remote', user: data.name, body: parsed, time: data.time, msgId: data.msgId, status: isSeen ? 'seen' : 'delivered' });
                 
-                if (activePeerId === conn.peer) {
-                    addMessage(data.name, parsed, 'remote', data.time, true, isSeen ? 'seen' : 'delivered', data.msgId);
-                }
-                
-                if (isSeen) {
-                    conn.send({type: 'seen', msgId: data.msgId}); 
-                } else {
-                    conn.send({type: 'delivered', msgId: data.msgId});
-                }
+                if (activePeerId === conn.peer) { addMessage(data.name, parsed, 'remote', data.time, true, isSeen ? 'seen' : 'delivered', data.msgId); }
+                if (isSeen) { conn.send({type: 'seen', msgId: data.msgId}); } else { conn.send({type: 'delivered', msgId: data.msgId}); }
             })();
         }
         else if (data.type === 'seen') updateMsgStatus(conn.peer, data.msgId, 'seen');
@@ -1071,13 +1056,9 @@ function setupConn(conn) {
 function handlePeerDisconnect(peerId) {
     connections = connections.filter(c => c.peer !== peerId);
     const contacts = loadContacts();
-    if (contacts[peerId]) { 
-        contacts[peerId].lastSeen = Date.now(); 
-        saveContacts(contacts); 
-    }
+    if (contacts[peerId]) { contacts[peerId].lastSeen = Date.now(); saveContacts(contacts); }
     updateOnlineList();
     renderContacts();
-    
     if (activePeerId === peerId) {
         const l = getLang();
         document.getElementById('chat-header-status').innerText = l.offlineStatus + ': ' + formatLastSeen(Date.now());
@@ -1094,10 +1075,7 @@ document.addEventListener("visibilitychange", () => {
         if (c) {
             let hasUnseen = false;
             c.messages.forEach(m => {
-                if (m.type === 'remote' && m.status !== 'seen') {
-                    m.status = 'seen';
-                    hasUnseen = true;
-                }
+                if (m.type === 'remote' && m.status !== 'seen') { m.status = 'seen'; hasUnseen = true; }
             });
             if (hasUnseen) {
                 saveContacts(contacts);
@@ -1116,7 +1094,6 @@ function updateMsgStatus(peerId, msgId, status) {
     if (contacts[peerId]) {
         let changed = false;
         let foundIndex = contacts[peerId].messages.findIndex(m => (m.msgId === msgId) || (m.time === msgId));
-        
         if (foundIndex !== -1) {
             for (let i = 0; i <= foundIndex; i++) {
                 let m = contacts[peerId].messages[i];
@@ -1124,7 +1101,6 @@ function updateMsgStatus(peerId, msgId, status) {
                     if (status === 'seen') m.status = 'seen';
                     else if (status === 'delivered' && m.status === 'sent') m.status = 'delivered';
                     changed = true;
-                    
                     if (activePeerId === peerId) {
                         const safeId = m.msgId || m.time.replace(/[:\s]/g, '');
                         const el = document.getElementById('status-' + safeId);
@@ -1329,7 +1305,6 @@ async function sendMessage() {
 
     if (targets.length > 0) {
         for (let c of targets) {
-            // Eğer E2E anahtarı hazırsa metni şifrele
             if (e2eKeys[c.peer]) {
                 const encryptedBody = await encryptMsg(parsed, e2eKeys[c.peer]);
                 try { c.send({type: 'msg', name: myName, body: encryptedBody, time: time, msgId: msgId, isEncrypted: true}); } catch(e){}
@@ -1340,7 +1315,6 @@ async function sendMessage() {
     }
     
     if (activePeerId) {
-        // Yerel cihaza şifresiz kaydediyoruz ki daha sonra okunabilsin
         upsertContact(activePeerId, peerNames[activePeerId] || null, { type: 'local', body: parsed, time: time, msgId: msgId, status: 'sent' });
     } else {
         const l = getLang();
@@ -1372,7 +1346,8 @@ function addMessage(user, text, type, time, scroll, status = 'sent', msgId = nul
 
     let translateBtn = '';
     const tempId = 'msg-' + Math.floor(Math.random()*1000000);
-    if(type === 'remote' && !text.includes('<img') && !text.includes('<video')) {
+    
+    if(type === 'remote' && !text.includes('<img') && !text.includes('<video') && !text.includes('<audio') && !text.includes('file-card')) {
         translateBtn = `<button class="translate-btn" onclick="translateMsg(this, 'body-${tempId}')" title="Çevir">🌐</button>`;
     }
 
@@ -1380,12 +1355,36 @@ function addMessage(user, text, type, time, scroll, status = 'sent', msgId = nul
         '<div class="msg-body" id="body-' + tempId + '">' + text + '</div>' +
         '<div class="msg-meta">' + translateBtn + displayTime + ticks + '</div>';
     box.appendChild(div);
+
+    // HATA ÇÖZÜMÜ BURADA: Eklenen her mesaj için anında çeviri motorunu çalıştır!
+    applyDynamicTranslations(div);
+
     if (scroll) box.scrollTop = box.scrollHeight;
 }
 
+window.confirmExeDownload = function(e) {
+    const l = getLang();
+    if (!confirm(l.unsafeWarn)) {
+        e.preventDefault();
+        return false;
+    }
+    return true;
+}
+
+function openImageViewer(src) {
+    document.getElementById('image-viewer-img').src = src;
+    document.getElementById('image-viewer').style.display = 'flex';
+}
+
+function closeImageViewer() {
+    document.getElementById('image-viewer').style.display = 'none';
+    document.getElementById('image-viewer-img').src = '';
+}
+
 function handleMedia(input) {
+    if (!input.files || input.files.length === 0) return;
     const file = input.files[0];
-    if (!file) return;
+    input.value = ''; 
 
     const l = getLang();
     const fileSizeMB = file.size / (1024 * 1024);
@@ -1396,12 +1395,60 @@ function handleMedia(input) {
 
     const reader = new FileReader();
     reader.onload = async e => {
+        const b64 = e.target.result;
         let mediaHtml = '';
-        if (file.type.startsWith('image/')) {
-            mediaHtml = '<img src="' + e.target.result + '" style="max-width:100%; margin-top:5px; display:block;">';
-        } else if (file.type.startsWith('video/')) {
-            mediaHtml = '<video src="' + e.target.result + '" controls style="max-width:100%; margin-top:5px; display:block; border: 1px solid var(--skype-blue);"></video>';
+        
+        const ext = file.name.split('.').pop().toLowerCase();
+        const isExe = ['exe', 'deb', 'rpm', 'bat', 'sh', 'msi', 'apk', 'cmd'].includes(ext);
+        const isImg = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg', 'tiff', 'heic', 'heif', 'ico'].includes(ext);
+        const isVid = ['mp4', 'webm', 'ogg', 'mov', 'mkv', 'avi', 'wmv'].includes(ext);
+        const isAud = ['mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac', 'wma'].includes(ext);
+        const isPdf = ext === 'pdf';
+
+        const dlText = l.downloadBtn || 'Yükle';
+        const pvText = l.previewBtn || 'Önizle';
+
+        if (isImg) {
+            mediaHtml = `
+                <div style="margin-top:5px;">
+                    <img src="${b64}" onclick="openImageViewer(this.src)" style="max-width:100%; max-height:200px; cursor:pointer; border:1px solid #ddd; display:block; margin-bottom:8px;">
+                    <a href="${b64}" download="${file.name}" style="font-size:11px; color:var(--skype-blue); text-decoration:none; font-weight:bold; background: rgba(0,175,240,0.1); padding: 5px 10px; display: inline-block;">⬇ <span data-i18n="downloadBtn">${dlText}</span></a>
+                </div>
+            `;
+        } else if (isVid) {
+            mediaHtml = `
+                <div style="margin-top:5px;">
+                    <video src="${b64}" controls style="max-width:100%; border: 1px solid var(--skype-blue); display:block; margin-bottom:8px;"></video>
+                    <a href="${b64}" download="${file.name}" style="font-size:11px; color:var(--skype-blue); text-decoration:none; font-weight:bold; background: rgba(0,175,240,0.1); padding: 5px 10px; display: inline-block;">⬇ <span data-i18n="downloadBtn">${dlText}</span></a>
+                </div>
+            `;
+        } else if (isAud) {
+            mediaHtml = `
+                <div style="margin-top:5px;">
+                    <audio src="${b64}" controls style="max-width:100%; display:block; margin-bottom:8px;"></audio>
+                    <a href="${b64}" download="${file.name}" style="font-size:11px; color:var(--skype-blue); text-decoration:none; font-weight:bold; background: rgba(0,175,240,0.1); padding: 5px 10px; display: inline-block;">⬇ <span data-i18n="downloadBtn">${dlText}</span></a>
+                </div>
+            `;
+        } else if (isExe) {
+            mediaHtml = `
+                <div class="file-card" style="background:rgba(0,0,0,0.03); padding:12px; border-left:3px solid var(--sos-red); margin-top:5px; display:flex; flex-direction:column; gap:8px;">
+                    <strong style="font-size:12px; word-break:break-all; color:#333;">📦 ${file.name}</strong>
+                    <a href="${b64}" download="${file.name}" onclick="return confirmExeDownload(event)" style="font-size:11px; color:var(--sos-red); text-decoration:none; font-weight:bold; background: rgba(231,76,60,0.1); padding: 5px 10px; align-self: flex-start;">⬇ <span data-i18n="downloadBtn">${dlText}</span></a>
+                </div>
+            `;
+        } else {
+            const previewLink = isPdf ? `<a href="${b64}" target="_blank" style="font-size:11px; color:#8e44ad; text-decoration:none; font-weight:bold; background: rgba(142,68,173,0.1); padding: 5px 10px; margin-right:5px;">👁 <span data-i18n="previewBtn">${pvText}</span></a>` : '';
+            mediaHtml = `
+                <div class="file-card" style="background:rgba(0,0,0,0.03); padding:12px; border-left:3px solid var(--skype-blue); margin-top:5px; display:flex; flex-direction:column; gap:8px;">
+                    <strong style="font-size:12px; word-break:break-all; color:#333;">📄 ${file.name}</strong>
+                    <div style="display:flex; gap: 5px;">
+                        ${previewLink}
+                        <a href="${b64}" download="${file.name}" style="font-size:11px; color:var(--skype-blue); text-decoration:none; font-weight:bold; background: rgba(0,175,240,0.1); padding: 5px 10px;">⬇ <span data-i18n="downloadBtn">${dlText}</span></a>
+                    </div>
+                </div>
+            `;
         }
+
         if (mediaHtml) await sendSpecialMessage(mediaHtml);
     };
     reader.readAsDataURL(file);
