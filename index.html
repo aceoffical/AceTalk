@@ -177,7 +177,7 @@
         #chat-header { display: none; padding: 12px 30px; background: #f7f7f7; border-bottom: 1px solid #eee; align-items: center; gap: 12px; }
         #chat-header-avatar { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 13px; overflow: hidden; border: 1px solid #ccc; }
         #chat-header-avatar img { width: 100%; height: 100%; object-fit: cover; }
-        #chat-header-name { font-size: 14px; font-weight: 700; color: #333; }
+        #chat-header-name { font-size: 14px; font-weight: 700; color: #333; display: flex; align-items: center; gap: 5px;}
         #chat-header-status { font-size: 10px; color: #999; margin-top: 2px; transition: color 0.3s; }
 
         /* Call overlay & Videos */
@@ -298,14 +298,12 @@
 <audio id="snd-call" src="https://assets.mixkit.co/active_storage/sfx/1359/1359-preview.mp3" loop></audio>
 <audio id="snd-sos" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
 
-<!-- MOBILE TOP NAV -->
 <div id="mobile-nav">
     <button class="mobile-btn" onclick="toggleMobileSidebar('left')">☰</button>
     <strong style="letter-spacing: 1px; font-size: 18px; color: var(--skype-blue);">AceTalk</strong>
     <button class="mobile-btn" onclick="toggleMobileSidebar('right')">👥</button>
 </div>
 
-<!-- CALL OVERLAY -->
 <div id="call-overlay">
     <div id="call-icon" style="font-size: 60px; margin-bottom: 20px;">📞</div>
     <h2 id="call-name">AceTalk Voice</h2>
@@ -318,7 +316,6 @@
     <button onclick="endCall()" data-i18n="closeCall" style="background: var(--call-red); color: white; border: none; padding: 15px 40px; font-weight: bold; cursor: pointer; margin-top: 30px;">KAPAT</button>
 </div>
 
-<!-- INCOMING CALL PANEL -->
 <div id="incoming-call-panel">
     <div>
         <div id="incoming-call-name" data-i18n="callName">Birileri arıyor...</div>
@@ -330,7 +327,6 @@
     </div>
 </div>
 
-<!-- DELETE CONFIRM MODAL -->
 <div id="delete-modal">
     <div class="modal-box">
         <div class="modal-title" data-i18n="delTitle">Kişiyi sil</div>
@@ -342,7 +338,6 @@
     </div>
 </div>
 
-<!-- RESET ACCOUNT MODAL -->
 <div id="reset-modal">
     <div class="modal-box" style="border-top-color: #e67e22;">
         <div class="modal-title" data-i18n="resetTitle">Hesabı sıfırla</div>
@@ -354,7 +349,6 @@
     </div>
 </div>
 
-<!-- SETUP SCREEN -->
 <div id="phone-setup" style="display:none;">
     <h2>AceTalk</h2>
     <p data-i18n="setupTitle">Hesabını oluştur</p>
@@ -370,7 +364,6 @@
     </div>
 </div>
 
-<!-- SPLASH -->
 <div id="splash-screen">
     <h1 style="color: var(--skype-blue); font-weight: 700; font-size: 48px; margin: 0;">AceTalk</h1>
     <div class="sidebar-slogan" data-i18n="slogan" style="color: white; margin-top: 5px;">Simple Messenger</div>
@@ -380,7 +373,6 @@
 <div id="mobile-overlay" onclick="closeAllMobileMenus()"></div>
 
 <div class="app-container">
-    <!-- LEFT SIDEBAR -->
     <div class="sidebar">
         <button class="mobile-btn close-btn" style="color:#7f8c8d;" onclick="toggleMobileSidebar('left')">×</button>
         <div class="brand-section">
@@ -411,7 +403,6 @@
             <button onclick="openResetModal()" class="wp-btn" style="color:#e74c3c; border-left-color: transparent;" data-i18n="resetAccBtn">⚠ Hesabı Sıfırla</button>
         </div>
 
-        <!-- MY STATUS BOX -->
         <div class="my-status-box">
             <div class="status-header">
                 <label for="my-avatar-input" class="my-avatar-upload" id="my-avatar-display" title="Profil Fotoğrafını Değiştir">?</label>
@@ -434,7 +425,6 @@
         </div>
     </div>
 
-    <!-- MAIN CHAT -->
     <div class="main-chat" id="drop-zone" onclick="closeAllMobileMenus()">
         <div id="chat-header">
             <div id="chat-header-avatar"></div>
@@ -465,7 +455,6 @@
         </div>
     </div>
 
-    <!-- RIGHT BAR -->
     <div class="right-bar">
         <button class="mobile-btn close-btn" style="color:#7f8c8d;" onclick="toggleMobileSidebar('right')">×</button>
         <div class="contacts-header">
@@ -483,7 +472,6 @@
             </div>
         </div>
         
-        <!-- BİLGİ BÖLÜMÜ SAĞ ÇUBUĞA TAŞINDI -->
         <div data-i18n="appInfo" style="font-size: 9px; color: #4a6278; text-align: center; padding: 12px 10px; line-height: 1.6; letter-spacing: 0.5px; border-top: 1px solid #111d28; margin-top: auto; z-index: 5;">
             AceTalk MileStone 3 • Kurucu: Ace © 2026 • Uçtan uca şifreli • Designed in Baku
         </div>
@@ -662,7 +650,9 @@ function openContact(peerId) {
     if(peerAvatars[peerId]) { avatar.innerHTML = `<img src="${peerAvatars[peerId]}">`; } 
     else { avatar.style.background = stringToColor(peerId); avatar.innerHTML = (contact.name || '?').charAt(0).toUpperCase(); }
     
-    headerName.innerText = contact.name || peerIdToName(peerId);
+    const e2eStatus = e2eKeys[peerId] ? '<span style="color:#2ecc71; font-size:10px; margin-left:5px; background:rgba(46,204,113,0.1); padding:2px 5px; border-radius:3px;" title="Uçtan Uca Şifreli">🔒 E2E</span>' : '';
+    headerName.innerHTML = (contact.name || peerIdToName(peerId)) + e2eStatus;
+
     const isOnline = connections.find(c => c.peer === peerId);
     
     const l = getLang();
@@ -762,7 +752,6 @@ function updateOnlineList() {
     list.innerHTML = '';
     const l = getLang();
     
-    // YENİ "BURASI ÇOK ISSIZ" KONTROLÜ
     if (connections.length === 0) {
         list.innerHTML = '<div style="padding: 10px 16px; font-size:10px; color:#4a6278; font-style:italic;">' + l.emptyOnline + '</div>';
         return;
@@ -849,6 +838,41 @@ function tryCreateAccount() {
         } else { errDiv.innerText = l.connError; }
         testPeer.destroy();
     });
+}
+
+// ─── E2E ENCRYPTION LOGIC (WEB CRYPTO API) ──────────────────────────────────
+let e2eKeys = {}; // Stores shared symmetric keys per peer connection
+
+async function generateE2EKey() {
+    return await crypto.subtle.generateKey({name: "AES-GCM", length: 256}, true, ["encrypt", "decrypt"]);
+}
+
+async function exportKey(key) {
+    const exported = await crypto.subtle.exportKey("jwk", key);
+    return exported;
+}
+
+async function importKey(jwk) {
+    return await crypto.subtle.importKey("jwk", jwk, {name: "AES-GCM"}, true, ["encrypt", "decrypt"]);
+}
+
+async function encryptMsg(text, key) {
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const encoded = new TextEncoder().encode(text);
+    const encrypted = await crypto.subtle.encrypt({name: "AES-GCM", iv: iv}, key, encoded);
+    return {
+        iv: Array.from(iv),
+        data: btoa(String.fromCharCode.apply(null, new Uint8Array(encrypted)))
+    };
+}
+
+async function decryptMsg(encryptedPayload, key) {
+    const iv = new Uint8Array(encryptedPayload.iv);
+    const dataStr = atob(encryptedPayload.data);
+    const dataBuffer = new Uint8Array(dataStr.length);
+    for(let i=0; i<dataStr.length; i++) dataBuffer[i] = dataStr.charCodeAt(i);
+    const decrypted = await crypto.subtle.decrypt({name: "AES-GCM", iv: iv}, key, dataBuffer);
+    return new TextDecoder().decode(decrypted);
 }
 
 // ─── PEER LOGIC & AUTO-RECONNECT ─────────────────────────────────────────────
@@ -952,12 +976,28 @@ function setupConn(conn) {
             upsertContact(conn.peer, peerNames[conn.peer] || null);
             updateOnlineList();
             renderContacts();
+            
+            // E2E Key Exchange Initiation: Sadece bir taraf (ID'si küçük olan) anahtar üretip dağıtır
+            if (peer.id < conn.peer && window.crypto && crypto.subtle) {
+                generateE2EKey().then(key => {
+                    e2eKeys[conn.peer] = key;
+                    exportKey(key).then(jwk => {
+                        conn.send({type: 'e2e_key', jwk: jwk});
+                        if (activePeerId === conn.peer) openContact(conn.peer); // Arayüzü güncelle (Kilit ikonunu göster)
+                    });
+                });
+            }
 
             const contacts = loadContacts();
             if (contacts[conn.peer]) {
                 const pendingMsgs = contacts[conn.peer].messages.filter(m => m.type === 'local' && m.status === 'sent');
-                pendingMsgs.forEach(m => {
-                    conn.send({type: 'msg', name: myName, body: m.body, time: m.time, msgId: m.msgId});
+                pendingMsgs.forEach(async m => {
+                    if (e2eKeys[conn.peer]) {
+                        const encryptedBody = await encryptMsg(m.body, e2eKeys[conn.peer]);
+                        conn.send({type: 'msg', name: myName, body: encryptedBody, time: m.time, msgId: m.msgId, isEncrypted: true});
+                    } else {
+                        conn.send({type: 'msg', name: myName, body: m.body, time: m.time, msgId: m.msgId});
+                    }
                 });
             }
         }
@@ -970,39 +1010,57 @@ function setupConn(conn) {
             upsertContact(conn.peer, data.name);
             if(activePeerId === conn.peer) openContact(conn.peer); 
         }
+        else if (data.type === 'e2e_key') {
+            importKey(data.jwk).then(key => {
+                e2eKeys[conn.peer] = key;
+                if (activePeerId === conn.peer) openContact(conn.peer); // Arayüzü güncelle (Kilit ikonunu göster)
+            }).catch(e => console.error("E2E anahtarı alınamadı", e));
+        }
         else if (data.type === 'msg') {
-            playAudio('snd-msg');
-            const parsed = parseMarkdown(data.body);
-            const isSeen = (activePeerId === conn.peer && document.visibilityState === 'visible');
-            
-            upsertContact(conn.peer, peerNames[conn.peer] || null, { type: 'remote', user: data.name, body: parsed, time: data.time, msgId: data.msgId, status: isSeen ? 'seen' : 'delivered' });
-            
-            if (activePeerId === conn.peer) {
-                addMessage(data.name, parsed, 'remote', data.time, true, isSeen ? 'seen' : 'delivered', data.msgId);
-            }
-            
-            if (isSeen) {
-                conn.send({type: 'seen', msgId: data.msgId}); 
-            } else {
-                conn.send({type: 'delivered', msgId: data.msgId});
-            }
+            (async () => {
+                playAudio('snd-msg');
+                let parsed = data.body;
+                
+                // Eğer mesaj şifreliyse ve bizim de anahtarımız varsa çöz
+                if (data.isEncrypted && e2eKeys[conn.peer]) {
+                    try {
+                        parsed = await decryptMsg(data.body, e2eKeys[conn.peer]);
+                    } catch(e) {
+                        parsed = "🔒 [Şifreli Mesaj Çözülemedi]";
+                    }
+                } else if (data.isEncrypted && !e2eKeys[conn.peer]) {
+                    parsed = "🔒 [E2E Anahtarı Bekleniyor]";
+                } else {
+                    parsed = parseMarkdown(data.body);
+                }
+
+                const isSeen = (activePeerId === conn.peer && document.visibilityState === 'visible');
+                
+                upsertContact(conn.peer, peerNames[conn.peer] || null, { type: 'remote', user: data.name, body: parsed, time: data.time, msgId: data.msgId, status: isSeen ? 'seen' : 'delivered' });
+                
+                if (activePeerId === conn.peer) {
+                    addMessage(data.name, parsed, 'remote', data.time, true, isSeen ? 'seen' : 'delivered', data.msgId);
+                }
+                
+                if (isSeen) {
+                    conn.send({type: 'seen', msgId: data.msgId}); 
+                } else {
+                    conn.send({type: 'delivered', msgId: data.msgId});
+                }
+            })();
         }
         else if (data.type === 'seen') updateMsgStatus(conn.peer, data.msgId, 'seen');
         else if (data.type === 'delivered') updateMsgStatus(conn.peer, data.msgId, 'delivered');
         else if (data.type === 'typing') { if(activePeerId === conn.peer) showTyping(data.name, data.state); }
         else if (data.type === 'sos') handleSOS(data);
         else if (data.type === 'offline') handlePeerDisconnect(conn.peer); 
-        
-        // YENİ: ARAMA İPTAL SİNYALİNİ YAKALAMA
         else if (data.type === 'cancel_call') {
             if (pendingCall) {
                 document.getElementById('incoming-call-panel').style.display = 'none';
                 document.getElementById('snd-call').pause();
                 pendingCall = null;
             }
-            if (currentCall) {
-                endCall(false); // Döngüye girmemek için false
-            }
+            if (currentCall) { endCall(false); }
         }
     });
 
@@ -1233,7 +1291,6 @@ function rejectCall() {
     if (pendingCall) { pendingCall.close(); pendingCall = null; }
 }
 
-// YENİ: ARAMA İPTAL SİNYALİ YAYMA (Döngüyü kırmak için isBroadcast eklendi)
 function endCall(isBroadcast = true) {
     if (currentCall) { currentCall.close(); currentCall = null; }
     if (pendingCall) { pendingCall.close(); pendingCall = null; }
@@ -1258,7 +1315,7 @@ function parseMarkdown(text) {
     return text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\*(.*?)\*/g, '<i>$1</i>').replace(/~~(.*?)~~/g, '<s>$1</s>').replace(/`(.*?)`/g, '<code>$1</code>');
 }
 
-function sendMessage() {
+async function sendMessage() {
     const input = document.getElementById('message-input');
     const myName = document.getElementById('my-name-input').value;
     const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -1271,10 +1328,19 @@ function sendMessage() {
     const targets = activePeerId && connections.find(c => c.peer === activePeerId) ? connections.filter(c => c.peer === activePeerId) : [];
 
     if (targets.length > 0) {
-        targets.forEach(c => { try { c.send({type: 'msg', name: myName, body: parsed, time: time, msgId: msgId}); } catch(e){} });
+        for (let c of targets) {
+            // Eğer E2E anahtarı hazırsa metni şifrele
+            if (e2eKeys[c.peer]) {
+                const encryptedBody = await encryptMsg(parsed, e2eKeys[c.peer]);
+                try { c.send({type: 'msg', name: myName, body: encryptedBody, time: time, msgId: msgId, isEncrypted: true}); } catch(e){}
+            } else {
+                try { c.send({type: 'msg', name: myName, body: parsed, time: time, msgId: msgId}); } catch(e){}
+            }
+        }
     }
     
     if (activePeerId) {
+        // Yerel cihaza şifresiz kaydediyoruz ki daha sonra okunabilsin
         upsertContact(activePeerId, peerNames[activePeerId] || null, { type: 'local', body: parsed, time: time, msgId: msgId, status: 'sent' });
     } else {
         const l = getLang();
@@ -1329,26 +1395,33 @@ function handleMedia(input) {
     }
 
     const reader = new FileReader();
-    reader.onload = e => {
+    reader.onload = async e => {
         let mediaHtml = '';
         if (file.type.startsWith('image/')) {
             mediaHtml = '<img src="' + e.target.result + '" style="max-width:100%; margin-top:5px; display:block;">';
         } else if (file.type.startsWith('video/')) {
             mediaHtml = '<video src="' + e.target.result + '" controls style="max-width:100%; margin-top:5px; display:block; border: 1px solid var(--skype-blue);"></video>';
         }
-        if (mediaHtml) sendSpecialMessage(mediaHtml);
+        if (mediaHtml) await sendSpecialMessage(mediaHtml);
     };
     reader.readAsDataURL(file);
 }
 
-function sendSpecialMessage(content) {
+async function sendSpecialMessage(content) {
     const myName = document.getElementById('my-name-input').value;
     const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     const msgId = Date.now().toString();
     const targets = activePeerId && connections.find(c => c.peer === activePeerId) ? connections.filter(c => c.peer === activePeerId) : [];
     
     if (targets.length > 0) {
-        targets.forEach(c => { try { c.send({type: 'msg', name: myName, body: content, time: time, msgId: msgId}); } catch(e){} });
+        for (let c of targets) {
+            if (e2eKeys[c.peer]) {
+                const encryptedBody = await encryptMsg(content, e2eKeys[c.peer]);
+                try { c.send({type: 'msg', name: myName, body: encryptedBody, time: time, msgId: msgId, isEncrypted: true}); } catch(e){}
+            } else {
+                try { c.send({type: 'msg', name: myName, body: content, time: time, msgId: msgId}); } catch(e){}
+            }
+        }
     }
 
     if (activePeerId) {
