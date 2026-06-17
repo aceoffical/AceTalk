@@ -347,6 +347,10 @@
 
 <!-- SETUP SCREEN -->
 <div id="phone-setup" style="display:none;">
+    <div style="position: absolute; top: 20px; display: flex; gap: 10px;">
+        <button onclick="setLanguage('tr')" style="background: #1a252f; border: 1px solid #34495e; color: white; padding: 8px 15px; cursor: pointer; font-family: 'Ubuntu', sans-serif; font-weight: bold; font-size: 12px; letter-spacing: 1px;">TR</button>
+        <button onclick="setLanguage('en')" style="background: #1a252f; border: 1px solid #34495e; color: white; padding: 8px 15px; cursor: pointer; font-family: 'Ubuntu', sans-serif; font-weight: bold; font-size: 12px; letter-spacing: 1px;">EN</button>
+    </div>
     <h2>AceTalk</h2>
     <p data-i18n="setupTitle">Hesabını oluştur</p>
     <div id="name-step" style="display: flex; flex-direction: column; align-items: center;">
@@ -599,7 +603,7 @@ function setLanguage(lang) {
     const selectEl = document.getElementById('lang-select');
     if (selectEl && selectEl.value !== lang) selectEl.value = lang;
 
-    applyDynamicTranslations(); // Tüm ekranı çevir
+    applyDynamicTranslations(); 
     
     renderContacts();
     updateOnlineList();
@@ -980,6 +984,11 @@ function setupConn(conn) {
             updateOnlineList();
             renderContacts();
             
+            // UX DOKUNUŞU: Sistem bağlantı kurduğu an kullanıcı hiçbir yerle konuşmuyorsa otomatik o kişinin ekranını aç.
+            if (!activePeerId) {
+                openContact(conn.peer);
+            }
+            
             if (peer.id < conn.peer && window.crypto && crypto.subtle) {
                 generateE2EKey().then(key => {
                     e2eKeys[conn.peer] = key;
@@ -1299,10 +1308,23 @@ async function sendMessage() {
 
     if (input.value.trim() === '') return;
 
+    if (!activePeerId) {
+        const l = getLang();
+        alert(l.noConn); 
+        return;
+    }
+
     const body = input.value;
     const parsed = parseMarkdown(body);
-    const targets = activePeerId && connections.find(c => c.peer === activePeerId) ? connections.filter(c => c.peer === activePeerId) : [];
+    
+    // Arayüzü HEMEN güncelle
+    upsertContact(activePeerId, peerNames[activePeerId] || null, { type: 'local', body: parsed, time: time, msgId: msgId, status: 'sent' });
+    addMessage('', parsed, 'local', time, true, 'sent', msgId);
+    input.value = '';
+    notifyTyping(false);
 
+    // Şifreleme ve gönderme işlemini arka planda yap
+    const targets = connections.filter(c => c.peer === activePeerId);
     if (targets.length > 0) {
         for (let c of targets) {
             if (e2eKeys[c.peer]) {
@@ -1313,17 +1335,6 @@ async function sendMessage() {
             }
         }
     }
-    
-    if (activePeerId) {
-        upsertContact(activePeerId, peerNames[activePeerId] || null, { type: 'local', body: parsed, time: time, msgId: msgId, status: 'sent' });
-    } else {
-        const l = getLang();
-        alert(l.noConn); return;
-    }
-    
-    addMessage('', parsed, 'local', time, true, 'sent', msgId);
-    input.value = '';
-    notifyTyping(false);
 }
 
 function addMessage(user, text, type, time, scroll, status = 'sent', msgId = null) {
@@ -1356,7 +1367,6 @@ function addMessage(user, text, type, time, scroll, status = 'sent', msgId = nul
         '<div class="msg-meta">' + translateBtn + displayTime + ticks + '</div>';
     box.appendChild(div);
 
-    // HATA ÇÖZÜMÜ BURADA: Eklenen her mesaj için anında çeviri motorunu çalıştır!
     applyDynamicTranslations(div);
 
     if (scroll) box.scrollTop = box.scrollHeight;
@@ -1458,8 +1468,19 @@ async function sendSpecialMessage(content) {
     const myName = document.getElementById('my-name-input').value;
     const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     const msgId = Date.now().toString();
-    const targets = activePeerId && connections.find(c => c.peer === activePeerId) ? connections.filter(c => c.peer === activePeerId) : [];
     
+    if (!activePeerId) {
+        const l = getLang();
+        alert(l.noConn);
+        return;
+    }
+
+    // Arayüzü HEMEN güncelle
+    upsertContact(activePeerId, peerNames[activePeerId] || null, { type: 'local', body: content, time: time, msgId: msgId, status: 'sent' });
+    addMessage('', content, 'local', time, true, 'sent', msgId);
+
+    // Şifreleme ve gönderme işlemini arka planda yap
+    const targets = connections.filter(c => c.peer === activePeerId);
     if (targets.length > 0) {
         for (let c of targets) {
             if (e2eKeys[c.peer]) {
@@ -1470,12 +1491,6 @@ async function sendSpecialMessage(content) {
             }
         }
     }
-
-    if (activePeerId) {
-        upsertContact(activePeerId, null, { type: 'local', body: content, time: time, msgId: msgId, status: 'sent' });
-    }
-    
-    addMessage('', content, 'local', time, true, 'sent', msgId);
 }
 
 function notifyTyping(state = true) {
