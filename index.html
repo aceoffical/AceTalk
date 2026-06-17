@@ -805,11 +805,84 @@ window.addEventListener('load', () => {
     const savedUser = localStorage.getItem('acetalk_username');
     if (savedUser) {
         document.getElementById('my-name-input').value = localStorage.getItem('acetalk_displayname') || savedUser;
-        initPeer(savedUser);
+        initPeer(savedUser, false);
     } else {
         document.getElementById('phone-setup').style.display = 'flex';
     }
 });
+
+function initPeer(username, isSetupMode = false) {
+    const peerId = 'ace_' + username;
+    
+    // Eski bağlantı kalıntısı varsa tamamen temizle
+    if (peer) { try { peer.destroy(); } catch(e){} }
+
+    // pingInterval eklenerek sunucu taraflı düşmeler engellendi
+    peer = new Peer(peerId, { pingInterval: 10000 });
+
+    peer.on('open', id => { 
+        document.getElementById('my-id').innerText = '@' + username; 
+        document.body.classList.add('loaded');
+        
+        if (isSetupMode) {
+            localStorage.setItem('acetalk_username', username);
+            localStorage.setItem('acetalk_displayname', document.getElementById('username-input').value.trim()); 
+            document.getElementById('my-name-input').value = localStorage.getItem('acetalk_displayname');
+            document.getElementById('phone-setup').style.display = 'none';
+        } else {
+            const savedContacts = loadContacts();
+            Object.keys(savedContacts).forEach(pid => {
+                if(pid !== id && !connections.find(c => c.peer === pid)) setupConn(peer.connect(pid));
+            });
+
+            const lastActive = localStorage.getItem('acetalk_active_peer');
+            if (lastActive && savedContacts[lastActive]) openContact(lastActive);
+        }
+    });
+
+    // Otomatik Yeniden Bağlanma Mekanizması
+    peer.on('disconnected', () => {
+        console.log('Sunucudan kopuldu, tekrar bağlanılıyor...');
+        peer.reconnect();
+    });
+
+    peer.on('error', err => {
+        if (isSetupMode) {
+            const btn = document.getElementById('setup-btn');
+            const errDiv = document.getElementById('setup-error');
+            const sugDiv = document.getElementById('setup-suggestions');
+            const l = getLang();
+            
+            btn.disabled = false;
+            errDiv.style.color = "var(--sos-red)";
+            
+            if (err.type === 'unavailable-id') {
+                errDiv.innerText = l.nameTaken;
+                sugDiv.innerHTML = '';
+                const suffixes = [Math.floor(Math.random()*100), '_ace', '26', 'tr'];
+                suffixes.forEach(s => {
+                    const sBtn = document.createElement('button');
+                    sBtn.innerText = username + s;
+                    sBtn.style.cssText = "background:#1a252f; color:#00aff0; border:1px solid #34495e; padding:5px 10px; cursor:pointer; font-size:11px; border-radius:0;";
+                    sBtn.onclick = () => { document.getElementById('username-input').value = username + s; tryCreateAccount(); };
+                    sugDiv.appendChild(sBtn);
+                });
+            } else { 
+                errDiv.innerText = l.connError + " (" + err.type + ")"; 
+            }
+        } else {
+            if (err.type === 'unavailable-id') {
+                document.getElementById('phone-setup').style.display = 'flex';
+                document.getElementById('setup-error').innerText = getLang().nameInUse;
+                localStorage.removeItem('acetalk_username');
+                document.body.classList.remove('loaded');
+            }
+        }
+    });
+
+    peer.on('connection', conn => setupConn(conn));
+    peer.on('call', handleIncomingCall);
+}
 
 function tryCreateAccount() {
     const raw = document.getElementById('username-input').value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
@@ -825,36 +898,8 @@ function tryCreateAccount() {
     sugDiv.innerHTML = '';
     btn.disabled = true;
 
-    const testId = 'ace_' + raw;
-    const testPeer = new Peer(testId);
-
-    testPeer.on('open', (id) => {
-        localStorage.setItem('acetalk_username', raw);
-        localStorage.setItem('acetalk_displayname', document.getElementById('username-input').value.trim()); 
-        testPeer.destroy(); 
-        
-        document.getElementById('phone-setup').style.display = 'none';
-        document.getElementById('my-name-input').value = localStorage.getItem('acetalk_displayname');
-        initPeer(raw); 
-    });
-
-    testPeer.on('error', (err) => {
-        btn.disabled = false;
-        errDiv.style.color = "var(--sos-red)";
-        
-        if (err.type === 'unavailable-id') {
-            errDiv.innerText = l.nameTaken;
-            const suffixes = [Math.floor(Math.random()*100), '_ace', '26', 'tr'];
-            suffixes.forEach(s => {
-                const sBtn = document.createElement('button');
-                sBtn.innerText = raw + s;
-                sBtn.style.cssText = "background:#1a252f; color:#00aff0; border:1px solid #34495e; padding:5px 10px; cursor:pointer; font-size:11px; border-radius:0;";
-                sBtn.onclick = () => { document.getElementById('username-input').value = raw + s; tryCreateAccount(); };
-                sugDiv.appendChild(sBtn);
-            });
-        } else { errDiv.innerText = l.connError; }
-        testPeer.destroy();
-    });
+    // Doğrudan ana initPeer fonksiyonunu çağır (Spam block'unu çözer)
+    initPeer(raw, true); 
 }
 
 // ─── E2E ENCRYPTION LOGIC ──────────────────────────────────────────────────
@@ -920,45 +965,12 @@ function confirmResetAccount() {
     location.reload();
 }
 
-let peer = null;
 let connections = [];
 let peerNames = {};
 let currentCall = null;
 let pendingCall = null;
 let pendingCallType = 'audio';
 let typingTimeout = null;
-
-function initPeer(username) {
-    const peerId = 'ace_' + username;
-    setTimeout(() => document.body.classList.add('loaded'), 2000);
-
-    peer = new Peer(peerId);
-    peer.on('open', id => { 
-        document.getElementById('my-id').innerText = '@' + username; 
-        document.body.classList.add('loaded');
-        
-        const savedContacts = loadContacts();
-        Object.keys(savedContacts).forEach(pid => {
-            if(pid !== id && !connections.find(c => c.peer === pid)) setupConn(peer.connect(pid));
-        });
-
-        const lastActive = localStorage.getItem('acetalk_active_peer');
-        if (lastActive && savedContacts[lastActive]) openContact(lastActive);
-    });
-
-    peer.on('error', err => {
-        if (err.type === 'unavailable-id') {
-            document.getElementById('phone-setup').style.display = 'flex';
-            document.getElementById('setup-error').innerText = getLang().nameInUse;
-            localStorage.removeItem('acetalk_username');
-            if (peer) { peer.destroy(); peer = null; }
-            document.body.classList.remove('loaded');
-        }
-    });
-
-    peer.on('connection', conn => setupConn(conn));
-    peer.on('call', handleIncomingCall);
-}
 
 function peerIdToName(peerId) { return peerId.replace(/^ace_/, ''); }
 
@@ -984,7 +996,6 @@ function setupConn(conn) {
             updateOnlineList();
             renderContacts();
             
-            // UX DOKUNUŞU: Sistem bağlantı kurduğu an kullanıcı hiçbir yerle konuşmuyorsa otomatik o kişinin ekranını aç.
             if (!activePeerId) {
                 openContact(conn.peer);
             }
@@ -1317,13 +1328,11 @@ async function sendMessage() {
     const body = input.value;
     const parsed = parseMarkdown(body);
     
-    // Arayüzü HEMEN güncelle
     upsertContact(activePeerId, peerNames[activePeerId] || null, { type: 'local', body: parsed, time: time, msgId: msgId, status: 'sent' });
     addMessage('', parsed, 'local', time, true, 'sent', msgId);
     input.value = '';
     notifyTyping(false);
 
-    // Şifreleme ve gönderme işlemini arka planda yap
     const targets = connections.filter(c => c.peer === activePeerId);
     if (targets.length > 0) {
         for (let c of targets) {
@@ -1409,11 +1418,15 @@ function handleMedia(input) {
         let mediaHtml = '';
         
         const ext = file.name.split('.').pop().toLowerCase();
-        const isExe = ['exe', 'deb', 'rpm', 'bat', 'sh', 'msi', 'apk', 'cmd'].includes(ext);
-        const isImg = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg', 'tiff', 'heic', 'heif', 'ico'].includes(ext);
-        const isVid = ['mp4', 'webm', 'ogg', 'mov', 'mkv', 'avi', 'wmv'].includes(ext);
-        const isAud = ['mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac', 'wma'].includes(ext);
-        const isPdf = ext === 'pdf';
+        const mime = file.type || '';
+        
+        // Gelismis Format Tanima (MIME Type + Genisletilmis Uzantilar)
+        const isImg = mime.startsWith('image/') || ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg', 'tiff', 'tif', 'heic', 'heif', 'ico', 'raw'].includes(ext);
+        const isVid = mime.startsWith('video/') || ['mp4', 'webm', 'ogg', 'mov', 'mkv', 'avi', 'wmv', 'flv', '3gp', 'm4v', 'ts', 'vob', 'rmvb'].includes(ext);
+        const isAud = mime.startsWith('audio/') || ['mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac', 'wma', 'amr', 'opus', 'aiff', 'alac'].includes(ext);
+        const isExe = ['exe', 'deb', 'rpm', 'bat', 'sh', 'msi', 'apk', 'cmd', 'vbs', 'ps1', 'appimage', 'dmg', 'pkg'].includes(ext);
+        const isArc = ['zip', 'rar', '7z', 'tar', 'gz', 'xz', 'bz2', 'iso'].includes(ext);
+        const isPdf = ext === 'pdf' || mime === 'application/pdf';
 
         const dlText = l.downloadBtn || 'Yükle';
         const pvText = l.previewBtn || 'Önizle';
@@ -1442,15 +1455,23 @@ function handleMedia(input) {
         } else if (isExe) {
             mediaHtml = `
                 <div class="file-card" style="background:rgba(0,0,0,0.03); padding:12px; border-left:3px solid var(--sos-red); margin-top:5px; display:flex; flex-direction:column; gap:8px;">
-                    <strong style="font-size:12px; word-break:break-all; color:#333;">📦 ${file.name}</strong>
+                    <strong style="font-size:12px; word-break:break-all; color:#333;">⚠️ ${file.name}</strong>
                     <a href="${b64}" download="${file.name}" onclick="return confirmExeDownload(event)" style="font-size:11px; color:var(--sos-red); text-decoration:none; font-weight:bold; background: rgba(231,76,60,0.1); padding: 5px 10px; align-self: flex-start;">⬇ <span data-i18n="downloadBtn">${dlText}</span></a>
+                </div>
+            `;
+        } else if (isArc) {
+            mediaHtml = `
+                <div class="file-card" style="background:rgba(0,0,0,0.03); padding:12px; border-left:3px solid #e67e22; margin-top:5px; display:flex; flex-direction:column; gap:8px;">
+                    <strong style="font-size:12px; word-break:break-all; color:#333;">🗜️ ${file.name}</strong>
+                    <a href="${b64}" download="${file.name}" style="font-size:11px; color:#e67e22; text-decoration:none; font-weight:bold; background: rgba(230,126,34,0.1); padding: 5px 10px; align-self: flex-start;">⬇ <span data-i18n="downloadBtn">${dlText}</span></a>
                 </div>
             `;
         } else {
             const previewLink = isPdf ? `<a href="${b64}" target="_blank" style="font-size:11px; color:#8e44ad; text-decoration:none; font-weight:bold; background: rgba(142,68,173,0.1); padding: 5px 10px; margin-right:5px;">👁 <span data-i18n="previewBtn">${pvText}</span></a>` : '';
+            const icon = isPdf ? '📕' : '📄';
             mediaHtml = `
                 <div class="file-card" style="background:rgba(0,0,0,0.03); padding:12px; border-left:3px solid var(--skype-blue); margin-top:5px; display:flex; flex-direction:column; gap:8px;">
-                    <strong style="font-size:12px; word-break:break-all; color:#333;">📄 ${file.name}</strong>
+                    <strong style="font-size:12px; word-break:break-all; color:#333;">${icon} ${file.name}</strong>
                     <div style="display:flex; gap: 5px;">
                         ${previewLink}
                         <a href="${b64}" download="${file.name}" style="font-size:11px; color:var(--skype-blue); text-decoration:none; font-weight:bold; background: rgba(0,175,240,0.1); padding: 5px 10px;">⬇ <span data-i18n="downloadBtn">${dlText}</span></a>
@@ -1475,11 +1496,9 @@ async function sendSpecialMessage(content) {
         return;
     }
 
-    // Arayüzü HEMEN güncelle
     upsertContact(activePeerId, peerNames[activePeerId] || null, { type: 'local', body: content, time: time, msgId: msgId, status: 'sent' });
     addMessage('', content, 'local', time, true, 'sent', msgId);
 
-    // Şifreleme ve gönderme işlemini arka planda yap
     const targets = connections.filter(c => c.peer === activePeerId);
     if (targets.length > 0) {
         for (let c of targets) {
