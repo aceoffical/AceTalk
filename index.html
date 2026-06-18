@@ -12,7 +12,7 @@
         #bg { 
             position: fixed; top:0; left:0; width:100%; height:100%; 
             background: url('Acetalkwallpaper.jpg') center/cover; 
-            filter: blur(15px) brightness(0.3) saturate(1.5); /* Daha mavimsi ve karanlık */
+            filter: blur(15px) brightness(0.3) saturate(1.5); 
             z-index: -1; 
         }
 
@@ -20,6 +20,11 @@
             position: relative; z-index: 2; height: 100vh; display: flex; flex-direction: column; 
             align-items: center; justify-content: center; color: white; pointer-events: none; 
         }
+
+        /* Dil Butonları */
+        .lang-container { position: absolute; top: 20px; right: 20px; z-index: 10; pointer-events: auto; display: flex; gap: 10px; }
+        .lang-btn { background: rgba(26, 37, 47, 0.6); border: 1px solid #34495e; color: white; padding: 5px 15px; cursor: pointer; font-family: 'Ubuntu', sans-serif; transition: 0.3s; }
+        .lang-btn:hover { border-color: #00aff0; color: #00aff0; }
 
         h1 { font-weight: 700; font-size: 60px; margin: 0; pointer-events: auto; cursor: pointer; transition: transform 0.1s; }
         p { font-weight: 300; font-size: 18px; color: #bdc3c7; pointer-events: auto; }
@@ -34,9 +39,14 @@
     <div id="bg"></div>
     <div id="canvas-root"></div>
     
+    <div class="lang-container">
+        <button class="lang-btn" onclick="changeLang('TR')">TR</button>
+        <button class="lang-btn" onclick="changeLang('US')">US</button>
+    </div>
+
     <div id="container">
         <h1 id="title" onclick="shakeTitle()">AceTalk</h1>
-        <p>Üzgünüz, Site bakımda olduğu için şu an kullanılamıyor.</p>
+        <p id="status-text">Üzgünüz, Site bakımda olduğu için şu an kullanılamıyor.</p>
     </div>
 
     <script>
@@ -44,6 +54,15 @@
             const title = document.getElementById('title');
             title.classList.add('shake');
             setTimeout(() => title.classList.remove('shake'), 200);
+        }
+
+        function changeLang(lang) {
+            const text = document.getElementById('status-text');
+            if (lang === 'US') {
+                text.innerText = "Sorry, the site is currently unavailable due to maintenance.";
+            } else {
+                text.innerText = "Üzgünüz, Site bakımda olduğu için şu an kullanılamıyor.";
+            }
         }
 
         const { Engine, Render, World, Bodies, Events } = Matter;
@@ -54,7 +73,6 @@
             options: { width: window.innerWidth, height: window.innerHeight, wireframes: false, background: 'transparent' }
         });
 
-        // 1 saniyede 1 küp
         setInterval(() => {
             const box = Bodies.rectangle(Math.random() * window.innerWidth, -50, 30, 30, { 
                 render: { fillStyle: '#00aff0' },
@@ -63,7 +81,6 @@
             World.add(engine.world, [box]);
         }, 1000);
 
-        // Küpler aşağı çıkınca yok olsun (birikmesin)
         Events.on(engine, 'afterUpdate', () => {
             engine.world.bodies.forEach(body => {
                 if (body.position.y > window.innerHeight + 100) World.remove(engine.world, body);
