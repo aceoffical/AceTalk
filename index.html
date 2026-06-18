@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>AceTalk | Bakım Modu</title>
+    <!-- Logo tarayıcı sekmesinde görünecek -->
     <link rel="icon" type="image/png" href="icon-192-new.png">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
@@ -10,7 +11,6 @@
             margin: 0;
             padding: 0;
             height: 100vh;
-            /* Arka plan ayarları */
             background-image: url('Acetalkwallpaper.jpg');
             background-size: cover;
             background-position: center;
@@ -24,17 +24,15 @@
             position: relative;
         }
 
-        /* Blur ve koyuluk katmanı */
         body::before {
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(44, 62, 80, 0.85); /* Hafif koyu katman */
-            backdrop-filter: blur(10px); /* Bulanıklık */
+            background: rgba(44, 62, 80, 0.85);
+            backdrop-filter: blur(10px);
             z-index: 1;
         }
 
-        /* İçeriklerin üstte kalması için */
         .content {
             position: relative;
             z-index: 2;
@@ -44,21 +42,9 @@
             justify-content: center;
         }
 
-        .box-loader {
-            width: 40px;
-            height: 40px;
-            background: #00aff0;
-            margin-bottom: 30px;
-            animation: rotateSquare 2s infinite ease-in-out;
-        }
-
-        @keyframes rotateSquare {
-            0% { transform: rotate(0deg); }
-            50% { transform: rotate(180deg) scale(1.2); }
-            100% { transform: rotate(360deg); }
-        }
-
+        /* Başlık stili: Kalın (Bold) */
         h1 { font-weight: 700; letter-spacing: 2px; margin: 0; font-size: 40px; }
+        
         p { color: #bdc3c7; margin-top: 10px; font-size: 14px; text-align: center; padding: 0 20px; }
 
         .lang-btns {
@@ -87,7 +73,6 @@
 <body>
 
     <div class="content">
-        <div class="box-loader"></div>
         <h1>AceTalk</h1>
         <p id="status-text">Üzgünüz, Site bakımda olduğu için şu an kullanılamıyor.</p>
 
