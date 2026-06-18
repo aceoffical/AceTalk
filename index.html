@@ -822,14 +822,21 @@ function initPeer(username, isSetupMode = false) {
 
     peer.on('open', id => { 
         document.getElementById('my-id').innerText = '@' + username; 
-        document.body.classList.add('loaded');
         
         if (isSetupMode) {
             localStorage.setItem('acetalk_username', username);
             localStorage.setItem('acetalk_displayname', document.getElementById('username-input').value.trim()); 
             document.getElementById('my-name-input').value = localStorage.getItem('acetalk_displayname');
             document.getElementById('phone-setup').style.display = 'none';
+            document.body.classList.add('loaded'); // Açılış animasyonunu bitir
+            
+            // Hesap açıldıktan sonra ana ekran için bağlantıları kontrol et
+            const savedContacts = loadContacts();
+            Object.keys(savedContacts).forEach(pid => {
+                if(pid !== id && !connections.find(c => c.peer === pid)) setupConn(peer.connect(pid));
+            });
         } else {
+            document.body.classList.add('loaded');
             const savedContacts = loadContacts();
             Object.keys(savedContacts).forEach(pid => {
                 if(pid !== id && !connections.find(c => c.peer === pid)) setupConn(peer.connect(pid));
@@ -840,10 +847,18 @@ function initPeer(username, isSetupMode = false) {
         }
     });
 
-    // Otomatik Yeniden Bağlanma Mekanizması
+    // YENİDEN BAĞLANMA MANTIĞI DÜZELTİLDİ: Kurulum modundaysa döngüye sokma!
     peer.on('disconnected', () => {
-        console.log('Sunucudan kopuldu, tekrar bağlanılıyor...');
-        peer.reconnect();
+        console.log('Sunucudan kopuldu...');
+        // Sadece kurulum bitmişse ve uygulamaya girilmişse yeniden bağlanmayı dene
+        if (!isSetupMode && document.body.classList.contains('loaded')) {
+            setTimeout(() => {
+                if (peer && !peer.destroyed && peer.disconnected) {
+                    console.log('Tekrar bağlanılıyor...');
+                    peer.reconnect();
+                }
+            }, 2000);
+        }
     });
 
     peer.on('error', err => {
@@ -863,13 +878,16 @@ function initPeer(username, isSetupMode = false) {
                 suffixes.forEach(s => {
                     const sBtn = document.createElement('button');
                     sBtn.innerText = username + s;
-                    sBtn.style.cssText = "background:#1a252f; color:#00aff0; border:1px solid #34495e; padding:5px 10px; cursor:pointer; font-size:11px; border-radius:0;";
+                    sBtn.style.cssText = "background:#1a252f; color:#00aff0; border:1px solid #34495e; padding:5px 10px; cursor:pointer; font-size:11px; border-radius:0; margin:2px;";
                     sBtn.onclick = () => { document.getElementById('username-input').value = username + s; tryCreateAccount(); };
                     sugDiv.appendChild(sBtn);
                 });
             } else { 
                 errDiv.innerText = l.connError + " (" + err.type + ")"; 
             }
+            
+            // Hata sonrası askıda kalmaması için temizle
+            try { peer.destroy(); } catch(e){}
         } else {
             if (err.type === 'unavailable-id') {
                 document.getElementById('phone-setup').style.display = 'flex';
@@ -898,7 +916,7 @@ function tryCreateAccount() {
     sugDiv.innerHTML = '';
     btn.disabled = true;
 
-    // Doğrudan ana initPeer fonksiyonunu çağır (Spam block'unu çözer)
+    // Doğrudan ana initPeer fonksiyonunu çağır (isSetupMode = true)
     initPeer(raw, true); 
 }
 
@@ -1420,7 +1438,6 @@ function handleMedia(input) {
         const ext = file.name.split('.').pop().toLowerCase();
         const mime = file.type || '';
         
-        // Gelismis Format Tanima (MIME Type + Genisletilmis Uzantilar)
         const isImg = mime.startsWith('image/') || ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg', 'tiff', 'tif', 'heic', 'heif', 'ico', 'raw'].includes(ext);
         const isVid = mime.startsWith('video/') || ['mp4', 'webm', 'ogg', 'mov', 'mkv', 'avi', 'wmv', 'flv', '3gp', 'm4v', 'ts', 'vob', 'rmvb'].includes(ext);
         const isAud = mime.startsWith('audio/') || ['mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac', 'wma', 'amr', 'opus', 'aiff', 'alac'].includes(ext);
