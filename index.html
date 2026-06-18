@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>AceTalk | Bakım Modu</title>
+    <!-- Logoyu head kısmına ekledik -->
+    <link rel="icon" type="image/png" href="icon-192.png">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -17,6 +19,13 @@
             justify-content: center;
             color: white;
             overflow: hidden;
+        }
+
+        /* Logo Stili */
+        .site-logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
         }
 
         /* Küçük Kare Animasyonu */
@@ -35,7 +44,7 @@
         }
 
         h1 { font-weight: 300; letter-spacing: 2px; margin: 0; }
-        p { color: #7f8c8d; margin-top: 10px; font-size: 14px; }
+        p { color: #7f8c8d; margin-top: 10px; font-size: 14px; text-align: center; padding: 0 20px; }
 
         .lang-btns {
             margin-top: 40px;
@@ -61,9 +70,12 @@
 </head>
 <body>
 
+    <!-- Logo -->
+    <img src="icon-192.png" alt="AceTalk Logo" class="site-logo">
+    
     <div class="box-loader"></div>
     <h1>AceTalk</h1>
-    <p id="status-text">Şu an site kullanılamıyor.</p>
+    <p id="status-text">Üzgünüz, Site bakımda olduğu için şu an kullanılamıyor.</p>
 
     <div class="lang-btns">
         <button class="lang-btn" onclick="changeLang('TR')">TR</button>
@@ -74,9 +86,9 @@
         function changeLang(lang) {
             const text = document.getElementById('status-text');
             if (lang === 'EN') {
-                text.innerText = "The site is currently unavailable.";
+                text.innerText = "Sorry, the site is currently unavailable due to maintenance.";
             } else {
-                text.innerText = "Şu an site kullanılamıyor.";
+                text.innerText = "Üzgünüz, Site bakımda olduğu için şu an kullanılamıyor.";
             }
         }
     </script>
