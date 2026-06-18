@@ -819,7 +819,14 @@ function initPeer(username, isSetupMode = false) {
     
     if (peer) { try { peer.destroy(); } catch(e){} }
 
-    peer = new Peer(peerId, { pingInterval: 10000 });
+    // GÜVENLİ BAĞLANTI (PORT 443) BURAYA EKLENDİ
+    peer = new Peer(peerId, { 
+        host: '0.peerjs.com', 
+        port: 443, 
+        secure: true, 
+        pingInterval: 10000,
+        debug: 2 
+    });
 
     peer.on('open', id => { 
         if(isSetupMode) clearTimeout(setupTimeout); // BAŞARILI: SAYACI DURDUR
