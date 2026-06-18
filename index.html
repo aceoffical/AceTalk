@@ -811,16 +811,19 @@ window.addEventListener('load', () => {
     }
 });
 
+// ZAMAN AŞIMI DEĞİŞKENİ EKLENDİ
+let setupTimeout = null;
+
 function initPeer(username, isSetupMode = false) {
     const peerId = 'ace_' + username;
     
-    // Eski bağlantı kalıntısı varsa tamamen temizle
     if (peer) { try { peer.destroy(); } catch(e){} }
 
-    // pingInterval eklenerek sunucu taraflı düşmeler engellendi
     peer = new Peer(peerId, { pingInterval: 10000 });
 
     peer.on('open', id => { 
+        if(isSetupMode) clearTimeout(setupTimeout); // BAŞARILI: SAYACI DURDUR
+        
         document.getElementById('my-id').innerText = '@' + username; 
         
         if (isSetupMode) {
@@ -828,9 +831,8 @@ function initPeer(username, isSetupMode = false) {
             localStorage.setItem('acetalk_displayname', document.getElementById('username-input').value.trim()); 
             document.getElementById('my-name-input').value = localStorage.getItem('acetalk_displayname');
             document.getElementById('phone-setup').style.display = 'none';
-            document.body.classList.add('loaded'); // Açılış animasyonunu bitir
+            document.body.classList.add('loaded'); 
             
-            // Hesap açıldıktan sonra ana ekran için bağlantıları kontrol et
             const savedContacts = loadContacts();
             Object.keys(savedContacts).forEach(pid => {
                 if(pid !== id && !connections.find(c => c.peer === pid)) setupConn(peer.connect(pid));
@@ -847,14 +849,20 @@ function initPeer(username, isSetupMode = false) {
         }
     });
 
-    // YENİDEN BAĞLANMA MANTIĞI DÜZELTİLDİ: Kurulum modundaysa döngüye sokma!
     peer.on('disconnected', () => {
-        console.log('Sunucudan kopuldu...');
-        // Sadece kurulum bitmişse ve uygulamaya girilmişse yeniden bağlanmayı dene
-        if (!isSetupMode && document.body.classList.contains('loaded')) {
+        if (isSetupMode) {
+            // SESSİZ KOPMALARI YAKALA VE KİLİDİ AÇ
+            clearTimeout(setupTimeout);
+            const btn = document.getElementById('setup-btn');
+            const errDiv = document.getElementById('setup-error');
+            if(btn) btn.disabled = false;
+            if(errDiv) {
+                errDiv.innerText = "Sunucu bağlantısı koptu. Tekrar dene.";
+                errDiv.style.color = "var(--sos-red)";
+            }
+        } else if (document.body.classList.contains('loaded')) {
             setTimeout(() => {
                 if (peer && !peer.destroyed && peer.disconnected) {
-                    console.log('Tekrar bağlanılıyor...');
                     peer.reconnect();
                 }
             }, 2000);
@@ -863,6 +871,7 @@ function initPeer(username, isSetupMode = false) {
 
     peer.on('error', err => {
         if (isSetupMode) {
+            clearTimeout(setupTimeout); // HATA GELDİ: SAYACI DURDUR
             const btn = document.getElementById('setup-btn');
             const errDiv = document.getElementById('setup-error');
             const sugDiv = document.getElementById('setup-suggestions');
@@ -886,7 +895,6 @@ function initPeer(username, isSetupMode = false) {
                 errDiv.innerText = l.connError + " (" + err.type + ")"; 
             }
             
-            // Hata sonrası askıda kalmaması için temizle
             try { peer.destroy(); } catch(e){}
         } else {
             if (err.type === 'unavailable-id') {
@@ -914,9 +922,19 @@ function tryCreateAccount() {
     errDiv.innerText = l.checking;
     errDiv.style.color = "#00aff0";
     sugDiv.innerHTML = '';
-    btn.disabled = true;
+    btn.disabled = true; // Butonu Kilitliyoruz
 
-    // Doğrudan ana initPeer fonksiyonunu çağır (isSetupMode = true)
+    // GÜVENLİK KİLİDİ: 10 Saniye içinde cevap gelmezse zorla kilidi aç!
+    clearTimeout(setupTimeout);
+    setupTimeout = setTimeout(() => {
+        if (btn.disabled) { 
+            btn.disabled = false;
+            errDiv.innerText = "Sunucu yanıt vermiyor. Lütfen tekrar dene.";
+            errDiv.style.color = "var(--sos-red)";
+            if (peer) { try { peer.destroy(); } catch(e){} }
+        }
+    }, 10000); // 10000 ms = 10 Saniye
+
     initPeer(raw, true); 
 }
 
