@@ -27,7 +27,7 @@
         .lang-btn:hover { border-color: #00aff0; color: #00aff0; }
 
         h1 { font-weight: 700; font-size: 60px; margin: 0; pointer-events: auto; cursor: pointer; transition: transform 0.1s; }
-        p { font-weight: 300; font-size: 18px; color: #bdc3c7; pointer-events: auto; }
+        p { font-weight: 300; font-size: 18px; color: #bdc3c7; pointer-events: auto; max-width: 600px; text-align: center; }
         
         .shake { animation: shake 0.2s; }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
@@ -46,7 +46,7 @@
 
     <div id="container">
         <h1 id="title" onclick="shakeTitle()">AceTalk</h1>
-        <p id="status-text">Üzgünüz, Site bakımda olduğu için şu an kullanılamıyor.</p>
+        <p id="status-text">Biraz mola! Sitemizi sizin için güzelleştiriyoruz, çok yakında geri döneceğiz.</p>
     </div>
 
     <script>
@@ -59,9 +59,9 @@
         function changeLang(lang) {
             const text = document.getElementById('status-text');
             if (lang === 'US') {
-                text.innerText = "Sorry, the site is currently unavailable due to maintenance.";
+                text.innerText = "Taking a little break! We're making our site better for you and will be back soon.";
             } else {
-                text.innerText = "Üzgünüz, Site bakımda olduğu için şu an kullanılamıyor.";
+                text.innerText = "Biraz mola! Sitemizi sizin için güzelleştiriyoruz, çok yakında geri döneceğiz.";
             }
         }
 
