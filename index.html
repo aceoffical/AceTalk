@@ -410,7 +410,8 @@
                 <input type="text" id="my-name-input" class="status-input" value="AceUser" readonly title="Sohbette görünecek adın">
             </div>
             <b style="font-size: 10px; color: var(--skype-blue);" data-i18n="myName">ADIM</b>
-            <small style="display:block; margin-top:5px; font-size: 9px; color: #7f8c8d;">👤 <span id="my-id" style="color: #00ffcc; cursor:pointer;" onclick="navigator.clipboard.writeText(this.innerText).then(()=>{this.style.color='#fff';setTimeout(()=>this.style.color='#00ffcc',1000)})" title="Kopyalamak için tıkla">...</span></small>
+            <!-- Görselliği kaldırıldı ama JS hata vermesin diye gizli tutuluyor -->
+            <span id="my-id" style="display:none;"></span>
         </div>
 
         <div style="margin-top: auto; display: flex; flex-direction: column; gap: 10px;">
