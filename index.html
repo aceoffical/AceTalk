@@ -240,18 +240,25 @@
         #setup-btn:hover { filter: brightness(1.15); }
         #setup-btn:disabled { background: #555; cursor: not-allowed; }
 
-        /* DELETE & RESET MODAL */
-        #delete-modal, #reset-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 20000; display: none; align-items: center; justify-content: center; animation: fadeInBg 0.2s ease; }
+        /* ALL CUSTOM MODALS */
+        #delete-modal, #reset-modal, #edit-modal, #delete-msg-modal, #unsafe-file-modal { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.6); z-index: 30000; display: none; align-items: center; 
+            justify-content: center; animation: fadeInBg 0.2s ease; 
+        }
         @keyframes fadeInBg { from { opacity: 0; } to { opacity: 1; } }
-        .modal-box { background: #1e2d3d; border: 1px solid #34495e; padding: 28px 30px; min-width: 280px; max-width: 340px; border-top: 3px solid var(--sos-red); animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .modal-box { background: #1e2d3d; border: 1px solid #34495e; padding: 28px 30px; min-width: 280px; max-width: 360px; border-top: 3px solid var(--sos-red); animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); width: 100%; box-sizing: border-box; }
         @keyframes modalPop { from { opacity: 0; transform: scale(0.85) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-        .modal-title { color: white; font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+        .modal-title { color: white; font-size: 15px; font-weight: 700; margin-bottom: 10px; }
         .modal-sub { color: #7f8c8d; font-size: 12px; line-height: 1.6; margin-bottom: 22px; }
         .modal-btns { display: flex; gap: 8px; }
         .modal-btns button { flex: 1; padding: 11px; border: none; font-weight: bold; cursor: pointer; font-family: 'Ubuntu', sans-serif; font-size: 12px; letter-spacing: 1px; transition: filter 0.15s ease; }
         .modal-btns button:hover { filter: brightness(1.15); }
         .btn-modal-delete { background: var(--sos-red); color: white; }
         .btn-modal-cancel { background: #2c3e50; color: #aaa; border: 1px solid #34495e; }
+        
+        #edit-msg-input { width: 100%; background: #1a252f; border: 1px solid #34495e; color: white; padding: 12px; font-family: 'Ubuntu', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s ease; margin-bottom: 20px; border-radius: 0; }
+        #edit-msg-input:focus { border-color: var(--skype-blue); }
 
         @media (min-width: 769px) {
             .sidebar .close-btn, .right-bar .close-btn { display: none !important; }
@@ -316,6 +323,42 @@
     <div class="ctx-item" id="ctx-pin" onclick="handleCtxPin()">📌 Sabitle / Kaldır</div>
     <div class="ctx-item" id="ctx-edit" onclick="handleCtxEdit()">✏️ Düzenle</div>
     <div class="ctx-item danger" id="ctx-delete" onclick="handleCtxDelete()">🗑️ Herkesten Sil</div>
+</div>
+
+<!-- MESAJ DÜZENLEME MODALI -->
+<div id="edit-modal">
+    <div class="modal-box" style="border-top-color: var(--skype-blue);">
+        <div class="modal-title" data-i18n="editTitle">Mesajı Düzenle</div>
+        <input type="text" id="edit-msg-input" onkeypress="if(event.key==='Enter') confirmEditMsg()">
+        <div class="modal-btns">
+            <button class="btn-modal-delete" style="background:var(--skype-blue);" onclick="confirmEditMsg()" data-i18n="saveBtn">KAYDET</button>
+            <button class="btn-modal-cancel" onclick="closeEditModal()" data-i18n="cancelBtn">İPTAL</button>
+        </div>
+    </div>
+</div>
+
+<!-- MESAJ SİLME MODALI -->
+<div id="delete-msg-modal">
+    <div class="modal-box">
+        <div class="modal-title" data-i18n="delMsgTitle">Mesajı Sil</div>
+        <div class="modal-sub" data-i18n="delMsgDesc">Bu mesajı herkesten silmek istediğine emin misin?</div>
+        <div class="modal-btns">
+            <button class="btn-modal-delete" onclick="confirmDeleteMsg()" data-i18n="delBtn">SİL</button>
+            <button class="btn-modal-cancel" onclick="closeDeleteMsgModal()" data-i18n="cancelBtn">İPTAL</button>
+        </div>
+    </div>
+</div>
+
+<!-- GÜVENSİZ DOSYA (EXE) MODALI -->
+<div id="unsafe-file-modal">
+    <div class="modal-box" style="border-top-color: #e67e22;">
+        <div class="modal-title" data-i18n="unsafeTitle">Güvenlik Uyarısı</div>
+        <div class="modal-sub" data-i18n="unsafeWarn">Güvenli dosya olmayabilir!<br>Yine de indirmek istiyor musun?</div>
+        <div class="modal-btns">
+            <button class="btn-modal-delete" style="background:#e67e22;" onclick="confirmUnsafeDownload()" data-i18n="downloadBtn">İNDİR</button>
+            <button class="btn-modal-cancel" onclick="closeUnsafeModal()" data-i18n="cancelBtn">İPTAL</button>
+        </div>
+    </div>
 </div>
 
 <div id="mobile-nav">
@@ -596,8 +639,18 @@ function updateMyProfile() {
 
 // ─── DİLLER ──────────────────────────────────────────────────────────────────
 const i18n = {
-    tr: { appInfo: "AceTalk MileStone 3 • Kurucu: Ace © 2026 • Uçtan uca şifreli • Designed in Baku", slogan: "Simple Messenger", myName: "ADIM", idPlaceholder: "Karşı tarafın ismi...", connectBtn: "BAĞLAN", voiceCall: "SESLİ ARA", videoCall: "KAMERALI ARA", secureChat: "Güvenli ve şifreli uçtan uca sohbet.", enterId: "Bağlanmak için bir isim girin.", msgPlaceholder: "Mesajınızı yazın...", calling: "ARANIYOR...", closeCall: "KAPAT", typing: "yazıyor...", sosBtn: "🚨 ACİL", sosCooldown: "saniye bekle", sosReceived: "ACİL YARDIM ÇAĞRISI", sosFrom: "Gönderen", sosHops: "ağ üzerinden ulaştı", sosNoConn: "Bağlı kimse yok! Önce birine bağlan.", wallpaperBtn: "❖ Duvar Kağıdı", resetWpBtn: "↺ Varsayılan WP", resetAccBtn: "⚠ Hesabı Sıfırla", micDenied: "Kamera/Mikrofon erişimi reddedildi!", noConn: "Şimdilik yalnızsın.", emptyOnline: "Burası çok ıssız..", connected: "🟢 BAĞLANDI", contactsTitle: "KİŞİLER", onlineNow: "ŞU AN ÇEVRİMİÇİ", savedContacts: "KAYDEDİLEN", noContacts: "Henüz kişi yok.\nBiri ile konuştuktan sonra burada görünür.", onlineStatus: "Çevrimiçi", offlineStatus: "Son görülme", incomingVoice: "Sesli arama geliyor", incomingVideo: "Görüntülü arama geliyor", answerBtn: "CEVAPLA", rejectBtn: "REDDET", setupTitle: "Hesabını oluştur", usernamePlace: "Kullanıcı Adı", startBtn: "BAŞLA ✓", setupDesc: "Bu senin eşsiz ID'n olacak. Başkaları sana bu isimle bağlanacak.", delTitle: "Kişiyi sil", delDesc: "kişisini ve tüm mesaj geçmişini silmek istediğine emin misin?", delBtn: "SİL", cancelBtn: "İPTAL", resetTitle: "Hesabı sıfırla", resetDesc: "Kullanıcı adın, görünen ismin ve tüm konuşma geçmişin silinecek. Bu işlem geri alınamaz.", resetBtn: "SIFIRLA", fileTooBig: "Dosya boyutu çok büyük! Maksimum 50 MB.", nameTaken: "Bu isim alınmış! Şunlardan birini dene:", nameShort: "En az 3 harf veya rakam olmalı!", checking: "Uygunluk kontrol ediliyor...", connError: "Bağlantı hatası, tekrar deneyin.", nameInUse: "Bu isim başka bir cihazda açık!", videoMsg: "Video", imageMsg: "Resim", fileMsg: "Dosya", callName: "Birileri arıyor...", translated: "(Çevrildi)", downloadBtn: "Yükle", previewBtn: "Önizle", unsafeWarn: "Güvenli dosya olmayabilir!\nYine de indirmek istiyor musun?" },
-    en: { appInfo: "AceTalk MileStone 3 • Founder: Ace © 2026 • End-to-End Encrypted • Designed in Baku", slogan: "Simple Messenger", myName: "MY NAME", idPlaceholder: "Their username...", connectBtn: "CONNECT", voiceCall: "VOICE CALL", videoCall: "VIDEO CALL", secureChat: "Secure end-to-end encrypted chat.", enterId: "Enter an ID to connect.", msgPlaceholder: "Type your message...", calling: "CALLING...", closeCall: "HANG UP", typing: "is typing...", sosBtn: "🚨 SOS", sosCooldown: "seconds wait", sosReceived: "EMERGENCY SOS RECEIVED", sosFrom: "From", sosHops: "hops away", sosNoConn: "Nobody connected!", wallpaperBtn: "❖ Wallpaper", resetWpBtn: "↺ Default WP", resetAccBtn: "⚠ Reset Account", micDenied: "Camera/Mic access denied!", noConn: "You're alone for now.", emptyOnline: "It's so deserted here..", connected: "🟢 CONNECTED", contactsTitle: "CONTACTS", onlineNow: "ONLINE NOW", savedContacts: "SAVED", noContacts: "No contacts yet.\nAppears after chatting.", onlineStatus: "Online", offlineStatus: "Last seen", incomingVoice: "Incoming voice call", incomingVideo: "Incoming video call", answerBtn: "ANSWER", rejectBtn: "REJECT", setupTitle: "Create your account", usernamePlace: "Username", startBtn: "START ✓", setupDesc: "This is your unique ID. Others will connect using this name.", delTitle: "Delete contact", delDesc: "and all chat history? Are you sure?", delBtn: "DELETE", cancelBtn: "CANCEL", resetTitle: "Reset account", resetDesc: "Your username, display name, and all history will be deleted. This cannot be undone.", resetBtn: "RESET", fileTooBig: "File is too large! Maximum 50 MB.", nameTaken: "Name is taken! Try one of these:", nameShort: "Must be at least 3 letters or numbers!", checking: "Checking availability...", connError: "Connection error, try again.", nameInUse: "This name is open on another device!", videoMsg: "Video", imageMsg: "Image", fileMsg: "File", callName: "Someone is calling...", translated: "(Translated)", downloadBtn: "Download", previewBtn: "Preview", unsafeWarn: "This file may be unsafe!\nDo you still want to download?" }
+    tr: { 
+        appInfo: "AceTalk MileStone 3 • Kurucu: Ace © 2026 • Uçtan uca şifreli • Designed in Baku", slogan: "Simple Messenger", myName: "ADIM", idPlaceholder: "Karşı tarafın ismi...", connectBtn: "BAĞLAN", voiceCall: "SESLİ ARA", videoCall: "KAMERALI ARA", secureChat: "Güvenli ve şifreli uçtan uca sohbet.", enterId: "Bağlanmak için bir isim girin.", msgPlaceholder: "Mesajınızı yazın...", calling: "ARANIYOR...", closeCall: "KAPAT", typing: "yazıyor...", sosBtn: "🚨 ACİL", sosCooldown: "saniye bekle", sosReceived: "ACİL YARDIM ÇAĞRISI", sosFrom: "Gönderen", sosHops: "ağ üzerinden ulaştı", sosNoConn: "Bağlı kimse yok! Önce birine bağlan.", wallpaperBtn: "❖ Duvar Kağıdı", resetWpBtn: "↺ Varsayılan WP", resetAccBtn: "⚠ Hesabı Sıfırla", micDenied: "Kamera/Mikrofon erişimi reddedildi!", noConn: "Şimdilik yalnızsın.", emptyOnline: "Burası çok ıssız..", connected: "🟢 BAĞLANDI", contactsTitle: "KİŞİLER", onlineNow: "ŞU AN ÇEVRİMİÇİ", savedContacts: "KAYDEDİLEN", noContacts: "Henüz kişi yok.\nBiri ile konuştuktan sonra burada görünür.", onlineStatus: "Çevrimiçi", offlineStatus: "Son görülme", incomingVoice: "Sesli arama geliyor", incomingVideo: "Görüntülü arama geliyor", answerBtn: "CEVAPLA", rejectBtn: "REDDET", setupTitle: "Hesabını oluştur", usernamePlace: "Kullanıcı Adı", startBtn: "BAŞLA ✓", setupDesc: "Bu senin eşsiz ID'n olacak. Başkaları sana bu isimle bağlanacak.", delTitle: "Kişiyi sil", delDesc: "kişisini ve tüm mesaj geçmişini silmek istediğine emin misin?", delBtn: "SİL", cancelBtn: "İPTAL", resetTitle: "Hesabı sıfırla", resetDesc: "Kullanıcı adın, görünen ismin ve tüm konuşma geçmişin silinecek. Bu işlem geri alınamaz.", resetBtn: "SIFIRLA", fileTooBig: "Dosya boyutu çok büyük! Maksimum 50 MB.", nameTaken: "Bu isim alınmış! Şunlardan birini dene:", nameShort: "En az 3 harf veya rakam olmalı!", checking: "Uygunluk kontrol ediliyor...", connError: "Bağlantı hatası, tekrar deneyin.", nameInUse: "Bu isim başka bir cihazda açık!", videoMsg: "Video", imageMsg: "Resim", fileMsg: "Dosya", callName: "Birileri arıyor...", translated: "(Çevrildi)", downloadBtn: "Yükle", previewBtn: "Önizle",
+        unsafeTitle: "Güvenlik Uyarısı", unsafeWarn: "Güvenli dosya olmayabilir!<br>Yine de indirmek istiyor musun?",
+        editTitle: "Mesajı Düzenle", saveBtn: "KAYDET",
+        delMsgTitle: "Mesajı Sil", delMsgDesc: "Bu mesajı herkesten silmek istediğine emin misin?"
+    },
+    en: { 
+        appInfo: "AceTalk MileStone 3 • Founder: Ace © 2026 • End-to-End Encrypted • Designed in Baku", slogan: "Simple Messenger", myName: "MY NAME", idPlaceholder: "Their username...", connectBtn: "CONNECT", voiceCall: "VOICE CALL", videoCall: "VIDEO CALL", secureChat: "Secure end-to-end encrypted chat.", enterId: "Enter an ID to connect.", msgPlaceholder: "Type your message...", calling: "CALLING...", closeCall: "HANG UP", typing: "is typing...", sosBtn: "🚨 SOS", sosCooldown: "seconds wait", sosReceived: "EMERGENCY SOS RECEIVED", sosFrom: "From", sosHops: "hops away", sosNoConn: "Nobody connected!", wallpaperBtn: "❖ Wallpaper", resetWpBtn: "↺ Default WP", resetAccBtn: "⚠ Reset Account", micDenied: "Camera/Mic access denied!", noConn: "You're alone for now.", emptyOnline: "It's so deserted here..", connected: "🟢 CONNECTED", contactsTitle: "CONTACTS", onlineNow: "ONLINE NOW", savedContacts: "SAVED", noContacts: "No contacts yet.\nAppears after chatting.", onlineStatus: "Online", offlineStatus: "Last seen", incomingVoice: "Incoming voice call", incomingVideo: "Incoming video call", answerBtn: "ANSWER", rejectBtn: "REJECT", setupTitle: "Create your account", usernamePlace: "Username", startBtn: "START ✓", setupDesc: "This is your unique ID. Others will connect using this name.", delTitle: "Delete contact", delDesc: "and all chat history? Are you sure?", delBtn: "DELETE", cancelBtn: "CANCEL", resetTitle: "Reset account", resetDesc: "Your username, display name, and all history will be deleted. This cannot be undone.", resetBtn: "RESET", fileTooBig: "File is too large! Maximum 50 MB.", nameTaken: "Name is taken! Try one of these:", nameShort: "Must be at least 3 letters or numbers!", checking: "Checking availability...", connError: "Connection error, try again.", nameInUse: "This name is open on another device!", videoMsg: "Video", imageMsg: "Image", fileMsg: "File", callName: "Someone is calling...", translated: "(Translated)", downloadBtn: "Download", previewBtn: "Preview",
+        unsafeTitle: "Security Warning", unsafeWarn: "This file may be unsafe!<br>Do you still want to download?",
+        editTitle: "Edit Message", saveBtn: "SAVE",
+        delMsgTitle: "Delete Message", delMsgDesc: "Are you sure you want to delete this message for everyone?"
+    }
 };
 
 let currentLang = localStorage.getItem('acetalk_lang') || 'tr';
@@ -836,7 +889,7 @@ function showContextMenu(e, msgId, type) {
     if(!contact) return;
     
     const msg = contact.messages.find(m => m.msgId === msgId);
-    if(!msg || msg.isDeleted) return; // Silinmiş mesajda menü açılmaz
+    if(!msg || msg.isDeleted) return;
 
     ctxMsgId = msgId;
     ctxMsgType = type;
@@ -854,7 +907,6 @@ function showContextMenu(e, msgId, type) {
 
     const isMedia = msg.body.includes('<img') || msg.body.includes('<video') || msg.body.includes('<audio') || msg.body.includes('file-card');
     
-    // Düzenle/Sil sadece kişinin kendi attığı mesajlarda (local) ve medya değilse görünür
     document.getElementById('ctx-edit').style.display = (type === 'local' && !isMedia) ? 'flex' : 'none';
     document.getElementById('ctx-delete').style.display = (type === 'local') ? 'flex' : 'none';
     
@@ -862,7 +914,8 @@ function showContextMenu(e, msgId, type) {
     document.getElementById('ctx-pin').innerHTML = isPinned ? '📌 Sabitlemeyi Kaldır' : '📌 Sabitle';
 }
 
-async function handleCtxEdit() {
+// DÜZENLEME MODALI FONKSİYONLARI
+function handleCtxEdit() {
     document.getElementById('context-menu').style.display = 'none';
     if(!ctxMsgId || ctxMsgType !== 'local' || !activePeerId) return;
     
@@ -871,8 +924,27 @@ async function handleCtxEdit() {
     if(!msg || msg.isDeleted) return;
     
     const oldText = msg.rawText || msg.body.replace(/<[^>]*>?/gm, '');
-    const newText = prompt("Mesajını düzenle:", oldText);
+    document.getElementById('edit-msg-input').value = oldText;
+    document.getElementById('edit-modal').style.display = 'flex';
+    document.getElementById('edit-msg-input').focus();
+}
+
+function closeEditModal() {
+    document.getElementById('edit-modal').style.display = 'none';
+}
+
+async function confirmEditMsg() {
+    const input = document.getElementById('edit-msg-input');
+    const newText = input.value;
+    document.getElementById('edit-modal').style.display = 'none';
     
+    if(!ctxMsgId || ctxMsgType !== 'local' || !activePeerId) return;
+    const contacts = loadContacts();
+    const msg = contacts[activePeerId].messages.find(m => m.msgId === ctxMsgId);
+    if(!msg || msg.isDeleted) return;
+
+    const oldText = msg.rawText || msg.body.replace(/<[^>]*>?/gm, '');
+
     if (newText !== null && newText.trim() !== '' && newText !== oldText) {
         msg.rawText = newText;
         msg.body = parseMarkdown(newText) + ' <small style="font-size:9px; opacity:0.6;">✏️ (düzenlendi)</small>';
@@ -881,7 +953,6 @@ async function handleCtxEdit() {
         const bodyEl = document.querySelector(`.msg[data-msgid="${ctxMsgId}"] .msg-body`);
         if(bodyEl) bodyEl.innerHTML = msg.body;
         
-        // Karşı tarafa düzenleme sinyali gönder
         const targets = connections.filter(c => c.peer === activePeerId);
         for (let c of targets) {
             if (e2eKeys[c.peer]) {
@@ -894,11 +965,22 @@ async function handleCtxEdit() {
     }
 }
 
+// SİLME MODALI FONKSİYONLARI
 function handleCtxDelete() {
     document.getElementById('context-menu').style.display = 'none';
     if(!ctxMsgId || ctxMsgType !== 'local' || !activePeerId) return;
-    if(!confirm("Bu mesajı herkesten silmek istediğine emin misin?")) return;
     
+    document.getElementById('delete-msg-modal').style.display = 'flex';
+}
+
+function closeDeleteMsgModal() {
+    document.getElementById('delete-msg-modal').style.display = 'none';
+}
+
+function confirmDeleteMsg() {
+    document.getElementById('delete-msg-modal').style.display = 'none';
+
+    if(!ctxMsgId || ctxMsgType !== 'local' || !activePeerId) return;
     const contacts = loadContacts();
     const contact = contacts[activePeerId];
     const msg = contact.messages.find(m => m.msgId === ctxMsgId);
@@ -912,7 +994,7 @@ function handleCtxDelete() {
     if(bodyEl) bodyEl.innerHTML = msg.body;
 
     if (contact.pinnedMsg && contact.pinnedMsg.id === ctxMsgId) {
-        unpinCurrent(new Event('click')); // Eğer silinen mesaj sabitliyse, sabitlemeyi kaldır
+        unpinCurrent(new Event('click')); 
     }
     
     connections.filter(c => c.peer === activePeerId).forEach(c => {
@@ -1625,7 +1707,6 @@ async function sendMessage() {
     const rawBody = input.value;
     const parsed = parseMarkdown(rawBody);
     
-    // Mesajı raw hali ile beraber kaydediyoruz ki düzenlerken kolayca değiştirebilelim
     upsertContact(activePeerId, peerNames[activePeerId] || null, { type: 'local', rawText: rawBody, body: parsed, time: time, msgId: msgId, status: 'sent' });
     addMessage('', parsed, 'local', time, true, 'sent', msgId);
     input.value = '';
@@ -1653,7 +1734,6 @@ function addMessage(user, text, type, time, scroll, status = 'sent', msgId = nul
     
     div.className = 'msg ' + type;
     
-    // Sağ tık menüsü için ID ekliyoruz
     if(msgId) {
         div.setAttribute('data-msgid', msgId);
         div.oncontextmenu = (e) => showContextMenu(e, msgId, type);
@@ -1686,13 +1766,30 @@ function addMessage(user, text, type, time, scroll, status = 'sent', msgId = nul
     if (scroll) box.scrollTop = box.scrollHeight;
 }
 
-window.confirmExeDownload = function(e) {
-    const l = getLang();
-    if (!confirm(l.unsafeWarn)) {
-        e.preventDefault();
-        return false;
-    }
-    return true;
+// ─── GÜVENSİZ DOSYA (EXE) İNDİRME ────────────────────────────────────────────
+let unsafeUrl = '';
+let unsafeFilename = '';
+
+window.confirmExeDownload = function(e, url, filename) {
+    e.preventDefault(); 
+    unsafeUrl = url;
+    unsafeFilename = filename;
+    document.getElementById('unsafe-file-modal').style.display = 'flex';
+    return false;
+}
+
+function closeUnsafeModal() {
+    document.getElementById('unsafe-file-modal').style.display = 'none';
+}
+
+function confirmUnsafeDownload() {
+    document.getElementById('unsafe-file-modal').style.display = 'none';
+    const a = document.createElement('a');
+    a.href = unsafeUrl;
+    a.download = unsafeFilename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
 
 function openImageViewer(src) {
@@ -1757,7 +1854,7 @@ function handleMedia(input) {
             mediaHtml = `
                 <div class="file-card" style="background:rgba(0,0,0,0.03); padding:12px; border-left:3px solid var(--sos-red); margin-top:5px; display:flex; flex-direction:column; gap:8px;">
                     <strong style="font-size:12px; word-break:break-all; color:#333;">📦 ${file.name}</strong>
-                    <a href="${b64}" download="${file.name}" onclick="return confirmExeDownload(event)" style="font-size:11px; color:var(--sos-red); text-decoration:none; font-weight:bold; background: rgba(231,76,60,0.1); padding: 5px 10px; align-self: flex-start;">⬇ <span data-i18n="downloadBtn">${dlText}</span></a>
+                    <a href="#" onclick="return confirmExeDownload(event, '${b64}', '${file.name}')" style="font-size:11px; color:var(--sos-red); text-decoration:none; font-weight:bold; background: rgba(231,76,60,0.1); padding: 5px 10px; align-self: flex-start;">⬇ <span data-i18n="downloadBtn">${dlText}</span></a>
                 </div>
             `;
         } else {
